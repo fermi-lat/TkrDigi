@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: lsrea  Fri Oct 11 11:02:52 PDT 2002
+TkrDigi/src
+
+Modified Files:
+	TkrSimpleDigiAlg.cxx 
+Log Message:
+move sort out of loop... worked but wasteful
+    *
+------------------------------------------------------------
 User: lsrea  Wed Oct  9 21:09:19 PDT 2002
 TkrDigi/src
 
