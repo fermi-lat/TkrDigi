@@ -6,7 +6,7 @@
  *
  * @authors Toby Burnett, Leon Rochester, Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Simple/SimpleMcToHitTool.h,v 1.1 2004/02/27 10:14:15 kuss Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Simple/SimpleMcToHitTool.h,v 1.2 2004/10/12 19:02:28 lsrea Exp $
  */
 
 #ifndef __SIMPLEMCTOHITTOOL_H__
@@ -54,6 +54,8 @@ class SimpleMcToHitTool : public AlgTool, virtual public IMcToHitTool {
     ITkrGeometrySvc*    m_tkrGeom;
     /// Pointer to the tracker alignment service
     ITkrAlignmentSvc*   m_taSvc;
+    /// flag to turn on test mode, deposits 0.155 MeV for every hit
+    bool m_test;
 
 };
 
