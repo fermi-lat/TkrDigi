@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: lsrea  Tue Apr 15 08:40:44 PDT 2003
+TkrDigi/src
+
+Modified Files:
+	SiStripList.cxx TkrSimpleDigiAlg.cxx 
+Log Message:
+add authors; some cleanup
+    *
+------------------------------------------------------------
+User: lsrea  Tue Apr 15 08:40:44 PDT 2003
 TkrDigi/doc
 
 Modified Files:
