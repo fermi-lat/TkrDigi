@@ -1,6 +1,6 @@
 package TkrDigi
 
-version v2r0p9
+version v2r0p12
 
 author Monica Brigida <monica.brigida@ba.infn.it>
 author Leon Rochester <lsrea@slac.stanford.edu>
@@ -29,6 +29,7 @@ use RootPolicy v4r*
 use RootIo v*
 
 use G4Propagator v*
+
 
 #apply_pattern package_headers
 
