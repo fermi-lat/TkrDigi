@@ -1,8 +1,9 @@
 package TkrDigi
-version v1r0
+version v1r2
 
-branches src mgr doc
-
+branches src cmt doc
+use GlastPolicy v4*
+use GaudiSvc
 use GlastSvc v8*
 use Event v8*
 
@@ -22,5 +23,5 @@ apply_pattern package_headers
 library TkrDigi   *.cxx   Dll/*.cxx   ${GlastDigi_headers}               
 
 apply_pattern package_Cshlibflags
-
+public
 apply_pattern package_test
