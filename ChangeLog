@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: lsrea  Thu Nov  6 11:03:01 PST 2003
+TkrDigi/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+prepare for tag v1r11p8
+limit hits to m_maxHits per side (default = 63)
+
+    *
+------------------------------------------------------------
 User: lsrea  Wed Oct 22 09:55:32 PDT 2003
 TkrDigi/doc
 
