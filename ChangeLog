@@ -1,5 +1,26 @@
 ------------------------------------------------------------
 User: kuss  Fri Feb 27 02:14:13 PST 2004
+TkrDigi/src
+
+Modified Files:
+	SiLayerList.cxx SiLayerList.h SiStripList.cxx SiStripList.h 
+	TkrDigiRandom.cxx 
+Added Files:
+	IHitToDigiTool.h IMcToHitTool.h INoiseTool.h 
+	SiPlaneMapContainer.h TkrVolumeIdentifier.cxx 
+	TkrVolumeIdentifier.h 
+Removed Files:
+      Tag: v1r11p11
+	TkrSimpleDigiAlg.cxx 
+Log Message:
+Commit of the sand box.  Bari specific files are in src/Bari, old-TkrDigi
+specific ones in src/Simple (left-overs of src/TkrSimpleDigiAlg.cxx), and
+common ones in src/General.  src/GaudiAlg contains the steering alg TkrDigiAlg,
+and the sub algorithms.  It should work!
+
+    *
+------------------------------------------------------------
+User: kuss  Fri Feb 27 02:14:13 PST 2004
 TkrDigi/cmt
 
 Modified Files:
