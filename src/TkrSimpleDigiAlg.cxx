@@ -1,5 +1,5 @@
 // File and Version Information:
-//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.33 2003/10/03 01:45:18 lsrea Exp $
+//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.34 2003/10/03 18:16:14 lsrea Exp $
 //
 // Description:
 //      TkrSimpleDigiAlg provides an example of a Gaudi algorithm.  
@@ -63,7 +63,7 @@
 *
 * @author T. Burnett
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.33 2003/10/03 01:45:18 lsrea Exp $  
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.34 2003/10/03 18:16:14 lsrea Exp $  
 */
 
 class TkrSimpleDigiAlg : public Algorithm {
@@ -348,7 +348,7 @@ StatusCode TkrSimpleDigiAlg::execute()
             // and do the ToT
             double dToT = (e/m_mevPerMip - m_totThreshold)*totFactor ;
             // apply saturation and threshold
-            dToT = std::max(std::min(dToT, m_totMax), 0);
+            dToT = std::max(std::min(dToT, m_totMax), 0.);
             int thisToT = static_cast<int>( dToT);
             int breakPoint = SiStripList::n_si_strips()/2;
             if (stripId<breakPoint) {
