@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: burnett  Fri Aug 16 13:08:05 PDT 2002
+TkrDigi/src
+
+Modified Files:
+	SiLayerList.cxx SiLayerList.h TkrSimpleDigiAlg.cxx 
+Log Message:
+
+use prefix for ids. fix joboptions so test job runs.
+    *
+------------------------------------------------------------
 User: lsrea  Thu Aug 15 14:02:11 PDT 2002
 TkrDigi/src
 
