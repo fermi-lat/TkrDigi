@@ -1,5 +1,5 @@
 // File and Version Information:
-//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.8 2002/08/14 17:07:42 lsrea Exp $
+//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.9 2002/08/15 21:02:11 lsrea Exp $
 //
 // Description:
 //      TkrSimpleDigiAlg provides an example of a Gaudi algorithm.  
@@ -52,7 +52,7 @@
 *
 * @author T. Burnett
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.8 2002/08/14 17:07:42 lsrea Exp $  
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.9 2002/08/15 21:02:11 lsrea Exp $  
 */
 
 class TkrSimpleDigiAlg : public Algorithm {
@@ -143,6 +143,8 @@ StatusCode TkrSimpleDigiAlg::initialize(){
         << endreq;
     
     // get the list of layers, to be used to add noise to otherwise empty layers
+    m_layers.setPrefix(m_gsv->getIDPrefix());
+
     m_gsv->accept(m_layers);
     log << MSG::INFO << "will add noise to "<< m_layers.size() << " Si layers, ids from "
         << m_layers.front().name() << " to " << m_layers.back().name() << endreq;

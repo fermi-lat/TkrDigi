@@ -1,4 +1,4 @@
-//$Header: /nfs/slac/g/glast/ground/cvs/Recon/src/SiLayerList.cxx,v 1.16 2002/05/29 03:01:13 burnett Exp $
+//$Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiLayerList.cxx,v 1.1 2002/07/19 15:57:16 burnett Exp $
 #include "SiLayerList.h"
 
 
@@ -36,7 +36,7 @@ void SiLayerList::popShape()
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 idents::VolumeIdentifier SiLayerList::getId()const
 {
-    idents::VolumeIdentifier id;
+    idents::VolumeIdentifier id(m_prefix);
     for(UintVector::const_iterator i=m_idValues.begin(); i!=m_idValues.end(); ++i) id.append(*i);
     return id;
 

@@ -1,4 +1,4 @@
-// $Header: /nfs/slac/g/glast/ground/cvs/Recon/src/SiLayerList.h,v 1.11 2002/05/04 21:16:07 burnett Exp $
+// $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiLayerList.h,v 1.1 2002/07/19 15:57:17 burnett Exp $
 
 #ifndef SiLayerList_h
 #define SiLayerList_h
@@ -41,6 +41,7 @@ public:
     idents::VolumeIdentifier getId()const; 
 
 
+    void setPrefix(idents::VolumeIdentifier prefix){m_prefix=prefix;}
 private:
     typedef std::vector<unsigned int> UintVector;
     typedef std::vector<std::string> StringVector;
@@ -55,6 +56,9 @@ private:
     UintVector m_idcount;
 
     std::vector<idents::VolumeIdentifier> m_idlist;
+
+    // the prefix to prepend
+    idents::VolumeIdentifier m_prefix;
 
 };
 #endif

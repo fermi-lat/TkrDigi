@@ -5,11 +5,13 @@ ApplicationMgr.ExtSvc   = { "GlastDetSvc" };
 //
 
 // List of Dlls
-ApplicationMgr.DLLs   = { "GlastSvc"};
-//, "GlastDigi" };
+ApplicationMgr.DLLs   = { "GlastSvc", "TkrDigi" };
 
 
 ApplicationMgr.TopAlg = { "ReadDigi", "TkrSimpleDigiAlg" };
+
+// uncomment this to test reduced version
+//GlastDetSvc.topVolume="oneTower";
 
 // Set output level threshold (2=DEBUG, 3=INFO, 4=WARNING, 5=ERROR, 6=FATAL )
 MessageSvc.OutputLevel      = 2;
