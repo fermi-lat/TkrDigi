@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: burnett  Sun Jun  9 07:48:54 PDT 2002
+TkrDigi/cmt
+
+Modified Files:
+	.cvsignore 
+Removed Files:
+	cleanup.csh cleanup.sh 
+Log Message:
+tidy
+    *
+------------------------------------------------------------
 User: burnett  Sun May 26 10:17:19 PDT 2002
 TkrDigi
 
