@@ -1,8 +1,7 @@
 /** @file release.notes
  * Package TkrDigi
  *
- * v1r5p1     08-aug-2002  Forgot to update the release notes!
- * v1r5       08-aug-2002  Remove local constants and calculations; all from GlastDetSvc now
+ * v1r5p2     08-aug-2002  Remove local constants and calculations; all from GlastDetSvc now
  * v1r4       22-jul-2002  THB Noise now in all planes, fill McTkrStripCol. 
  * v1r3       16-jul-2002  THB implement noise. 
  * v1r2       16-jul-2002  THfix requirements. 
