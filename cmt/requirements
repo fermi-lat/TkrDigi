@@ -4,8 +4,8 @@ version v1r5p6
 branches src cmt doc
 use GlastPolicy v4*
 use GaudiSvc
-use GlastSvc v8*
-use Event v8*
+use GlastSvc v9*
+use Event v9*
 
 use GuiSvc
 

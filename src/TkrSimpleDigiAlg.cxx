@@ -1,5 +1,5 @@
 // File and Version Information:
-//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.9 2002/08/15 21:02:11 lsrea Exp $
+//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.10 2002/08/16 20:08:05 burnett Exp $
 //
 // Description:
 //      TkrSimpleDigiAlg provides an example of a Gaudi algorithm.  
@@ -52,7 +52,7 @@
 *
 * @author T. Burnett
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.9 2002/08/15 21:02:11 lsrea Exp $  
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.10 2002/08/16 20:08:05 burnett Exp $  
 */
 
 class TkrSimpleDigiAlg : public Algorithm {
@@ -132,7 +132,10 @@ StatusCode TkrSimpleDigiAlg::initialize(){
     }
     
     // pass the GlastDetSvc pointer to the SiStripList static functions
-    SiStripList::initialize(m_gsv);
+    if (SiStripList::initialize(m_gsv).isFailure() ) {
+        log << MSG::ERROR << "Couldn't initialize SIStripList" << endreq;
+        return StatusCode::FAILURE;
+    }
 
     log << MSG::INFO << "ssdgap " << SiStripList::ssd_gap() 
         << " laddergap " << SiStripList::ladder_gap()
