@@ -1,13 +1,13 @@
 /*
- * @file BariMcToHitTool.cxx
- *
- * @brief Converts MC hits into tkr hits, using the Bari method.
- * Extracted from GlastDigi/v4r6/src/Tkr/TkrBariDigiAlg.cxx
- *
- * @authors Nico Giglietto, Monica Brigida, Leon Rochester, Michael Kuss
- *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Bari/BariMcToHitTool.cxx,v 1.3 2004/03/18 11:35:08 ngigliet Exp $
- */
+* @file BariMcToHitTool.cxx
+*
+* @brief Converts MC hits into tkr hits, using the Bari method.
+* Extracted from GlastDigi/v4r6/src/Tkr/TkrBariDigiAlg.cxx
+*
+* @authors Nico Giglietto, Monica Brigida, Leon Rochester, Michael Kuss
+*
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Bari/BariMcToHitTool.cxx,v 1.4 2004/03/19 10:11:21 kuss Exp $
+*/
 
 #include "BariMcToHitTool.h"
 
@@ -43,7 +43,7 @@ const IToolFactory& BariMcToHitToolFactory = s_factory;
 BariMcToHitTool::BariMcToHitTool(const std::string& type,
                                  const std::string& name,
                                  const IInterface* parent) :
-  AlgTool(type, name, parent)
+AlgTool(type, name, parent)
 {
     // Declare the additional interface
     declareInterface<IMcToHitTool>(this);
@@ -63,7 +63,7 @@ StatusCode BariMcToHitTool::initialize()
 
     // Set a default current file
     declareProperty("CurrentsFile",
-            m_CurrentsFile="$(TKRDIGIROOT)/src/Bari/correnti");
+        m_CurrentsFile="$(TKRDIGIROOT)/src/Bari/correnti");
 
     // Do the currents file (once) - LSR
     // OpenCurrent now returns a status code - LSR    
@@ -77,7 +77,7 @@ StatusCode BariMcToHitTool::initialize()
         return sc;
     }
     log << MSG::INFO << "Opening currents file " << m_CurrentsFile << endreq;
-    
+
 
     IService* iService = 0;
     sc = serviceLocator()->service("EventDataSvc", iService, true);
@@ -124,73 +124,73 @@ StatusCode BariMcToHitTool::execute()
     MsgStream log(msgSvc(), name());
     log << MSG::DEBUG << "execute " << endreq;
 
+    int kk = 0; // to count hits
+    CurrOr CurrentOr;
+    TkrDigitizer Digit;
+    Digit.Clean();
+
     //Look to see if the McPositionHitCol object is in the TDS
     SmartDataPtr<Event::McPositionHitCol>
         hits(m_edSvc, EventModel::MC::McPositionHitCol);
     if ( !hits ) { 
         log << MSG::WARNING << "could not find "
             << EventModel::MC::McPositionHitCol << endreq;
-        return  sc;
+    } else {
+
+        //    CurrOr* CurrentOr = new CurrOr();
+
+        static const double ladder_pitch = SiStripList::die_width()
+            + SiStripList::ladder_gap();
+        static const double ssd_pitch    = SiStripList::die_width()
+            + SiStripList::ssd_gap();
+        static const double waferOffset  = 0.5*(SiStripList::n_si_dies() - 1);
+
+        // start hits loop 
+        Event::McPositionHitCol::iterator it;        
+        for (it=hits->begin(); it!=hits->end(); it++ ) {   
+            Event::McPositionHit* pHit = *it;
+            const TkrVolumeIdentifier volId = pHit->volumeID();
+
+            // this is to remove ACD hits, which are now also McPositionHits
+            if ( volId.size() != 9 )
+                continue;
+            if ( !volId.isTowerTkr() )
+                continue;
+
+            const int tower   = volId.getTower().id();
+            const int bilayer = volId.getLayer();
+            const int view    = volId.getView();
+            const int ladder  = volId.getLadder(); // needed for the offset
+            const int wafer   = volId.getWafer(); // needed for the offset
+
+            // Here we shift the coordinate from the wafer to the plane
+            // this assumes that the number of ladders equals the number of
+            // wafers/ladder.  This is not true for the BFEM/BTEM!
+            const HepVector3D offset((ladder-waferOffset)*ladder_pitch,
+                (wafer-waferOffset)*ssd_pitch, 0);
+            HepPoint3D entry(pHit->entryPoint()+offset);
+            HepPoint3D exit (pHit->exitPoint() +offset);
+
+            const double energy = pHit->depositedEnergy();
+
+            log << MSG::DEBUG;
+            if (log.isActive() ) 
+                log << "Hit " << ++kk << " tower " << tower
+                << " layer " << bilayer << " view "  << view
+                <<" ene " << energy << endreq
+                << "      "
+                << " entry(" << entry.x()<<", "<<entry.y()<<", "<<entry.z() 
+                << ") exit (" << exit.x()<<", "<<exit.y()<<", "<<exit.z() << ")";
+            log << endreq;
+
+            // set variables
+            // getPlaneId() returns a volId with ladder and wafer info stripped
+            Digit.set(energy, entry, exit, volId.getPlaneId(), pHit);
+            // analog section
+            Digit.setDigit(&m_openCurr);
+            Digit.clusterize(&CurrentOr);
+        } // end of loop over hits
     }
-
-    //    CurrOr* CurrentOr = new CurrOr();
-    CurrOr CurrentOr;
-    TkrDigitizer Digit;
-    Digit.Clean();
-    int kk = 0;
-
-    static const double ladder_pitch = SiStripList::die_width()
-        + SiStripList::ladder_gap();
-    static const double ssd_pitch    = SiStripList::die_width()
-        + SiStripList::ssd_gap();
-    static const double waferOffset  = 0.5*(SiStripList::n_si_dies() - 1);
-            
-    // start hits loop 
-    for ( Event::McPositionHitCol::iterator it=hits->begin(); it!=hits->end();
-          it++ ) {   
-        Event::McPositionHit* pHit = *it;
-        const TkrVolumeIdentifier volId = pHit->volumeID();
-            
-        // this is to remove ACD hits, which are now also McPositionHits
-        if ( volId.size() != 9 )
-            continue;
-        if ( !volId.isTowerTkr() )
-            continue;
-            
-        const int tower   = volId.getTower().id();
-        const int bilayer = volId.getLayer();
-        const int view    = volId.getView();
-        const int ladder  = volId.getLadder(); // needed for the offset
-        const int wafer   = volId.getWafer(); // needed for the offset
-            
-        // Here we shift the coordinate from the wafer to the plane
-        // this assumes that the number of ladders equals the number of
-        // wafers/ladder.  This is not true for the BFEM/BTEM!
-        const HepVector3D offset((ladder-waferOffset)*ladder_pitch,
-                           (wafer-waferOffset)*ssd_pitch, 0);
-        HepPoint3D entry(pHit->entryPoint()+offset);
-        HepPoint3D exit (pHit->exitPoint() +offset);
-            
-        const double energy = pHit->depositedEnergy();
-
-        log << MSG::DEBUG;
-		if (log.isActive() ) 
-        log << "Hit " << ++kk << " tower " << tower
-            << " layer " << bilayer << " view "  << view
-            <<" ene " << energy << endreq
-            << "      "
-            << " entry(" << entry.x()<<", "<<entry.y()<<", "<<entry.z() 
-            << ") exit (" << exit.x()<<", "<<exit.y()<<", "<<exit.z() << ")";
-        log << endreq;
-            
-        // set variables
-        // getPlaneId() returns a volId with ladder and wafer info stripped
-        Digit.set(energy, entry, exit, volId.getPlaneId(), pHit);
-        // analog section
-        Digit.setDigit(&m_openCurr);
-        Digit.clusterize(&CurrentOr);
-    } // end of loop over hits
-
     // digital section
     const TotOr* const DigiOr = Digit.digitize(CurrentOr);
 
