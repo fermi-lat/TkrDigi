@@ -1,5 +1,5 @@
 // File and Version Information:
-//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.28 2003/03/13 19:07:23 lsrea Exp $
+//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.29 2003/04/15 15:40:44 lsrea Exp $
 //
 // Description:
 //      TkrSimpleDigiAlg provides an example of a Gaudi algorithm.  
@@ -63,7 +63,7 @@
 *
 * @author T. Burnett
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.28 2003/03/13 19:07:23 lsrea Exp $  
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.29 2003/04/15 15:40:44 lsrea Exp $  
 */
 
 class TkrSimpleDigiAlg : public Algorithm {
@@ -386,7 +386,12 @@ StatusCode TkrSimpleDigiAlg::execute()
                 rel->addInfo(stripString);
                 //addRelation now does the right thing with duplicates
                 // namely, appends the info to the existing info
+                // If the relation is indeed a duplicate, it doesn't actually get added,
+                //    so it's left lying around after the call, and should be deleted.
+                // The check is that the relational table hasn't gotten any bigger.
+                unsigned int size = digiHit.size();
                 digiHit.addRelation(rel);
+                if (digiHit.size() == size) delete rel;
             }
         }
         if (nStrips>0) {
