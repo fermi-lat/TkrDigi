@@ -1,16 +1,17 @@
 /**
- * @file SiStripList.cxx
- *
- * @brief Provides means of filling and retrieving a list of strips.
- *
- * @author Toby Burnett, Leon Rochester (original authors)
- * @author Michael Kuss
- *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.cxx,v 1.13 2004/02/27 10:14:13 kuss Exp $
- */
+* @file SiStripList.cxx
+*
+* @brief Provides means of filling and retrieving a list of strips.
+*
+* @author Toby Burnett, Leon Rochester (original authors)
+* @author Michael Kuss
+*
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.cxx,v 1.14 2004/03/10 18:37:04 lsrea Exp $
+*/
 
 #include "SiStripList.h"
 #include "General/GeneralNoiseTool.h"
+#include "TkrUtil/ITkrToTSvc.h"
 
 #include "CLHEP/Random/RandFlat.h"
 #include "CLHEP/Random/RandGauss.h"
@@ -38,7 +39,8 @@ double  SiStripList::s_ssd_gap       = 0.0; // 0.025;
 double  SiStripList::s_ladder_gap    = 0.0; // 0.200;
 
 
-StatusCode SiStripList::initialize(IGlastDetSvc* ds) {
+StatusCode SiStripList::initialize(IGlastDetSvc* ds) 
+{
     // Purpose and Method: initializes the static members from the detector svc
     // Inputs: pointer to the detector service
     // Outputs: a status code
@@ -48,16 +50,16 @@ StatusCode SiStripList::initialize(IGlastDetSvc* ds) {
     double temp;
 
     if ( s_detSvc->getNumericConstByName("nWaferAcross",
-                                         &s_n_si_dies).isFailure()
+        &s_n_si_dies).isFailure()
         || s_detSvc->getNumericConstByName("stripPerWafer",
-                                           &s_stripPerWafer).isFailure()
+        &s_stripPerWafer).isFailure()
         || s_detSvc->getNumericConstByName("SiWaferSide",
-                                           &s_die_width).isFailure()
+        &s_die_width).isFailure()
         || s_detSvc->getNumericConstByName("SiWaferActiveSide",
-                                           &temp).isFailure()
+        &temp).isFailure()
         || s_detSvc->getNumericConstByName("ssdGap", &s_ssd_gap).isFailure()
         || s_detSvc->getNumericConstByName("ladderGap",
-                                           &s_ladder_gap).isFailure()
+        &s_ladder_gap).isFailure()
         )
         return StatusCode::FAILURE;
     s_guard_ring = 0.5 * (s_die_width - temp);
@@ -69,7 +71,8 @@ StatusCode SiStripList::initialize(IGlastDetSvc* ds) {
 #ifndef TEMPLATE
 void SiStripList::addStrip(const int strip, double dE,
                            const hitList* hits,
-                           int t1, int t2) {
+                           int t1, int t2) 
+{
     // Purpose and Method: adds a strip to the list of strips.  To add all
     //                     McPositionHits, addStrip is called several times.  To
     //                     avoid that the energy is added each time, it is set
@@ -92,13 +95,15 @@ void SiStripList::addStrip(const int strip, double dE,
 
 void SiStripList::addStrip(const int strip, const double dE,
                            const Event::McPositionHit* hit,
-                           const int t1, const int t2) {
+                           const int t1, const int t2) 
+{
 #else
 export template<class T> void SiStripList::addStrip(const int strip,
                                                     const double dE,
                                                     const T* hit,
                                                     const int t1,
-                                                    const int t2) {
+                                                    const int t2) 
+{
 #endif
     // Purpose and Method: adds a strip with a single McPositionHit to the list
     //                     of strips
@@ -139,7 +144,7 @@ export template<class T> void SiStripList::addStrip(const int strip,
         insert(s, Strip(strip, dE, noise, hit, elecNoise, t1, t2));
         return;
     }
-        
+
     // If the strip isn't in the list yet, and no others have higher ids, 
     // add it to the end of the list.
     push_back(Strip(strip, dE, noise, hit, elecNoise, t1, t2));
@@ -147,7 +152,8 @@ export template<class T> void SiStripList::addStrip(const int strip,
 
 
 void SiStripList::score(const HepPoint3D& o, const HepPoint3D& p,
-                        const Event::McPositionHit* hit) {
+                        const Event::McPositionHit* hit) 
+{
     // Purpose and Method: distribute energy among the various strips as the
     //                     particle passes through the detector.
     // Inputs: entry and exit point (in local coordinates), and a pointer to a
@@ -158,12 +164,12 @@ void SiStripList::score(const HepPoint3D& o, const HepPoint3D& p,
     double eLoss = hit->depositedEnergy();
     if( eLoss == 0 )
         return;
-    
+
     HepVector3D dir = p - o;
     float dTot = dir.mag();
-    
+
     float xDir = dir.x();
-    
+
     float in = o.x();     // entry point -- x
     float ex = p.x();     // exit point -- x
     int ins = stripId(in), exs = stripId(ex); // enter/exit strips (if valid)
@@ -172,7 +178,7 @@ void SiStripList::score(const HepPoint3D& o, const HepPoint3D& p,
         len *= si_strip_pitch() / fabs(xDir);
     // max. length in x in a strip
     float dx_max = fabs(xDir)<si_strip_pitch() ? fabs(xDir) : si_strip_pitch();
-    
+
     // There are four likely cases to deal with here: 
     // 1) particle entered & exited entirely in a gap 
     // 2) particle entered through a gap, then passed through & exited strips
@@ -183,25 +189,25 @@ void SiStripList::score(const HepPoint3D& o, const HepPoint3D& p,
     // algorithm fails if the particle enters a gap passes through an entire 
     // die of silicon strips (or multiple dies) then exits through another
     // gap. This is highly unlikely.
-    
+
     if ( ins == Strip::undef_strip() ) {        // entered in a gap
-        
+
         if ( exs != Strip::undef_strip() ) {        // exited through a strip
             float sx = calculateBin(exs);
             // fraction of strip crossed
             float dx = si_strip_pitch() / 2.0 + (ex-sx) * copysign(1.0, xDir);
             float frac = dx / dx_max;
             addStrip(exs, eLoss*frac*len/dTot, hit);
-            
+
             short sinc = (xDir>0) ? -1 : 1; // move backwards (exit strip)
             for ( int sid=exs+sinc;
-                  (sid>=0)
-                      && (sid<n_si_strips())
-                      &&
-                      (
-                       xDir>0 ? (in<calculateBin(sid)) : (in>calculateBin(sid))
-                       );
-                  sid+=sinc )
+                (sid>=0)
+                && (sid<n_si_strips())
+                &&
+                (
+                xDir>0 ? (in<calculateBin(sid)) : (in>calculateBin(sid))
+                );
+            sid+=sinc )
                 addStrip(sid, eLoss*len/dTot, hit);
             // scans for until it crosses the entered gap
         }
@@ -215,16 +221,16 @@ void SiStripList::score(const HepPoint3D& o, const HepPoint3D& p,
             float dx = si_strip_pitch() / 2.0 - (in-sx) * copysign(1.0, xDir);
             float frac = dx / dx_max;   
             addStrip(ins, eLoss*frac*len/dTot, hit);
-            
+
             short sinc = (xDir>0) ? 1 : -1;   // move backwards (exit strip)
             for ( int sid=ins+sinc;
-                  (sid>=0)
-                      && (sid<n_si_strips())
-                      && 
-                      (
-                       xDir>0 ? (ex>calculateBin(sid)) : (ex<calculateBin(sid))
-                       );
-                  sid+=sinc )
+                (sid>=0)
+                && (sid<n_si_strips())
+                && 
+                (
+                xDir>0 ? (ex>calculateBin(sid)) : (ex<calculateBin(sid))
+                );
+            sid+=sinc )
                 addStrip(sid, eLoss*len/dTot, hit);
             // scans for until it crosses the exited gap
         }
@@ -240,7 +246,7 @@ void SiStripList::score(const HepPoint3D& o, const HepPoint3D& p,
                 dx = si_strip_pitch() / 2.0 + (ex-sx) * copysign(1.0, xDir);
                 frac = dx / dx_max;
                 addStrip(exs, eLoss*frac*len/dTot, hit); // exit strip
-                
+
                 short sinc = (ins<exs) ? 1 : -1;
                 for ( int sid=ins+sinc; sid!=exs; sid+=sinc )   
                     addStrip(sid, eLoss*len/dTot, hit);
@@ -252,7 +258,8 @@ void SiStripList::score(const HepPoint3D& o, const HepPoint3D& p,
 
 
 int SiStripList::addNoise(const double sigma, const double occupancy,
-                          const double threshold){
+                          const double threshold)
+{
     // Purpose and Method: this function call other functions to add noise
     // Inputs: noise rms in MeV, strip occupancy fraction, and energy threshold
     // Outputs: number of strips added
@@ -266,7 +273,8 @@ int SiStripList::addNoise(const double sigma, const double occupancy,
 }
 
 
-void SiStripList::addElectronicNoise(const double sigma) {
+void SiStripList::addElectronicNoise(const double sigma) 
+{
     // Purpose and Method: checks for the elec noise flag, and adds electronic
     //                     noise to already triggered strips
     // Inputs: noise rms in MeV
@@ -286,7 +294,8 @@ void SiStripList::addElectronicNoise(const double sigma) {
 
 
 int SiStripList::addNoiseStrips(const double occupancy,
-                                      const double threshold) {
+                                const double threshold) 
+{
     // Purpose and Method: adds noise hits to the strip list
     // Inputs: strip occupancy fraction, and energy threshold
     // Outputs: number of strips added
@@ -321,7 +330,8 @@ int SiStripList::addNoiseStrips(const double occupancy,
 }
 
 
-int SiStripList::removeStripsBelowThreshold(const double threshold) {
+int SiStripList::removeStripsBelowThreshold(const double threshold) 
+{
     // Purpose and Method: Removes strips which an energy deposit below
     //                     "threshold".  Strips can have a low energy as low as
     //                     if:
@@ -341,7 +351,7 @@ int SiStripList::removeStripsBelowThreshold(const double threshold) {
         if ( iter->energy() < threshold ) {
             /*
             std::cout << "removing strip with energy " << iter->energy()
-                      << " below threshold " << threshold << std::endl;
+            << " below threshold " << threshold << std::endl;
             */
             iter = erase(iter);
             ++removedStrips;
@@ -356,8 +366,9 @@ int SiStripList::removeStripsBelowThreshold(const double threshold) {
 
 // private member functions
 
-void SiStripList::getToT(int* ToT, const int sep) const {
-
+void SiStripList::getToT(int* ToT, const int tower, const int layer, const int view,
+                         const ITkrToTSvc* pToTSvc, const int sep) const 
+{
     // Purpose and Method: Calculates the ToTs of a layer.
     //                     There are two methods, based on the information
     //                     stored with the strips: McToHitBariTool stores the
@@ -381,7 +392,10 @@ void SiStripList::getToT(int* ToT, const int sep) const {
 
     int t1[2]     = {INT_MAX, INT_MAX};
     int t2[2]     = {INT_MIN, INT_MIN};
-    float emax[2] = {FLT_MIN, FLT_MIN};
+    int simpleToT[2] = {INT_MIN, INT_MIN};
+
+    double mevPerMip = GeneralHitToDigiTool::mevPerMip();    
+    double fCPerMip  = GeneralHitToDigiTool::fCPerMip();
 
     int size = m_strips.size();
     int controller = 0;
@@ -393,8 +407,8 @@ void SiStripList::getToT(int* ToT, const int sep) const {
             continue;
         int index = strip.index();
         if (index>sep) controller = 1;
-        const int time1 = strip.time1();
-        const int time2 = strip.time2();
+        int time1 = strip.time1();
+        int time2 = strip.time2();
         if( time1 != -1 && time2 != -1 ) { // strip with times ("Bari")
             if ( time1 < t1[controller] )
                 t1[controller] = time1;
@@ -402,28 +416,32 @@ void SiStripList::getToT(int* ToT, const int sep) const {
                 t2[controller] = time2;
         }
         else { // strip without times ("Simple")
-            const float e = strip.energy();
-            if ( e > emax[controller] )
-                emax[controller] = e;
+            float e = strip.energy();
+            if ( e>0 ) { // "Simple" or noise
+                double ToTGain = 5.0*fCPerMip*pToTSvc->getGain(tower, layer, view, index);
+                double ToTThresh = 5.0*pToTSvc->getThreshold(tower, layer, view, index);
+                double dToT =  e/mevPerMip*ToTGain + ToTThresh ;
+                int iToT = static_cast<int> ( std::max( 0., dToT));
+                if ( iToT > simpleToT[controller] )
+                    simpleToT[controller] = iToT;
+            }
         }
     }
 
-    static const int totMax = GeneralHitToDigiTool::totMax();
+    // These values reproduce the previous results 
+    //double rawGain   = 2.50267833;
+    //double rawThresh = -2.92;
+
+    int    totMax    = GeneralHitToDigiTool::totMax();
 
     // loop over controllers
     for(i=0; i<2; ++i) {
         ToT[i] = 0;
-        if ( t1[i] != INT_MAX && t2[i] != INT_MIN ) // "Bari"
+        if ( t1[i] != INT_MAX && t2[i] != INT_MIN ) { // "Bari"
             ToT[i] =  std::min( totMax, ( t2[i] - t1[i] ) / 20 );
-
-        static const double totAt1Mip = GeneralHitToDigiTool::totAt1Mip();
-        static const double mevPerMip = GeneralHitToDigiTool::mevPerMip();
-        static const double threshold = GeneralHitToDigiTool::totThreshold();
-        static const double f         = totAt1Mip / ( 1.0 - threshold / mevPerMip );
-
-        if ( emax[i]/mevPerMip > threshold ) { // "Simple" or noise
-            int iToT = static_cast<int> ( ( emax[i] - threshold ) / mevPerMip * f );
-            ToT[i] =  std::min( iToT, totMax );
+        }
+        if(simpleToT[i]>0) { 
+            ToT[i] =  std::min( simpleToT[i], totMax );
         }
     if (sep==sepSentinel) break;
     }
