@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: kuss  Tue Jul 20 08:40:09 PDT 2004
+TkrDigi/src/Bari
+
+Modified Files:
+	BariMcToHitTool.cxx 
+Log Message:
+If not found, it was not tried to set up the TkrGeometrySvc
+
+    *
+------------------------------------------------------------
 User: kuss  Tue Jul 20 07:14:05 PDT 2004
 TkrDigi/src
 
