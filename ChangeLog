@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: lsrea  Tue Mar  9 12:06:30 PST 2004
+TkrDigi/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+prepare for tag v2r0p1, cleanup before adding to head of GlastRelease
+
+    *
+------------------------------------------------------------
 User: kuss  Mon Mar  8 13:29:33 PST 2004
 TkrDigi/src
 
