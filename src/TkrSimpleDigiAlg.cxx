@@ -1,5 +1,5 @@
 // File and Version Information:
-//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.4 2002/07/19 15:59:17 burnett Exp $
+//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.3 2002/06/22 01:05:12 lsrea Exp $
 //
 // Description:
 //      TkrSimpleDigiAlg provides an example of a Gaudi algorithm.  
@@ -18,7 +18,7 @@
 //      may be omitted
 //
 // Author(s):
-//      T. Burnett		
+//     T. Burnett		
 //     	
 
 // [Gaudi system includes]
@@ -35,11 +35,8 @@
 #include "Event/TopLevel/EventModel.h"
 #include "Event/TopLevel/Event.h"
 #include "Event/Digi/TkrDigi.h"
-#include "Event/MonteCarlo/McTkrStrip.h"
-
 
 #include "SiStripList.h"
-#include "SiLayerList.h"
 
 #include "Event/MonteCarlo/McPositionHit.h"
 
@@ -52,7 +49,7 @@
 *
 * @author T. Burnett
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.4 2002/07/19 15:59:17 burnett Exp $  
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.3 2002/06/22 01:05:12 lsrea Exp $  
 */
 
 class TkrSimpleDigiAlg : public Algorithm {
@@ -66,34 +63,30 @@ public:
     StatusCode initialize();
     
     /** 
-    * Creates the output
+    * Describe the specifics of the execute routine for this algorithm
     */
     StatusCode execute();
     
+    /**
+    * Describe anything special about the finalize routine for this algorithm 
+    * here.
+    */
     StatusCode finalize();
     
-private: 
-    /**
-    *  This map assoicates the SiPlane volume Id with a list of hit strips.
-    */ 
     typedef std::map<idents::VolumeIdentifier, SiStripList*> SiPlaneMap;
     
+private: 
     SiPlaneMap m_SiMap;
-
     void createSiHits(const Event::McPositionHitVector& hits);
-    void addNoise();
-
     void clear();
     IGlastDetSvc * m_gsv;
-    
-    SiLayerList m_layers;
-    
-    /// energy deposit above which hit is recorded (MeV)
-    double m_threshold;
-    /// amount to fluctuate hit strips (MeV)
-    double m_noiseSigma;
-    /// frequency of noise hits
-    double m_noiseOccupancy;    
+
+	/// energy deposit above which hit is recorded (MeV)
+	double m_threshold;
+	/// amount to fluctuate hit strips (MeV)
+	double m_noiseSigma;
+	/// frequency of noise hits
+	double m_noiseOccupancy;    
 };
 
 static const AlgFactory<TkrSimpleDigiAlg>  Factory;
@@ -103,8 +96,8 @@ TkrSimpleDigiAlg::TkrSimpleDigiAlg(const std::string& name, ISvcLocator* pSvcLoc
 :Algorithm(name, pSvcLocator)
 {
     declareProperty("threshold",      m_threshold     = 0.030 );  
-    declareProperty("noiseSigma",     m_noiseSigma    = 0.010 );
-    declareProperty("noiseOccupancy", m_noiseOccupancy= 1.e-5 );
+	declareProperty("noiseSigma",     m_noiseSigma    = 0.010 );
+	declareProperty("noiseOccupancy", m_noiseOccupancy= 1.e-4 );
 }
 
 StatusCode TkrSimpleDigiAlg::initialize(){
@@ -134,16 +127,6 @@ StatusCode TkrSimpleDigiAlg::initialize(){
     // pass the GlastDetSvc pointer to the SiStripList static functions
     SiStripList::initialize(m_gsv);
     
-    // get the list of layers, to be used to add noise to otherwise empty layers
-    m_gsv->accept(m_layers);
-    log << MSG::INFO << "will add noise to "<< m_layers.size() << " Si layers, ids from "
-        << m_layers.front().name() << " to " << m_layers.back().name() << endreq;
-#if 0
-    for( SiLayerList::const_iterator it = m_layers.begin(); it!=m_layers.end(); ++it){
-        std::cout << it->name() << std::endl;
-    }
-#endif
-
     return sc;
 }
 
@@ -169,14 +152,12 @@ StatusCode TkrSimpleDigiAlg::execute()
         log << MSG::DEBUG << "could not find \""<< "EventModel::MC::McPositionHitCol" <<"\"" << endreq;
         return  sc;
     }
-
-    // create full map
     
     // now create the Si hits
     createSiHits(mcHits);
     
-    addNoise();
-
+    
+    
     //Take care of insuring that data area has been created
     DataObject* pNode = 0;
     sc = eventSvc()->retrieveObject( EventModel::Digi::Event, pNode);
@@ -188,17 +169,7 @@ StatusCode TkrSimpleDigiAlg::execute()
             return sc;
         }
     }
-    // Create the collection of hit strip objects
-    McTkrStripCol* strips = new McTkrStripCol;
-    sc = eventSvc()->registerObject( EventModel::MC::McTkrStripCol, strips);
     
-    if (sc != StatusCode::SUCCESS){
-        log << MSG::INFO << "Failed to register TkrStrip vector" << endreq;
-        return sc;
-    }
-
-
-
     //Create the collection of digi objects - will be empty at this point
     TkrDigiCol*  pTkrDigi   = new TkrDigiCol;
     
@@ -215,10 +186,11 @@ StatusCode TkrSimpleDigiAlg::execute()
     for(SiPlaneMap::iterator si = m_SiMap.begin(); si != m_SiMap.end(); ++si){
         SiStripList& sidet = *si->second;
         idents::VolumeIdentifier id = si->first;  
+
+        sidet.addNoise(m_noiseSigma, m_noiseOccupancy, m_threshold); 
         
-       
         // unpack the id: the order is correct!
-#if 1 //  old way
+#if 0 //  old way
         unsigned int towery=id[1], towerx= id[2],  tray=id[4], view=id[5],
             botTop=id[6], layer = tray+botTop-1;
 #else // do it from the bottom
@@ -234,6 +206,7 @@ StatusCode TkrSimpleDigiAlg::execute()
             towerx=s>0? id[--s] : 0, //2 with full LAT
             towery=s>0? id[--s] : 0; //1
 #endif
+        
         int ToT[2]={0,0};
         
         idents::TowerId tower = idents::TowerId(towerx, towery).id();
@@ -251,55 +224,17 @@ StatusCode TkrSimpleDigiAlg::execute()
             
             //TODO: apply threshold, add strip to TkrDigi
             pDigi->addC0Hit(stripId);
-
-            // save the hit here
-            strips->push_back(new Event::McTkrStrip(id, stripId, e));
-
+            
         }
     }
     
     return sc;
 }
 
-void TkrSimpleDigiAlg::addNoise(){
-    // Purpose and Method:  add noise hits
-    // Inputs:  class variables, especially m_layers,the list of si plane ids.
-    // Outputs:  additional hits in the Si
-    // TDS Inputs:  None 
-    // TDS Outputs:  None
-    // Dependencies: None
-    // Restrictions and Caveats:  None
-
-    int noiseCount=0;
-
-    // loop over list of possible layer ids
-    for(SiLayerList::const_iterator it=m_layers.begin(); it!=m_layers.end(); ++it){
-        idents::VolumeIdentifier id = *it;
-        if( m_SiMap.find(id) == m_SiMap.end()){
-
-           SiStripList* sidet = new SiStripList;
-            sidet->addNoise(m_noiseSigma, m_noiseOccupancy, m_threshold);
-            if(sidet->size()>0){
-                m_SiMap[id]= sidet;
-                noiseCount += sidet->size();
-            }
-            else delete sidet;
-
-        }else{
-            noiseCount -= m_SiMap[id]->size();
-            m_SiMap[id]->addNoise(m_noiseSigma, m_noiseOccupancy, m_threshold);
-            noiseCount += m_SiMap[id]->size();
-        }
-
-    }
-
-    MsgStream log(msgSvc(), name());
-    log << MSG::DEBUG << "added " << noiseCount <<" noise hits" << endreq;
-
-
-}
 StatusCode TkrSimpleDigiAlg::finalize(){
-    // Purpose and Method:  clear accumulated data at the end of the run
+    // Purpose and Method:  This routine is an example finalize routine for a
+    //     Gaudi algorithm.  Finalize will be called when event processing is
+    //     completed.
     // Inputs:  None
     // Outputs:  A StatusCode which denotes success or failure.
     // TDS Inputs:  None
@@ -343,20 +278,20 @@ void TkrSimpleDigiAlg::createSiHits(const Event::McPositionHitVector& hits)
             id = tid;
         }
         
-        static double ladder_pitch = SiStripList::die_width()+SiStripList::ladder_gap();
-        static double ssd_pitch    = SiStripList::die_width()+SiStripList::ssd_gap();
-        
+	// this assumes that the number of ladders equals the number of wafers/ladder
+	// not true for the BFEM/BTEM!
+    static double ladder_pitch = SiStripList::die_width()+SiStripList::ladder_gap();
+    static double ssd_pitch    = SiStripList::die_width()+SiStripList::ssd_gap();
+	static double waferOffset = 0.5*(SiStripList::n_si_dies() - 1);
+
         int ladder = id[7], wafer=id[8];
         Hep3Vector 
-            offset( (ladder-1.5)*ladder_pitch, (wafer-1.5)*ssd_pitch, 0),
+            offset( (ladder-waferOffset)*ladder_pitch, (wafer-waferOffset)*ssd_pitch, 0),
             entry(hit.entryPoint()+offset),
-            exit( hit.exitPoint()+offset);
+            exit( hit.exitPoint()+offset);       
         
-        //now truncate the id to the plane.
-        idents::VolumeIdentifier planeId;
-        for( int j=0; j<7; ++j) planeId.append(id[j]);
-         if( m_SiMap.find(planeId) == m_SiMap.end()) m_SiMap[planeId]= new SiStripList;
-        m_SiMap[planeId]->score(entry, exit, hit.depositedEnergy());
+        if( m_SiMap.find(id) == m_SiMap.end()) m_SiMap[id]= new SiStripList;
+        m_SiMap[id]->score(entry, exit, hit.depositedEnergy());
     }
 }
 
