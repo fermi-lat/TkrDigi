@@ -1,13 +1,13 @@
-//$Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiLayerList.cxx,v 1.1 2002/07/19 15:57:16 burnett Exp $
+//$Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiLayerList.cxx,v 1.2 2002/08/16 20:08:05 burnett Exp $
 #include "SiLayerList.h"
 
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 IGeometry::VisitorRet 
-  SiLayerList::pushShape(ShapeType s, const UintVector& idvec, 
-                           std::string name, std::string material, 
-                           const DoubleVector& params, 
-                           VolumeType type)
+  SiLayerList::pushShape(ShapeType /* s */, const UintVector& idvec, 
+                           std::string name, std::string /* material */, 
+                           const DoubleVector& /* params */, 
+                           VolumeType /* type */)
 {
     // concatenate the id for this node to current id.
     m_idcount.push_back(idvec.size());
