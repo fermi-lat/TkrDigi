@@ -1,4 +1,4 @@
-// $Header: /nfs/slac/g/glast/ground/cvs/GlastDigi/src/Tkr/SiStripList.h,v 1.2 2002/03/22 04:31:05 burnett Exp $
+// $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.h,v 1.1.1.1 2002/05/26 17:17:19 burnett Exp $
 
 #ifndef SiStripList_H
 #define SiStripList_H
@@ -17,6 +17,15 @@ public:
     void score(const HepPoint3D& o, const HepPoint3D& p, float eLoss);
 
     void clear();
+
+    /// add noise and remove hits below threshold
+    /**
+      *  @param noise_sigma noise rms in MeV
+      *  @param occupancy  fraction of time a cell is occupied
+      *  @param theshold   minimium energy deposit (MeV) that results in a latch
+      */
+
+    void addNoise(double noise_sigma, double occupancy, double threshold);
 
     /// Strip data declaration
     class Strip 
