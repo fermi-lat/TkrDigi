@@ -1,5 +1,5 @@
 // File and Version Information:
-//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.34 2003/10/03 18:16:14 lsrea Exp $
+//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.35 2003/10/08 16:41:08 lsrea Exp $
 //
 // Description:
 //      TkrSimpleDigiAlg provides an example of a Gaudi algorithm.  
@@ -63,7 +63,7 @@
 *
 * @author T. Burnett
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.34 2003/10/03 18:16:14 lsrea Exp $  
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.35 2003/10/08 16:41:08 lsrea Exp $  
 */
 
 class TkrSimpleDigiAlg : public Algorithm {
@@ -114,8 +114,8 @@ private:
     double m_totAt1Mip;
     /// average eloss in silicon per MIP (to calculate ToT from eloss
     double m_mevPerMip;
-    /// threshold for ToT (in Mips)
-    double m_totThreshold;
+    // threshold for ToT (in Mips)
+    //double m_totThreshold;
     /// maximum value of ToT 
     double m_totMax;
     /// if true, kill bad strips in digi
@@ -135,7 +135,7 @@ TkrSimpleDigiAlg::TkrSimpleDigiAlg(const std::string& name, ISvcLocator* pSvcLoc
     declareProperty("noiseOccupancy", m_noiseOccupancy= 5.e-5 );     // to match pdr number, was 1.e-5
     declareProperty("totAt1Mip"     , m_totAt1Mip     = 52.5  );
     declareProperty("mevPerMip"     , m_mevPerMip     = 0.155 );
-    declareProperty("totThreshold"  , m_totThreshold  = 0.1   );
+    // declareProperty("totThreshold"  , m_totThreshold  = 0.1   ); // bogus! only one threshold
     declareProperty("totMax"        , m_totMax        = 250.  );
     declareProperty("killBadStrips" , m_killBadStrips = false );
     declareProperty("killFailed"    , m_killFailed    = true  );
@@ -234,7 +234,7 @@ StatusCode TkrSimpleDigiAlg::execute()
     
     using namespace Event;
 
-    double totFactor = m_totAt1Mip/(1. - m_totThreshold);
+    double totFactor = m_totAt1Mip/(1. - m_threshold/m_mevPerMip);
     
     StatusCode  sc = StatusCode::SUCCESS;
     MsgStream   log( msgSvc(), name() );
@@ -346,7 +346,7 @@ StatusCode TkrSimpleDigiAlg::execute()
             
             // add the strip with the correct controller number
             // and do the ToT
-            double dToT = (e/m_mevPerMip - m_totThreshold)*totFactor ;
+            double dToT = (e - m_threshold)/m_mevPerMip*totFactor ;
             // apply saturation and threshold
             dToT = std::max(std::min(dToT, m_totMax), 0.);
             int thisToT = static_cast<int>( dToT);
