@@ -57,8 +57,8 @@ ClusterNewton::ClusterNewton()
 
 ClusterNewton::~ClusterNewton()
 {
-  delete Vout;
-  delete Iout;
+  delete[] Vout;
+  delete[] Iout;
 }
 
 void ClusterNewton::AddNoise()
