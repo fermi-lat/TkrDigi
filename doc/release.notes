@@ -1,6 +1,7 @@
 /** @file release.notes
  * Package TkrDigi
  *
+ * v1r4       22-jul-2002  THB Noise now in all planes, fill McTkrStripCol. 
  * v1r3       16-jul-2002  THB implement noise. 
  * v1r2       16-jul-2002  THfix requirements. 
  * v1r1       27-jun-2002  THB start on noise. 
