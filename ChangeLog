@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: lsrea  Tue Nov 23 15:08:22 PST 2004
+TkrDigi/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+Prepare for tag v2r0p15;
+  change to facilities::Util::expandEnvVar()
+
+    *
+------------------------------------------------------------
 User: jrb  Wed Nov 10 16:54:01 PST 2004
 TkrDigi/doc
 
