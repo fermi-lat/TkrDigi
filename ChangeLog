@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: lsrea  Thu Feb 13 12:43:33 PST 2003
+TkrDigi/src
+
+Modified Files:
+	TkrSimpleDigiAlg.cxx 
+Log Message:
+test on killBadStrips (default: false) and killFailed (default: true), 
+    new properties of TkrSimpleDigiAlg
+
+    *
+------------------------------------------------------------
 User: lsrea  Fri Feb  7 15:36:26 PST 2003
 TkrDigi/src
 
