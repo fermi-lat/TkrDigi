@@ -1,12 +1,13 @@
 /** @file release.notes
  * Package TkrDigi
  *
- * v1r5p4     12-aug-2002  Fixed typo; exit strip is now scored
- * v1r5p3     09-aug-2002  Modified the wrong version; this should fix it
- * v1r5p2     08-aug-2002  Remove local constants and calculations; all from GlastDetSvc now
+ * v1r5p5     14-aug-2002  LSR Remove code for handling incomplete ID's; check for TKR hit
+ * v1r5p4     12-aug-2002  LSR Fixed typo; exit strip is now scored
+ * v1r5p3     09-aug-2002  LSR Modified the wrong version; this should fix it
+ * v1r5p2     08-aug-2002  LSR Remove local constants and calculations; all from GlastDetSvc now
  * v1r4       22-jul-2002  THB Noise now in all planes, fill McTkrStripCol. 
  * v1r3       16-jul-2002  THB implement noise. 
- * v1r2       16-jul-2002  THfix requirements. 
+ * v1r2       16-jul-2002  THB fix requirements. 
  * v1r1       27-jun-2002  THB start on noise. 
  * v1r0       25-may-2002  THB create, coping TkrSimpleDigiAlg
  */
