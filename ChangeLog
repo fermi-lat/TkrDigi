@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: kuss  Mon Mar  8 13:29:33 PST 2004
+TkrDigi/src
+
+Removed Files:
+	TkrSimpleDigiAlg.cxx 
+Log Message:
+Oops.  TkrSimpleDigiAlg somehow survived.  I try again ...
+
+    *
+------------------------------------------------------------
 User: kuss  Fri Feb 27 02:14:15 PST 2004
 TkrDigi/src/test
 
