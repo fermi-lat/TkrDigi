@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: ngigliet  Thu Mar 18 03:35:08 PST 2004
+TkrDigi/src/Bari
+
+Modified Files:
+	BariMcToHitTool.cxx ClusterNewton.cxx ClusterNewton.h 
+	CurrOr.cxx CurrOr.h DigiElem.cxx DigiElem.h TkrDigitizer.cxx 
+	TkrDigitizer.h 
+Log Message:
+BariAlg updates
+    *
+------------------------------------------------------------
 User: lsrea  Sat Mar 13 11:46:36 PST 2004
 TkrDigi/doc
 
