@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Fri Jul 19 08:59:17 PDT 2002
+TkrDigi/src
+
+Modified Files:
+	TkrSimpleDigiAlg.cxx 
+Log Message:
+build in noise: also fix slight bug.
+    *
+------------------------------------------------------------
 User: burnett  Fri Jul 19 08:57:17 PDT 2002
 TkrDigi/src
 
