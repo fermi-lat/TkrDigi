@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: lsrea  Thu Aug 15 14:02:11 PDT 2002
+TkrDigi/src
+
+Modified Files:
+	SiStripList.cxx TkrSimpleDigiAlg.cxx 
+Log Message:
+Move console output to logfile
+
+    *
+------------------------------------------------------------
 User: lsrea  Wed Aug 14 10:07:42 PDT 2002
 TkrDigi/src
 
