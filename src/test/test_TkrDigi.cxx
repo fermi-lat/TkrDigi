@@ -1,0 +1,98 @@
+// $Header: /nfs/slac/g//ground/cvs/CalDigi/src/test/test_CalDigi.cxx,v 1.2 2002/08/18 17:01:50 richard Exp $
+
+// Include files
+// Gaudi system includes
+#include "GaudiKernel/MsgStream.h"
+#include "GaudiKernel/AlgFactory.h"
+#include "GaudiKernel/IDataProviderSvc.h"
+#include "GaudiKernel/SmartDataPtr.h"
+#include "GaudiKernel/Algorithm.h"
+
+// TDS class declarations: input data, and McParticle tree
+
+#include "Event/TopLevel/EventModel.h"
+
+#include "Event/Digi/TkrDigi.h"
+
+// Define the class here instead of in a header file: not needed anywhere but here!
+//------------------------------------------------------------------------------
+/** 
+A simple algorithm.
+
+  
+*/
+class test_TkrDigi : public Algorithm {
+public:
+    test_TkrDigi(const std::string& name, ISvcLocator* pSvcLocator);
+    StatusCode initialize();
+    StatusCode execute();
+    StatusCode finalize();
+    
+private: 
+    //! number of times called
+    int m_count; 
+    //! the GlastDetSvc used for access to detector info
+};
+//------------------------------------------------------------------------
+
+// necessary to define a Factory for this algorithm
+// expect that the xxx_load.cxx file contains a call     
+//     DLL_DECL_ALGORITHM( test_TkrDigi );
+
+static const AlgFactory<test_TkrDigi>  Factory;
+const IAlgFactory& test_TkrDigiFactory = Factory;
+
+//------------------------------------------------------------------------
+//! ctor
+test_TkrDigi::test_TkrDigi(const std::string& name, ISvcLocator* pSvcLocator)
+:Algorithm(name, pSvcLocator)
+,m_count(0)
+{
+}
+
+//------------------------------------------------------------------------
+//! set parameters and attach to various perhaps useful services.
+StatusCode test_TkrDigi::initialize(){
+    StatusCode  sc = StatusCode::SUCCESS;
+    MsgStream log(msgSvc(), name());
+    log << MSG::INFO << "initialize" << endreq;
+    
+    return sc;
+}
+
+//------------------------------------------------------------------------
+//! process an event
+StatusCode test_TkrDigi::execute()
+{
+    StatusCode  sc = StatusCode::SUCCESS;
+    MsgStream   log( msgSvc(), name() );
+    log << MSG::INFO << "Has been called " << ++m_count << " time(s): ";
+    
+    
+    // First, the collection of TkrDigis is retrieved from the TDS
+    SmartDataPtr<Event::TkrDigiCol> digiCol(eventSvc(),EventModel::Digi::TkrDigiCol );
+    
+    if (digiCol == 0) {
+        log << "no TkrDigiCol found" << endreq;
+        sc = StatusCode::FAILURE;
+        return sc;
+    } else {
+        log << digiCol->size() << " TKR digis found " << endreq;
+    }
+    
+    
+    return sc;
+}
+
+//------------------------------------------------------------------------
+//! clean up, summarize
+StatusCode test_TkrDigi::finalize(){
+    StatusCode  sc = StatusCode::SUCCESS;
+    MsgStream log(msgSvc(), name());
+    log << MSG::INFO << "finalize after " << m_count << " calls." << endreq;
+    
+    return sc;
+}
+
+
+

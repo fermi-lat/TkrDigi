@@ -1,23 +1,44 @@
 //##############################################################
 //
-ApplicationMgr.ExtSvc   = { "GlastDetSvc" };
+//  Job options file for TkrBariDigiAlg test 
 
+// primary DLLs
+
+ApplicationMgr.DLLs+= {"RootIo","TkrDigi"};
+
+// ----------------------------
+// setup basic event loop stuff
 //
+ApplicationMgr.ExtSvc = { 
+    "GlastEventSelector/EventSelector" , 
+    "EventCnvSvc"
+    };
+EventPersistencySvc.CnvServices = {"EventCnvSvc"};
+EventSelector.Input = "NONE";
 
-// List of Dlls
-ApplicationMgr.DLLs   = { "GlastSvc", "TkrDigi" };
+// ----------------------------
+//  topalg
+//
+ApplicationMgr.TopAlg = {
+    "mcRootReaderAlg",      
+    "TkrSimpleDigiAlg",
+    "test_TkrDigi" 
+    };
 
+// ----------------------------
+//  Geometry definition
+//
+ApplicationMgr.DLLs += {"GlastSvc"};
+ApplicationMgr.ExtSvc += { "GlastDetSvc"};
+GlastDetSvc.topVolume="LAT"; 
 
-ApplicationMgr.TopAlg = { "ReadDigi", "TkrSimpleDigiAlg" };
-
-// uncomment this to test reduced version
-//GlastDetSvc.topVolume="oneTower";
+GlastDetSvc.xmlfile="$(XMLGEODBSROOT)/xml/flight/flightSegVols.xml";
+//GlastDetSvc.visitorMode="recon";
 
 // Set output level threshold (2=DEBUG, 3=INFO, 4=WARNING, 5=ERROR, 6=FATAL )
-MessageSvc.OutputLevel      = 2;
-
-
-ApplicationMgr.EvtMax = 11;
+MessageSvc.OutputLevel = 3;
+ApplicationMgr.EvtMax = 5;
+mcRootReaderAlg.mcRootFile="$(TKRDIGIROOT)/src/test/muon_mc.root";
 
 //==============================================================
 //
