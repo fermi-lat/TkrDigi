@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: lsrea  Fri May  2 09:34:09 PDT 2003
+TkrDigi/src
+
+Modified Files:
+	TkrSimpleDigiAlg.cxx 
+Log Message:
+Noise and threshold params, notably noiseOccupancy (was 1e-5, now 5e-5) changed to match pdrApp.
+    *
+------------------------------------------------------------
 User: lsrea  Fri May  2 09:09:36 PDT 2003
 TkrDigi/src
 
