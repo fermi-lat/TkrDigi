@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: lsrea  Thu May  8 19:40:47 PDT 2003
+TkrDigi/src
+
+Modified Files:
+	TkrSimpleDigiAlg.cxx 
+Log Message:
+Fixed bug in alignment code
+    *
+------------------------------------------------------------
+User: lsrea  Thu May  8 19:40:47 PDT 2003
 TkrDigi/doc
 
 Modified Files:
