@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: burnett  Thu Jun 20 15:23:38 PDT 2002
+TkrDigi/src
+
+Modified Files:
+	SiStripList.cxx SiStripList.h TkrSimpleDigiAlg.cxx 
+Log Message:
+
+add code to modify deposited energy with noise, add noise strip hits.
+Needs a little redesign to allow setting strips in planes without data.
+    *
+------------------------------------------------------------
 User: burnett  Sun Jun  9 07:48:54 PDT 2002
 TkrDigi/cmt
 
