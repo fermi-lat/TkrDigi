@@ -1,4 +1,2 @@
 setup.*
-cleanup.*
-Makefile
-*.make
+cleanup*

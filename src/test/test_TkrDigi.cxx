@@ -1,4 +1,4 @@
-// $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/test/test_TkrDigi.cxx,v 1.3 2003/11/06 19:03:01 lsrea Exp $
+// $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/test/test_TkrDigi.cxx,v 1.1 2002/08/25 17:13:12 lsrea Exp $
 
 // Include files
 // Gaudi system includes
@@ -82,7 +82,7 @@ StatusCode test_TkrDigi::execute()
             log << MSG::INFO << endreq << "Detailed dump of 1st event: " << endreq << endreq;
             int ndigi = 0;
             Event::TkrDigiCol::const_iterator pTkrDigi = digiCol->begin();
-            for (; pTkrDigi!= digiCol->end(); pTkrDigi++) {
+            for (pTkrDigi; pTkrDigi!= digiCol->end(); pTkrDigi++) {
                 log <<MSG::INFO << "Digi " << ndigi++ << " ";
                 // output the digi proper:  " << digi " no longer works because
                 // "digi" now returns an integer sort order
@@ -90,6 +90,7 @@ StatusCode test_TkrDigi::execute()
                 log << endreq;
             }
         }
+
     }
     
     

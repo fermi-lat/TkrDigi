@@ -1,13 +1,9 @@
 package TkrDigi
+version v1r11p5
 
-version v2r0p3
-
-author Monica Brigida <monica.brigida@ba.infn.it>
 author Leon Rochester <lsrea@slac.stanford.edu>
-author Michael Kuss   <michael.kuss@pi.infn.it>
 
 branches src cmt doc
-
 use GlastPolicy v5r*
 use GlastSvc v9r*
 use Event v9r*
@@ -16,7 +12,7 @@ use GuiSvc v3r*
 use TkrUtil v1r*
 use facilities v2r*
 
-use xml v4r*
+use xml v4r*      
 
 apply_pattern packageShr
 
@@ -24,30 +20,19 @@ set JOBOPTIONS ${TKRDIGIROOT}/src/test/jobOptions.txt
 
 #=============================================================
 private
-
 use RootPolicy v2r*
 use RootIo v*
 
 use G4Propagator v*
 
-#apply_pattern package_headers
+apply_pattern package_headers
 
-#macro_append TkrDigi_headers "" WIN32 " *.h"
-#library TkrDigi   *.cxx   Dll/*.cxx   ${TkrDigi_headers}
+macro_append TkrDigi_headers "" WIN32 " *.h"
 
-macro TKRDIGI_source    " *.cxx " \
-        WIN32           " *.cxx *.h "
-
-library TkrDigi \
-        -s=.          ${TKRDIGI_source} \
-        -s=General    ${TKRDIGI_source} \
-        -s=Bari       ${TKRDIGI_source} \
-        -s=Simple     ${TKRDIGI_source} \
-        -s=Dll        ${TKRDIGI_source} \
-        -s=GaudiAlg   ${TKRDIGI_source}
+library TkrDigi   *.cxx   Dll/*.cxx   ${TkrDigi_headers}               
 
 apply_pattern package_Cshlibflags
 
-# build this for testing, console only. Load all objects directly.
+# build this for testing, console only. Load all objects directly. 
 
 application test_TkrDigi ${GuiMain} test/*.cxx ${Win32Resource}
