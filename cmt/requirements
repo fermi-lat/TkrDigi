@@ -1,6 +1,6 @@
 package TkrDigi
 
-version v2r0p6
+version v2r0p7
 
 author Monica Brigida <monica.brigida@ba.infn.it>
 author Leon Rochester <lsrea@slac.stanford.edu>
@@ -25,7 +25,7 @@ set JOBOPTIONS ${TKRDIGIROOT}/src/test/jobOptions.txt
 #=============================================================
 private
 
-use RootPolicy v2r*
+use RootPolicy v4r*
 use RootIo v*
 
 use G4Propagator v*

@@ -2,6 +2,7 @@
 @verbatim
  Package TkrDigi
 
+ v2r0p7     18-jun-2004  HMK Use latest RootPolicy version
  v2r0p6     16-jun-2004  LSR fix bug in alignment code in Simple alg, and
                                add alignment code to Bari alg
  v2r0p5     10-may-2004  LSR use new TkrToTSvc params
