@@ -1,4 +1,18 @@
 ------------------------------------------------------------
+User: lsrea  Sun Aug 25 10:13:12 PDT 2002
+TkrDigi/src/test
+
+Modified Files:
+	jobOptions.txt 
+Added Files:
+	muon_mc.root test_TkrDigi.cxx test_TkrDigi_load.cxx 
+Removed Files:
+	ReadDigi.cxx ReadDigi.h 
+Log Message:
+add a functioning test program
+
+    *
+------------------------------------------------------------
 User: lsrea  Sun Aug 25 10:13:11 PDT 2002
 TkrDigi/cmt
 
