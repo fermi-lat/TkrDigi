@@ -6,7 +6,7 @@
  *
  * @authors Nico Giglietto, Monica Brigida, Leon Rochester, Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Bari/BariMcToHitTool.cxx,v 1.2 2004/03/09 20:06:30 lsrea Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Bari/BariMcToHitTool.cxx,v 1.3 2004/03/18 11:35:08 ngigliet Exp $
  */
 
 #include "BariMcToHitTool.h"
@@ -201,10 +201,12 @@ StatusCode BariMcToHitTool::execute()
     log << endreq;
 
     // Take care of insuring that the data area has been created
+    log << MSG::DEBUG << "we should create /Event/tmp" << endreq;
     DataObject* pNode = 0;
     sc = m_edSvc->retrieveObject("/Event/tmp", pNode);
     if ( sc.isFailure() ) {
         sc = m_edSvc->registerObject("/Event/tmp", new DataObject);
+        log << MSG::DEBUG << "registering /Event/tmp" << endreq;
         if( sc.isFailure() ) {
             log << MSG::ERROR << "could not register /Event/tmp" << endreq;
             return sc;
