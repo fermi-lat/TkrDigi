@@ -1,5 +1,5 @@
 // File and Version Information:
-//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.19 2003/01/06 19:48:28 lsrea Exp $
+//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.20 2003/01/27 00:39:26 lsrea Exp $
 //
 // Description:
 //      TkrSimpleDigiAlg provides an example of a Gaudi algorithm.  
@@ -31,6 +31,7 @@
 #include "TkrUtil/ITkrFailureModeSvc.h"
 #include "TkrUtil/ITkrBadStripsSvc.h"
 #include "TkrUtil/ITkrAlignmentSvc.h"
+#include "TkrUtil/ITkrGeometrySvc.h"
 
 #include "idents/VolumeIdentifier.h"
 #include "idents/TowerId.h"
@@ -62,7 +63,7 @@
 *
 * @author T. Burnett
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.19 2003/01/06 19:48:28 lsrea Exp $  
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.20 2003/01/27 00:39:26 lsrea Exp $  
 */
 
 class TkrSimpleDigiAlg : public Algorithm {
@@ -94,11 +95,12 @@ private:
     void addNoise();
     
     void clear();
-    IGlastDetSvc * m_gsv;
+    IGlastDetSvc *       m_gsv;
+    ITkrGeometrySvc *    m_tgsv;
 
     ITkrFailureModeSvc * m_fsv;
-    ITkrBadStripsSvc   * m_bsv;
-    ITkrAlignmentSvc   * m_asv;
+    ITkrBadStripsSvc *   m_bsv;
+    ITkrAlignmentSvc *   m_asv;
     
     SiLayerList m_layers;
     
@@ -154,7 +156,14 @@ StatusCode TkrSimpleDigiAlg::initialize(){
         return StatusCode::FAILURE;
     }
 
-    // Get the failure mode service 
+    // Get the Glast detector service 
+    m_tgsv=0;
+    if( service( "TkrGeometrySvc", m_tgsv).isFailure() ) {
+        log << MSG::ERROR << "Couldn't set up TkrGeometrySvc!" << endreq;
+        return StatusCode::FAILURE;
+    }
+
+   // Get the failure mode service 
     m_fsv=0;
     if( service( "TkrFailureModeSvc", m_fsv).isFailure() ) {
         log << MSG::INFO << "Couldn't set up TkrFailureModeSvc" << endreq;
@@ -326,10 +335,22 @@ StatusCode TkrSimpleDigiAlg::execute()
             } else {
                 pDigi->addC1Hit(stripId, thisToT);
             }
-            
+           
+            // get the alignment offset of the strip
+            HepPoint3D point(0);
+            double deltaX = 0;
+            double deltaY = 0;
+            if( m_asv && m_asv->alignSim()) {
+                HepPoint3D entry(0., 0., 0.);
+                HepPoint3D  exit(0., 0., 1.);
+                m_asv->moveMCHit(id, entry, exit);
+                deltaX = -entry.x();
+                deltaY = -entry.y();
+            }
+
             // save the hit here
             Event::McTkrStrip* pStrip = 
-                new Event::McTkrStrip(id, stripId, e, noise, hits);
+                new Event::McTkrStrip(id, stripId, e, noise, hits, deltaX, deltaY);
             strips->push_back(pStrip);
             
             // and add the relation
