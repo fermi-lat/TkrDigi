@@ -7,7 +7,7 @@
  *
  * @authors Toby Burnett, Leon Rochester, Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigiSandBox/src/General/GeneralHitToDigiTool.h,v 1.1 2004/02/24 13:57:34 kuss Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitToDigiTool.h,v 1.1 2004/02/27 10:14:15 kuss Exp $
  */
 
 #ifndef __GENERALHITTODIGITOOL_H__
@@ -59,6 +59,8 @@ private:
     ITkrBadStripsSvc*   m_tbsSvc;
     /// Pointer to the tracker alignment service
     ITkrAlignmentSvc*   m_taSvc;
+    /// Pointer to the tracker splits service
+    ITkrSplitsSvc*      m_tspSvc;
 
     /// if true, kill bad strips in digi
     bool   m_killBadStrips;

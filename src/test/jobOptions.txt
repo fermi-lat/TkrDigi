@@ -10,7 +10,7 @@ ApplicationMgr.DLLs+= {"RootIo","TkrDigi", "TkrUtil"};
 // setup basic event loop stuff
 //
 ApplicationMgr.ExtSvc = { 
-    "GlastEventSelector/EventSelector" , 
+   "GlastEventSelector/EventSelector" , 
     "EventCnvSvc"
     };
 EventPersistencySvc.CnvServices = {"EventCnvSvc"};
@@ -34,19 +34,17 @@ ApplicationMgr.TopAlg = {
 // ----------------------------
 // Just to see that the following services don't start misbehaving
 //
-ApplicationMgr.ExtSvc += {"TkrFailureModeSvc"};
 TkrFailureModeSvc.towerList= {"14"};  
 TkrFailureModeSvc.layerList= {"14_3_0", "14_4_1"};
 
-ApplicationMgr.ExtSvc += {"TkrBadStripsSvc"};
 TkrBadStripsSvc.badStripsFile = "$(TKRUTILROOT)/src/test/badStrips.txt";
+
+TkrSplitsSvc.splitsFile = "$(TKRUTILROOT)/src/test/splits.xml";
 
 // ----------------------------
 //  Geometry definition
 //
 ApplicationMgr.DLLs += {"GlastSvc", "G4Generator", "G4Propagator"};
-ApplicationMgr.ExtSvc += { "GlastDetSvc"};
-ApplicationMgr.ExtSvc += { "TkrGeometrySvc" };
 
 GlastDetSvc.topVolume="LAT"; 
 

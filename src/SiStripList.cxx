@@ -6,7 +6,7 @@
  * @author Toby Burnett, Leon Rochester (original authors)
  * @author Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigiSandBox/src/SiStripList.cxx,v 1.22 2004/02/24 13:57:32 kuss Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.cxx,v 1.13 2004/02/27 10:14:13 kuss Exp $
  */
 
 #include "SiStripList.h"
@@ -356,88 +356,75 @@ int SiStripList::removeStripsBelowThreshold(const double threshold) {
 
 // private member functions
 
-int SiStripList::getToT(const int sep, const int controller) const {
-    // Purpose and Method: Calculates the ToT of a layer for given controller.
+void SiStripList::getToT(int* ToT, const int sep) const {
+
+    // Purpose and Method: Calculates the ToTs of a layer.
     //                     There are two methods, based on the information
     //                     stored with the strips: McToHitBariTool stores the
     //                     ToT start and stop time (and the energy, but this one
     //                     is inaccurate and is used only for GuiSvc),
     //                     McToHitSimpleTool stores the energy.  Usually, a
     //                     strip list should contain only "real" hits filled
-    //                     with one method, but noise hits always don't contain
-    //                     the times but an energy.
+    //                     with one method.
+    //
+    //                     If called with one argument, the method returns a pointer
+    //                     to a single ToT, the max ToT for the layer
+    //
     //                     The code determines, if set, the minimum start and
     //                     stop times and calculates the ToT.  Otherwise, it
     //                     uses an empirical parametrization to estimate the
     //                     ToT from the maximum energy deposited in a single
     //                     strip.  For the later, implicitely noise hits are
     //                     included, but not for the "times" method.
-    // Inputs: strip id of the separating strip (exclusive)
-    // Outputs: a ToT
-    // Dependencies: none
-    // Caveats: Before, there were two separate routines for ToT0 and ToT1.
-    //          Both were almost identical except for the "for" loop.  ToT0 used
-    //          an iterator, ToT1 an reverse_iterator (to speed up searching),
-    //          To ease maintainance, I wanted to merge both routines, but
-    //          didn't find a better way than the one I have implemented now.
+    // Inputs: pointer to the array of ToTs, strip id of the last C0 strip
+    // Outputs: fills in the ToTs
 
-    int begin;
-    int end;
-    int inc;
-    if ( controller == 0 ) {  // loop parameters for controller 0
-        begin = 0;
-        end = size();
-        inc = 1;
-    }
-    else { // assuming controller 1
-        begin = size() - 1;
-        end = -1;
-        inc = -1;
-    }
+    int t1[2]     = {INT_MAX, INT_MAX};
+    int t2[2]     = {INT_MIN, INT_MIN};
+    float emax[2] = {FLT_MIN, FLT_MIN};
 
-    int t1 = INT_MAX;
-    int t2 = INT_MIN;
-    float emax = FLT_MIN;
-
-    for ( int i=begin; i!=end; i+=inc ) { // loop over strips
-        const SiStripList::Strip* it = &m_strips[i];
+    int size = m_strips.size();
+    int controller = 0;
+    int i;
+    for (i=0; i<size; ++i ) { // loop over strips
+        const SiStripList::Strip strip = m_strips[i];
         // don't use strips which are "bad" or "noise"
-        if ( it->badStrip() /* || it->noise()*/ )
+        if ( strip.badStrip() /* || strip.noise()*/ )
             continue;
-        if ( ( controller == 0 && it->index() >= sep ) ||
-             ( controller == 1 && it->index() < sep ) )
-            break; // break if the range of the other controller is reached
-        const int time1 = it->time1();
-        const int time2 = it->time2();
+        int index = strip.index();
+        if (index>sep) controller = 1;
+        const int time1 = strip.time1();
+        const int time2 = strip.time2();
         if( time1 != -1 && time2 != -1 ) { // strip with times ("Bari")
-            if ( time1 < t1 )
-                t1 = time1;
-            if ( time2 > t2 )
-                t2 = time2;
+            if ( time1 < t1[controller] )
+                t1[controller] = time1;
+            if ( time2 > t2[controller] )
+                t2[controller] = time2;
         }
         else { // strip without times ("Simple")
-            const float e = it->energy();
-            if ( e > emax )
-                emax = e;
+            const float e = strip.energy();
+            if ( e > emax[controller] )
+                emax[controller] = e;
         }
     }
 
     static const int totMax = GeneralHitToDigiTool::totMax();
 
-    if ( t1 != INT_MAX && t2 != INT_MIN ) // "Bari"
-        return std::min( totMax, ( t2 - t1 ) / 20 );
+    // loop over controllers
+    for(i=0; i<2; ++i) {
+        ToT[i] = 0;
+        if ( t1[i] != INT_MAX && t2[i] != INT_MIN ) // "Bari"
+            ToT[i] =  std::min( totMax, ( t2[i] - t1[i] ) / 20 );
 
-    static const double totAt1Mip = GeneralHitToDigiTool::totAt1Mip();
-    static const double mevPerMip = GeneralHitToDigiTool::mevPerMip();
-    static const double threshold = GeneralHitToDigiTool::totThreshold();
-    static const double f         = totAt1Mip / ( 1.0 - threshold / mevPerMip );
-   
-    if ( emax/mevPerMip > threshold ) { // "Simple" or noise
-        int iToT = static_cast<int> ( ( emax - threshold ) / mevPerMip * f );
-        return  std::min( iToT, totMax );
+        static const double totAt1Mip = GeneralHitToDigiTool::totAt1Mip();
+        static const double mevPerMip = GeneralHitToDigiTool::mevPerMip();
+        static const double threshold = GeneralHitToDigiTool::totThreshold();
+        static const double f         = totAt1Mip / ( 1.0 - threshold / mevPerMip );
+
+        if ( emax[i]/mevPerMip > threshold ) { // "Simple" or noise
+            int iToT = static_cast<int> ( ( emax[i] - threshold ) / mevPerMip * f );
+            ToT[i] =  std::min( iToT, totMax );
+        }
+    if (sep==sepSentinel) break;
     }
-
-    // ToT is below threshold, but strip fired: different thresholds for each!
-    // (or some other anomaly)
-    return 0;
 }
