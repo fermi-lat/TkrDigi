@@ -1,5 +1,5 @@
 // File and Version Information:
-//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.13 2002/10/08 23:59:37 lsrea Exp $
+//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.14 2002/10/09 04:59:47 lsrea Exp $
 //
 // Description:
 //      TkrSimpleDigiAlg provides an example of a Gaudi algorithm.  
@@ -58,7 +58,7 @@
 *
 * @author T. Burnett
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.13 2002/10/08 23:59:37 lsrea Exp $  
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.14 2002/10/09 04:59:47 lsrea Exp $  
 */
 
 class TkrSimpleDigiAlg : public Algorithm {
@@ -249,7 +249,6 @@ StatusCode TkrSimpleDigiAlg::execute()
     digiHit.init();
     tabType* pRelTab = digiHit.getAllRelations();
     
-    //std::cout << "pointer to table: " << pRelTab << std::endl;
     sc = eventSvc()->registerObject(EventModel::Digi::TkrDigiHitTab, pRelTab);
     if (sc.isFailure()) {
         log << MSG::ERROR << "Registration of digiHit Failed!" << endreq; 
@@ -301,52 +300,22 @@ StatusCode TkrSimpleDigiAlg::execute()
             std::string stripString;
             facilities::Util::itoa(stripId, stripString);
             // right adjust... is there a better way?
-            while (stripString.length()<4) {
-                stripString = " "+stripString;
-            }
-            
-            Event::McTkrStrip::hitList::const_iterator ihit;
-            Event::McPositionHit* pHit= 0;
-            int nHits = pStrip->getHits().size();
-            
-            bool found1 = false;
-            if (nHits>0) {
-                for (ihit = pStrip->begin(); ihit!=pStrip->end(); ihit++) {
-                    Event::McPositionHit* pHit = *ihit;
+            while (stripString.length()<4) {stripString = " "+stripString;}
 
-                    // now check to see if we have it already
-                    if(digiHit.size()>0){
-                        std::vector<relType*> byFirst;
-                        byFirst = digiHit.getRelByFirst(pDigi);
-                        int vSize = byFirst.size();
-                        for (int ir = 0; ir<vSize; ir++) {
-                            relType* rel = byFirst[ir];
-                            if ( rel->getSecond()==pHit) {
-                                found1 = true;
-                                rel->addInfo(stripString);
-                                //std::cout << "Info added to existing relation: " 
-                                //    << pDigi << " " << pHit << std::endl;
-                                break;
-                            }
-                        }
-                    }
-                    // if not, add it
-                    if (!found1) {                          
-                        relType *rel = new relType(pDigi, pHit);
-                        rel->addInfo(stripString);
-                        digiHit.addRelation(rel);
-                        
-                        //std::cout << "Regular relation added: " 
-                        //    << pDigi << " " << pHit << std::endl;
-                    }
-                }
+            Event::McTkrStrip::hitList::const_iterator itH;
+                
+            for (itH = pStrip->begin(); itH!=pStrip->end(); itH++) {
+                Event::McPositionHit* pHit = *itH;
+                relType *rel = new relType(pDigi, pHit);
+                rel->addInfo(stripString);
+                //addRelation now does the right thing with duplicates
+                // namely, appends the info to the existing info
+                digiHit.addRelation(rel);
             }
-        }
+         }
 
         // sort by tower, layer, view
-        std::sort(pTkrDigi->begin(), pTkrDigi->end(), Event::TkrDigi::digiLess());
-              
-        
+        std::sort(pTkrDigi->begin(), pTkrDigi->end(), Event::TkrDigi::digiLess());        
     }
     return sc;
 }
@@ -379,8 +348,7 @@ void TkrSimpleDigiAlg::addNoise(){
             noiseCount -= m_SiMap[id]->size();
             m_SiMap[id]->addNoise(m_noiseSigma, m_noiseOccupancy, m_threshold);
             noiseCount += m_SiMap[id]->size();
-        }
-        
+        }       
     }
     
     MsgStream log(msgSvc(), name());
