@@ -1,5 +1,5 @@
 package TkrDigi
-version v1r11p1
+version v1r11p2
 
 branches src cmt doc
 use GlastPolicy v5r*
@@ -19,7 +19,7 @@ set JOBOPTIONS ${TKRDIGIROOT}/src/test/jobOptions.txt
 #=============================================================
 private
 use RootPolicy v2r*
-use RootIo v6*
+use RootIo v*
 
 use G4Propagator v*
 
