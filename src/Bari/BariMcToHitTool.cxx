@@ -6,7 +6,7 @@
 *
 * @authors Nico Giglietto, Monica Brigida, Leon Rochester, Michael Kuss
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Bari/BariMcToHitTool.cxx,v 1.4 2004/03/19 10:11:21 kuss Exp $
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Bari/BariMcToHitTool.cxx,v 1.5 2004/03/19 16:41:16 lsrea Exp $
 */
 
 #include "BariMcToHitTool.h"
@@ -78,7 +78,6 @@ StatusCode BariMcToHitTool::initialize()
     }
     log << MSG::INFO << "Opening currents file " << m_CurrentsFile << endreq;
 
-
     IService* iService = 0;
     sc = serviceLocator()->service("EventDataSvc", iService, true);
     if ( sc.isFailure() ) {
@@ -92,6 +91,12 @@ StatusCode BariMcToHitTool::initialize()
     sc = service("GlastDetSvc", gsv);
     if( sc.isFailure() ) {
         log << MSG::ERROR << "could not find GlastDetSvc !" << endreq;
+        return sc;
+    }
+
+    sc = service("TkrGeometrySvc", m_geoSvc);
+    if( sc.isFailure() ) {
+        log << MSG::ERROR << "could not find TkrGeometrySvc !" << endreq;
         return sc;
     }
 
@@ -137,13 +142,15 @@ StatusCode BariMcToHitTool::execute()
             << EventModel::MC::McPositionHitCol << endreq;
     } else {
 
-        //    CurrOr* CurrentOr = new CurrOr();
-
+        // This assumes that the number of ladders equals the number of
+        // wafers/ladder.  Not true for the BFEM/BTEM!
         static const double ladder_pitch = SiStripList::die_width()
             + SiStripList::ladder_gap();
         static const double ssd_pitch    = SiStripList::die_width()
             + SiStripList::ssd_gap();
         static const double waferOffset  = 0.5*(SiStripList::n_si_dies() - 1);
+
+        ITkrAlignmentSvc* alsv = m_geoSvc->getTkrAlignmentSvc();
 
         // start hits loop 
         Event::McPositionHitCol::iterator it;        
@@ -157,35 +164,48 @@ StatusCode BariMcToHitTool::execute()
             if ( !volId.isTowerTkr() )
                 continue;
 
-            const int tower   = volId.getTower().id();
-            const int bilayer = volId.getLayer();
-            const int view    = volId.getView();
-            const int ladder  = volId.getLadder(); // needed for the offset
-            const int wafer   = volId.getWafer(); // needed for the offset
+            // these are in the wafer frame
+            HepPoint3D localEntry(pHit->entryPoint());
+            HepPoint3D localExit (pHit->exitPoint());
 
-            // Here we shift the coordinate from the wafer to the plane
-            // this assumes that the number of ladders equals the number of
-            // wafers/ladder.  This is not true for the BFEM/BTEM!
+            // move hit by alignment constants
+            // the wafer constants are applied to the wafer coordinates
+            if ( alsv && alsv->alignSim() )
+                alsv->moveMCHit(volId, localEntry, localExit);
+
+            // now generate the plane coordinates
+            // Since we know how the ladders and wafers are laid out
+            //    we just translate the wafer coordinates
+            const TkrVolumeIdentifier planeId = volId.getPlaneId();
+
+            const int ladder = volId.getLadder();
+            const int wafer  = volId.getWafer();
+
             const HepVector3D offset((ladder-waferOffset)*ladder_pitch,
                 (wafer-waferOffset)*ssd_pitch, 0);
-            HepPoint3D entry(pHit->entryPoint()+offset);
-            HepPoint3D exit (pHit->exitPoint() +offset);
 
-            const double energy = pHit->depositedEnergy();
-
-            log << MSG::DEBUG;
-            if (log.isActive() ) 
-                log << "Hit " << ++kk << " tower " << tower
-                << " layer " << bilayer << " view "  << view
-                <<" ene " << energy << endreq
-                << "      "
-                << " entry(" << entry.x()<<", "<<entry.y()<<", "<<entry.z() 
-                << ") exit (" << exit.x()<<", "<<exit.y()<<", "<<exit.z() << ")";
-            log << endreq;
+            HepPoint3D planeEntry(localEntry + offset);
+            HepPoint3D planeExit (localExit  + offset);
 
             // set variables
             // getPlaneId() returns a volId with ladder and wafer info stripped
-            Digit.set(energy, entry, exit, volId.getPlaneId(), pHit);
+            const double energy = pHit->depositedEnergy();
+
+            log << MSG::DEBUG;
+            if (log.isActive() ) {
+                const int tower   = volId.getTower().id();
+                const int bilayer = volId.getLayer();
+                const int view    = volId.getView();
+                log << "Hit " << ++kk << " tower " << tower
+                    << " layer " << bilayer << " view "  << view
+                    <<" ene " << energy << endreq
+                    << "      "
+                    << " entry(" << planeEntry.x()<<", "<<planeEntry.y()<<", "<<planeEntry.z() 
+                    << ") exit (" << planeExit.x()<<", "<<planeExit.y()<<", "<<planeExit.z() << ")";
+                log << endreq;
+            }
+
+            Digit.set(energy, planeEntry, planeExit, volId.getPlaneId(), pHit);
             // analog section
             Digit.setDigit(&m_openCurr);
             Digit.clusterize(&CurrentOr);
@@ -225,4 +245,3 @@ StatusCode BariMcToHitTool::execute()
 
     return sc;
 }
-
