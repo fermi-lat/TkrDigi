@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: lsrea  Sun Dec 26 15:28:20 PST 2004
+TkrDigi/src
+
+Modified Files:
+	SiStripList.cxx 
+Log Message:
+Prepare for tag v3r3: mods to ToT calls
+
+    *
+------------------------------------------------------------
 User: lsrea  Sun Dec 26 15:28:19 PST 2004
 TkrDigi/doc
 
