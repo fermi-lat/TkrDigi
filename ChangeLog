@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: lsrea  Thu Oct  2 18:45:18 PDT 2003
+TkrDigi/src
+
+Modified Files:
+	TkrSimpleDigiAlg.cxx 
+Log Message:
+add saturation of ToT, and make sure ToT doesn't go negative
+    *
+------------------------------------------------------------
 User: lsrea  Thu May  8 19:44:54 PDT 2003
 TkrDigi/doc
 
