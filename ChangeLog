@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: lsrea  Wed Aug 14 10:07:42 PDT 2002
+TkrDigi/doc
+
+Modified Files:
+	release.notes 
+Log Message:
+Remove code for handling incomplete ID's; check for TKR hit
+Prepare for tag v1r5p5 
+
+    *
+------------------------------------------------------------
 User: lsrea  Mon Aug 12 16:10:13 PDT 2002
 TkrDigi/doc
 
