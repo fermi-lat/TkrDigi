@@ -1,5 +1,15 @@
 ------------------------------------------------------------
 User: lsrea  Tue Oct 12 12:02:28 PDT 2004
+TkrDigi/src/General
+
+Modified Files:
+	GeneralHitToDigiTool.cxx GeneralHitToDigiTool.h 
+Log Message:
+convert to m_tkrGeom throughout
+
+    *
+------------------------------------------------------------
+User: lsrea  Tue Oct 12 12:02:28 PDT 2004
 TkrDigi/src/Bari
 
 Modified Files:
