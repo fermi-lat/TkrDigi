@@ -1,5 +1,5 @@
 // File and Version Information:
-//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.12 2002/10/08 22:25:01 lsrea Exp $
+//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.13 2002/10/08 23:59:37 lsrea Exp $
 //
 // Description:
 //      TkrSimpleDigiAlg provides an example of a Gaudi algorithm.  
@@ -58,7 +58,7 @@
 *
 * @author T. Burnett
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.12 2002/10/08 22:25:01 lsrea Exp $  
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.13 2002/10/08 23:59:37 lsrea Exp $  
 */
 
 class TkrSimpleDigiAlg : public Algorithm {
@@ -101,9 +101,11 @@ private:
     /// frequency of noise hits
     double m_noiseOccupancy;  
     /// average tot response to a MIP
-    double m_totPerMip;
+    double m_totAt1Mip;
     /// average eloss in silicon per MIP (to calculate ToT from eloss
     double m_mevPerMip;
+    /// threshold for ToT (in Mips)
+    double m_totThreshold;
 };
 
 static const AlgFactory<TkrSimpleDigiAlg>  Factory;
@@ -115,8 +117,9 @@ TkrSimpleDigiAlg::TkrSimpleDigiAlg(const std::string& name, ISvcLocator* pSvcLoc
     declareProperty("threshold",      m_threshold     = 0.030 );  
     declareProperty("noiseSigma",     m_noiseSigma    = 0.010 );
     declareProperty("noiseOccupancy", m_noiseOccupancy= 1.e-5 );
-    declareProperty("totPerMip"     , m_totPerMip     = 300.  );
+    declareProperty("totAt1Mip"     , m_totAt1Mip     = 15.0  );
     declareProperty("mevPerMip"     , m_mevPerMip     = 0.155 );
+    declareProperty("totThreshold"  , m_totThreshold  = 0.2   );
 }
 
 StatusCode TkrSimpleDigiAlg::initialize(){
@@ -183,6 +186,8 @@ StatusCode TkrSimpleDigiAlg::execute()
     // Restrictions and Caveats:  None
     
     using namespace Event;
+
+    double totFactor = m_totAt1Mip/(1. - m_totThreshold);
     
     StatusCode  sc = StatusCode::SUCCESS;
     MsgStream   log( msgSvc(), name() );
@@ -280,7 +285,7 @@ StatusCode TkrSimpleDigiAlg::execute()
             
             // add the strip with the correct controller number'
             // and do the ToT
-            int thisToT = e/m_mevPerMip*m_totPerMip;
+            int thisToT = (e/m_mevPerMip - m_totThreshold)*totFactor;
             if (stripId<SiStripList::n_si_strips()/2) {
                 pDigi->addC0Hit(stripId, thisToT);
             } else {
