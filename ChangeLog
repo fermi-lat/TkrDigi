@@ -1,5 +1,15 @@
 ------------------------------------------------------------
 User: lsrea  Mon Dec 13 19:07:33 PST 2004
+TkrDigi/src
+
+Modified Files:
+	SiStripList.cxx SiStripList.h 
+Log Message:
+prepare for tag v2r1: mods for new TkrUtil; add test feature
+
+    *
+------------------------------------------------------------
+User: lsrea  Mon Dec 13 19:07:33 PST 2004
 TkrDigi/doc
 
 Modified Files:
