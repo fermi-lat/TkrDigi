@@ -1,5 +1,6 @@
-//$Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiLayerList.cxx,v 1.3 2003/03/01 02:16:06 lsrea Exp $
+//$Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiLayerList.cxx,v 1.4 2003/03/22 22:55:08 lsrea Exp $
 #include "SiLayerList.h"
+#include <iostream>
 
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -21,9 +22,10 @@ IGeometry::VisitorRet
         return AbortSubtree;
     }
     // abort if we know it does not contain what we are looking for
-    if( name.substr(0,3)=="ACD") return AbortSubtree;
+        std::string prefix = name.substr(0,3);
+        if( prefix=="ACD" || prefix=="CAL") return AbortSubtree;
 
-    // otherwise continure
+    // otherwise continue
     return More;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
