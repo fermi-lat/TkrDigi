@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: jrb  Wed Nov 10 16:21:50 PST 2004
+TkrDigi/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+Eliminate use of xml..no obvious reason for it
+
+    *
+------------------------------------------------------------
 User: lsrea  Tue Oct 12 12:02:28 PDT 2004
 TkrDigi/src/Simple
 
