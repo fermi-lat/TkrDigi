@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: lsrea  Mon Jan  6 10:37:10 PST 2003
+TkrDigi/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+point to new TkrUtil (necessary until Gleam uses TkrUtil)
+    *
+------------------------------------------------------------
 User: lsrea  Fri Dec  6 15:58:46 PST 2002
 TkrDigi/src
 
