@@ -1,5 +1,15 @@
 ------------------------------------------------------------
 User: lsrea  Thu Mar 13 11:07:23 PST 2003
+TkrDigi/src
+
+Modified Files:
+	TkrSimpleDigiAlg.cxx 
+Log Message:
+modified for concurrent changes in TkrUtil
+
+    *
+------------------------------------------------------------
+User: lsrea  Thu Mar 13 11:07:23 PST 2003
 TkrDigi/cmt
 
 Modified Files:
