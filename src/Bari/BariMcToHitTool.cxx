@@ -6,7 +6,7 @@
 *
 * @authors Nico Giglietto, Monica Brigida, Leon Rochester, Michael Kuss
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Bari/BariMcToHitTool.cxx,v 1.10 2004/07/27 16:11:29 ngigliet Exp $
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Bari/BariMcToHitTool.cxx,v 1.11 2004/10/12 19:02:28 lsrea Exp $
 */
 
 #include "BariMcToHitTool.h"
@@ -23,7 +23,7 @@
 // Glast specific includes
 #include "GlastSvc/GlastDetSvc/IGlastDetSvc.h"
 
-#include "xml/IFile.h"
+#include "facilities/Util.h"
 
 #include "Event/TopLevel/EventModel.h"
 #include "Event/TopLevel/Event.h"
@@ -69,7 +69,7 @@ StatusCode BariMcToHitTool::initialize()
 
     // Do the currents file (once) - LSR
     // OpenCurrent now returns a status code - LSR    
-    xml::IFile::extractEnvVar(&m_CurrentsFile);
+    facilities::Util::expandEnvVar(&m_CurrentsFile);
     // trying to eliminate memory leak candidates
     //    m_openCurr = new InitCurrent();
     sc = m_openCurr.OpenCurrent(m_CurrentsFile); 
