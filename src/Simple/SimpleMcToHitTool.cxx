@@ -6,7 +6,7 @@
  *
  * @authors Toby Burnett, Leon Rochester, Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Simple/SimpleMcToHitTool.cxx,v 1.2 2004/03/09 20:06:30 lsrea Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Simple/SimpleMcToHitTool.cxx,v 1.3 2004/06/16 23:53:17 lsrea Exp $
  */
 
 #include "SimpleMcToHitTool.h"
@@ -198,7 +198,7 @@ SiPlaneMapContainer::SiPlaneMap SimpleMcToHitTool::createSiHits(
 
         // move hit by alignment constants
         // the wafer constants are applied to the wafer coordinates
-        if ( m_taSvc && m_taSvc->alignSim() )
+        if ( m_taSvc && m_taSvc->alignSim() ) 
             m_taSvc->moveMCHit(volId, localEntry, localExit);
         
         const TkrVolumeIdentifier planeId = volId.getPlaneId();

@@ -6,7 +6,7 @@
  *
  * @author Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitToDigiTool.cxx,v 1.3 2004/03/10 18:37:04 lsrea Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitToDigiTool.cxx,v 1.4 2004/03/13 19:43:56 lsrea Exp $
  */
 
 #include "GeneralHitToDigiTool.h"
@@ -306,6 +306,7 @@ StatusCode GeneralHitToDigiTool::execute()
             HepPoint3D point(0);
             double deltaX = 0;
             double deltaY = 0;
+            /*
             if ( m_taSvc && m_taSvc->alignSim() ) {
                 HepPoint3D entry(0., 0., 0.);
                 HepPoint3D  exit(0., 0., 1.);
@@ -313,6 +314,7 @@ StatusCode GeneralHitToDigiTool::execute()
                 deltaX = -entry.x();
                 deltaY = -entry.y();
             }
+            */
 
             const SiStripList::hitList& hits = itStrip->getHits();
 
@@ -320,7 +322,7 @@ StatusCode GeneralHitToDigiTool::execute()
             Event::McTkrStrip* pStrip =
                 new Event::McTkrStrip(volId, stripId,
                                       itStrip->energy(),
-                                      itStrip->noise(), hits, deltaX, deltaY);
+                                      itStrip->noise(), hits);
             strips->push_back(pStrip);
             
             // and add the relation
