@@ -1,5 +1,5 @@
 package TkrDigi
-version v1r11
+version v1r11p1
 
 branches src cmt doc
 use GlastPolicy v5r*
