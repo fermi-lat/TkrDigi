@@ -6,7 +6,7 @@
 *
 * @authors Nico Giglietto, Monica Brigida, Leon Rochester, Michael Kuss
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Bari/BariMcToHitTool.cxx,v 1.5 2004/03/19 16:41:16 lsrea Exp $
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Bari/BariMcToHitTool.cxx,v 1.6 2004/06/16 23:53:17 lsrea Exp $
 */
 
 #include "BariMcToHitTool.h"
@@ -176,7 +176,6 @@ StatusCode BariMcToHitTool::execute()
             // now generate the plane coordinates
             // Since we know how the ladders and wafers are laid out
             //    we just translate the wafer coordinates
-            const TkrVolumeIdentifier planeId = volId.getPlaneId();
 
             const int ladder = volId.getLadder();
             const int wafer  = volId.getWafer();
