@@ -1,6 +1,7 @@
 /** @file release.notes
  * Package TkrDigi
  *
+ * v1r10p1    04-feb-2003  LSR Fix test program jobOptions
  * v1r10      03-feb-2003  LSR Add alignment service
  * v1r9       10-jan-2003  LSR GlastRelease version
  * v1r8       06-jan-2003  LSR kill bad strips in Digi (and add to test)
