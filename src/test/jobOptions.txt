@@ -1,6 +1,6 @@
 //##############################################################
 //
-//  Job options file for TkrBariDigiAlg test 
+//  Job options file for TkrDigiAlg test 
 
 // primary DLLs
 
@@ -20,11 +20,17 @@ EventSelector.Input = "NONE";
 //  topalg
 //
 ApplicationMgr.TopAlg = {
-    "mcRootReaderAlg",      
-    "TkrSimpleDigiAlg",
+    "mcRootReaderAlg",
+    "TkrDigiAlg",
     "test_TkrDigi" 
     };
 
+// ----------------------------
+// TkrDigi settings
+//
+//TkrDigiAlg.Type = "Bari";  // default: "Simple"
+//TkrDigiNoiseAlg.Type = ""; // default: "General"
+ 
 // ----------------------------
 // Just to see that the following services don't start misbehaving
 //
@@ -46,6 +52,14 @@ GlastDetSvc.topVolume="LAT";
 
 GlastDetSvc.xmlfile="$(XMLGEODBSROOT)/xml/flight/flightSegVols.xml";
 //GlastDetSvc.visitorMode="recon";
+
+// ----------------------------
+//  Randoms definition
+// comment for the moment, for comparison with the old TkrDigi
+//
+//ApplicationMgr.ExtSvc += { "GlastRandomSvc"};
+//GlastRandomSvc.RunNumber = 7;
+//GlastRandomSvc.InitialSequenceNumber = 42;
 
 // Set output level threshold (2=DEBUG, 3=INFO, 4=WARNING, 5=ERROR, 6=FATAL )
 MessageSvc.OutputLevel = 3;
