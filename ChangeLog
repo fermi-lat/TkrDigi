@@ -1,5 +1,15 @@
 ------------------------------------------------------------
 User: lsrea  Thu Aug  8 22:06:16 PDT 2002
+TkrDigi/src
+
+Modified Files:
+	TkrSimpleDigiAlg.cxx 
+Log Message:
+Fix my fix; prepare for tag v1r5p3
+
+    *
+------------------------------------------------------------
+User: lsrea  Thu Aug  8 22:06:16 PDT 2002
 TkrDigi/doc
 
 Modified Files:
