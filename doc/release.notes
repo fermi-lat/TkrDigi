@@ -1,26 +1,29 @@
 /** @file release.notes
- * Package TkrDigi
- *
- * v1r10p4    01-mar-2003  LSR More cleanup of unix warning errors
- * v1r10p3    28-feb-2003  LSR cleanup of unix warning errors; fix of innocuous bug
- * v1r10p2    13-feb-2003  LSR test on killBadStrips and killFailed
- * v1r10p1    04-feb-2003  LSR Fix test program jobOptions
- * v1r10      03-feb-2003  LSR Add alignment service
- * v1r9       10-jan-2003  LSR GlastRelease version
- * v1r8       06-jan-2003  LSR kill bad strips in Digi (and add to test)
- * v1r7p2     06-jan-2003  LSR point to new TkrUtil
- * v1r7p1     11-oct-2002  LSR move sort out of loop
- * v1r7       09-oct-2002  LSR Randoms, RelTable, simple ToT, sort digis
- * v1r6       08-sep-2002  LSR update for new Event, GlastSvc
- * v1r5p7     25-Aug-2002  LSR working test program  test_TkrDigi
- * v1r5p6     16-aug-2002  THB use prefix for si plane list.
- * v1r5p5     14-aug-2002  LSR Remove code for handling incomplete ID's; check for TKR hit
- * v1r5p4     12-aug-2002  LSR Fixed typo; exit strip is now scored
- * v1r5p3     09-aug-2002  LSR Modified the wrong version; this should fix it
- * v1r5p2     08-aug-2002  LSR Remove local constants and calculations; all from GlastDetSvc now
- * v1r4       22-jul-2002  THB Noise now in all planes, fill McTkrStripCol. 
- * v1r3       16-jul-2002  THB implement noise. 
- * v1r2       16-jul-2002  THB fix requirements. 
- * v1r1       27-jun-2002  THB start on noise. 
- * v1r0       25-may-2002  THB create, coping TkrSimpleDigiAlg
+@verbatim
+ Package TkrDigi
+
+ v1r11      13-mar-2003  LSR Mods for new TkrUtil
+ v1r10p4    01-mar-2003  LSR More cleanup of unix warning errors
+ v1r10p3    28-feb-2003  LSR cleanup of unix warning errors; fix of innocuous bug
+ v1r10p2    13-feb-2003  LSR test on killBadStrips and killFailed
+ v1r10p1    04-feb-2003  LSR Fix test program jobOptions
+ v1r10      03-feb-2003  LSR Add alignment service
+ v1r9       10-jan-2003  LSR GlastRelease version
+ v1r8       06-jan-2003  LSR kill bad strips in Digi (and add to test)
+ v1r7p2     06-jan-2003  LSR point to new TkrUtil
+ v1r7p1     11-oct-2002  LSR move sort out of loop
+ v1r7       09-oct-2002  LSR Randoms, RelTable, simple ToT, sort digis
+ v1r6       08-sep-2002  LSR update for new Event, GlastSvc
+ v1r5p7     25-Aug-2002  LSR working test program  test_TkrDigi
+ v1r5p6     16-aug-2002  THB use prefix for si plane list.
+ v1r5p5     14-aug-2002  LSR Remove code for handling incomplete ID's; check for TKR hit
+ v1r5p4     12-aug-2002  LSR Fixed typo; exit strip is now scored
+ v1r5p3     09-aug-2002  LSR Modified the wrong version; this should fix it
+ v1r5p2     08-aug-2002  LSR Remove local constants and calculations; all from GlastDetSvc now
+ v1r4       22-jul-2002  THB Noise now in all planes, fill McTkrStripCol. 
+ v1r3       16-jul-2002  THB implement noise. 
+ v1r2       16-jul-2002  THB fix requirements. 
+ v1r1       27-jun-2002  THB start on noise. 
+ v1r0       25-may-2002  THB create, coping TkrSimpleDigiAlg
+@endverbatim
  */
