@@ -2,6 +2,7 @@
 @verbatim
  Package TkrDigi
 
+ v1r11p7    22-oct-2003  LSR Fix ToT threshold
  v1r11p6    16-oct-2003  LSR Truncate ToT to saturation value
  v1r11p5    08-may-2003  LSR fixed *big* mistake in alignment 
  v1r11p4    02-May-2003? LSR restored noise levels to pdr values
