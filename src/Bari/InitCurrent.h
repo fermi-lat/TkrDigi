@@ -35,7 +35,7 @@ private:
     int nbin;
   static const int ndim=250000;
 
-    double CURR[ndim];
+    double* CURR;
     double XXcurr[100];
     int ID1, ID2, IDD;
     double CurrPar[100];
