@@ -1,5 +1,15 @@
 ------------------------------------------------------------
 User: lsrea  Mon May 10 17:09:54 PDT 2004
+TkrDigi/src
+
+Modified Files:
+	SiStripList.cxx 
+Log Message:
+use new TkrToTSvc params; prepare for tag v2r0p5
+
+    *
+------------------------------------------------------------
+User: lsrea  Mon May 10 17:09:54 PDT 2004
 TkrDigi/doc
 
 Modified Files:
