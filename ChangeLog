@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: lsrea  Wed Oct  9 17:30:29 PDT 2002
+TkrDigi/src
+
+Modified Files:
+	TkrSimpleDigiAlg.cxx 
+Log Message:
+fix up reltable to use new improved addRelation
+    *
+------------------------------------------------------------
 User: lsrea  Tue Oct  8 21:59:47 PDT 2002
 TkrDigi/src
 
