@@ -1,5 +1,5 @@
 // File and Version Information:
-//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.11 2002/09/08 15:36:06 lsrea Exp $
+//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.12 2002/10/08 22:25:01 lsrea Exp $
 //
 // Description:
 //      TkrSimpleDigiAlg provides an example of a Gaudi algorithm.  
@@ -48,6 +48,8 @@
 #include "Event/MonteCarlo/McPositionHit.h"
 
 #include <cassert>
+#include <algorithm>
+
 /** 
 * @class TkrSimpleDigiAlg
 *
@@ -56,7 +58,7 @@
 *
 * @author T. Burnett
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.11 2002/09/08 15:36:06 lsrea Exp $  
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.12 2002/10/08 22:25:01 lsrea Exp $  
 */
 
 class TkrSimpleDigiAlg : public Algorithm {
@@ -97,7 +99,11 @@ private:
     /// amount to fluctuate hit strips (MeV)
     double m_noiseSigma;
     /// frequency of noise hits
-    double m_noiseOccupancy;    
+    double m_noiseOccupancy;  
+    /// average tot response to a MIP
+    double m_totPerMip;
+    /// average eloss in silicon per MIP (to calculate ToT from eloss
+    double m_mevPerMip;
 };
 
 static const AlgFactory<TkrSimpleDigiAlg>  Factory;
@@ -109,6 +115,8 @@ TkrSimpleDigiAlg::TkrSimpleDigiAlg(const std::string& name, ISvcLocator* pSvcLoc
     declareProperty("threshold",      m_threshold     = 0.030 );  
     declareProperty("noiseSigma",     m_noiseSigma    = 0.010 );
     declareProperty("noiseOccupancy", m_noiseOccupancy= 1.e-5 );
+    declareProperty("totPerMip"     , m_totPerMip     = 300.  );
+    declareProperty("mevPerMip"     , m_mevPerMip     = 0.155 );
 }
 
 StatusCode TkrSimpleDigiAlg::initialize(){
@@ -270,8 +278,14 @@ StatusCode TkrSimpleDigiAlg::execute()
             bool noise  = strip.noise();
             const SiStripList::hitList& hits = strip.getHits();
             
-            //TODO: apply threshold, add strip to TkrDigi
-            pDigi->addC0Hit(stripId);
+            // add the strip with the correct controller number'
+            // and do the ToT
+            int thisToT = e/m_mevPerMip*m_totPerMip;
+            if (stripId<SiStripList::n_si_strips()/2) {
+                pDigi->addC0Hit(stripId, thisToT);
+            } else {
+                pDigi->addC1Hit(stripId, thisToT);
+            }
             
             // save the hit here
             Event::McTkrStrip* pStrip = 
