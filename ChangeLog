@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: lsrea  Fri May  2 09:09:36 PDT 2003
+TkrDigi/src
+
+Modified Files:
+	TkrSimpleDigiAlg.cxx 
+Log Message:
+plug a small memory leak discovered by valgrind
+
+    *
+------------------------------------------------------------
 User: lsrea  Tue Apr 15 09:10:29 PDT 2003
 TkrDigi/cmt
 
