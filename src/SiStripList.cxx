@@ -1,4 +1,4 @@
-// $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.cxx,v 1.6 2002/09/08 15:36:06 lsrea Exp $
+// $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.cxx,v 1.7 2002/10/08 22:25:01 lsrea Exp $
 
 #include "SiStripList.h"
 #include <algorithm>
@@ -7,7 +7,7 @@
 
 #include "CLHEP/Random/RandFlat.h"
 #include "CLHEP/Random/RandGauss.h"
-
+#include "CLHEP/Random/RandBinomial.h"
 
 
 //  utility function declarations
@@ -213,14 +213,13 @@ void SiStripList::addNoise(double noise_sigma, double noise_occupancy, double th
     }
     
     // add noise 'hits' to the strip listing
-    double  r1 = RandFlat::shoot(); //TODO: use service
 
     static int   N = s_stripPerWafer*s_n_si_dies;
-    static double q0 = 1. - pow(1. - noise_occupancy, N);
+
+    int n = RandBinomial::shoot(N, noise_occupancy);
 
     // insert random triggered strips
-    for (double n = 1. , q = q0; 
-    r1 < q; n += 1. , q *=(N-n)*noise_occupancy/((n+1)*(1-noise_occupancy)))  {
+    for (int i = 0; i != n; ++i)  {
         unsigned  strip = 
             stripId((RandFlat::shoot())*panel_width() - panel_width()/2.);
         for (iter = begin(); (iter != end())&&((*iter).index() != strip); iter++);
