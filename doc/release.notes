@@ -3,7 +3,8 @@
  Package TkrDigi
 
  
- v1r11p4    08-may-2003  LSR fixed *big* mistake in alignment
+ v1r11p5    08-may-2003  LSR fixed *big* mistake in alignment 
+ v1r11p4    02-May-2003? LSR restored noise levels to pdr values
  v1r11p3    08-apr-2003  LSR don't move displayed hit
  v1r11p2    25-mar-2003  LSR use RootIo v*
  v1r11p1    22-mar-2003  LSR generalize test for EM silicon
