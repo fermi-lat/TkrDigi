@@ -1,4 +1,19 @@
 ------------------------------------------------------------
+User: lsrea  Fri Jun 21 18:05:12 PDT 2002
+TkrDigi/src
+
+Modified Files:
+	TkrSimpleDigiAlg.cxx 
+Log Message:
+Made noise-generation parameters into Properties:
+    threshold (MeV)  -- energy level to register hit (default: 0.03)
+    noiseSigma (MeV) -- amount to randomly fluctuate deposited energy (def: 0.01)
+    noiseOccupancy   -- fraction of strips given a noise hit (def: 1.e-4)
+setting all to zero gives faithful digitization of all MC hits.
+    
+
+    *
+------------------------------------------------------------
 User: burnett  Thu Jun 20 15:23:38 PDT 2002
 TkrDigi/src
 
