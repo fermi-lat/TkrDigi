@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: kyoung  Tue Oct  8 15:18:51 PDT 2002
+TkrDigi/src/Dll
+
+Modified Files:
+	TkrDigi_load.cxx 
+Log Message:
+Add TkrDigiRandom tool
+    *
+------------------------------------------------------------
+User: kyoung  Tue Oct  8 15:18:51 PDT 2002
 TkrDigi/src
 
 Added Files:
