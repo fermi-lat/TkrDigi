@@ -1,5 +1,5 @@
 // File and Version Information:
-//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.5 2002/07/22 12:24:47 burnett Exp $
+//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.7 2002/08/09 05:06:16 lsrea Exp $
 //
 // Description:
 //      TkrSimpleDigiAlg provides an example of a Gaudi algorithm.  
@@ -52,7 +52,7 @@
 *
 * @author T. Burnett
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.5 2002/07/22 12:24:47 burnett Exp $  
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.7 2002/08/09 05:06:16 lsrea Exp $  
 */
 
 class TkrSimpleDigiAlg : public Algorithm {
@@ -218,22 +218,9 @@ StatusCode TkrSimpleDigiAlg::execute()
         
        
         // unpack the id: the order is correct!
-#if 1 //  old way
+
         unsigned int towery=id[1], towerx= id[2],  tray=id[4], view=id[5],
             botTop=id[6], layer = tray+botTop-1;
-#else // do it from the bottom
-        int s = id.size()-2;   // last two fields are ladder, wafer
-        assert(s>3);
-        unsigned int 
-            botTop=id[--s],    // 6 with full LAT
-            view  =id[--s],    // 5
-            tray = id[--s],    // 4
-            layer = tray+botTop-1;
-        --s; // skip
-        unsigned int 
-            towerx=s>0? id[--s] : 0, //2 with full LAT
-            towery=s>0? id[--s] : 0; //1
-#endif
         int ToT[2]={0,0};
         
         idents::TowerId tower = idents::TowerId(towerx, towery).id();
@@ -332,17 +319,12 @@ void TkrSimpleDigiAlg::createSiHits(const Event::McPositionHitVector& hits)
         const Event::McPositionHit & hit = **ihit;
         
         idents::VolumeIdentifier id = hit.volumeID();
-        // siPlaneCoord expects size to be 9
-        int s = id.size(); 
-        if( s < 9 ) {
-            idents::VolumeIdentifier tid;
-            for( int j = 0; j<9; ++j) {
-                if( j< 9-s) 
-                    tid.append(0); else tid.append( id[j-9+s]);
-            }
-            id = tid;
-        }
-              
+
+        // check for correct length
+        if (id.size()!=9) continue;
+        // check that it's really a TKR hit (probably overkill)
+        if (!(id[0]==0 && id[3]==1)) continue; // !(LAT && TKR)
+                      
         // this assumes that the number of ladders equals the number of wafers/ladder
         // not true for the BFEM/BTEM!
         static double ladder_pitch = SiStripList::die_width()+SiStripList::ladder_gap();
