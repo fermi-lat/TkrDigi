@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: lsrea  Tue Oct  8 16:59:37 PDT 2002
+TkrDigi/src
+
+Modified Files:
+	TkrSimpleDigiAlg.cxx 
+Log Message:
+Do simple ToT: assume 300 counts/Mip and split the strips half and half
+    *
+------------------------------------------------------------
 User: lsrea  Tue Oct  8 15:25:01 PDT 2002
 TkrDigi/src
 
