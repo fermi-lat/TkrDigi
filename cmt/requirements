@@ -11,7 +11,9 @@ use GuiSvc
 
 use facilities
 
-use xml          
+use xml   
+
+use TkrUtil      
 
 apply_pattern packageShr
 
