@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: burnett  Fri Jul 19 08:57:17 PDT 2002
+TkrDigi/src
+
+Added Files:
+	SiLayerList.cxx SiLayerList.h 
+Log Message:
+new visitor that gets a list of silicon plane ids
+    *
+------------------------------------------------------------
 User: burnett  Mon Jul 15 08:38:22 PDT 2002
 TkrDigi/doc
 
