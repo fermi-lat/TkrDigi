@@ -1,4 +1,4 @@
-// $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.cxx,v 1.4 2002/08/12 23:07:26 lsrea Exp $
+// $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.cxx,v 1.5 2002/08/15 21:02:11 lsrea Exp $
 
 #include "SiStripList.h"
 #include <algorithm>
@@ -17,42 +17,41 @@ inline double copysign(double a, double b){return _copysign(a,b);}
 
 IGlastDetSvc* SiStripList::s_detsvc=0;
 
-void SiStripList::initialize(IGlastDetSvc * ds)
+StatusCode SiStripList::initialize(IGlastDetSvc * ds)
 {
     s_detsvc=ds;
 	StatusCode sc;
 	double temp;
 
-	sc = s_detsvc->getNumericConstByName("ssdGap", &s_ssd_gap);
-	sc = s_detsvc->getNumericConstByName("ladderGap", &s_ladder_gap);
-	sc = s_detsvc->getNumericConstByName("stripPerWafer", &temp);
-	s_stripPerWafer = temp + 0.5;
-	sc = s_detsvc->getNumericConstByName("nWaferAcross", &temp);
-	s_n_si_dies = temp + 0.5;
-	sc = s_detsvc->getNumericConstByName("SiWaferSide", &s_dice_width);
-	sc = s_detsvc->getNumericConstByName("SiWaferActiveSide", &temp);
-	s_guard_ring = 0.5*(s_dice_width - temp);
-
+    if(s_detsvc->getNumericConstByName("ssdGap", &s_ssd_gap).isFailure()
+        || s_detsvc->getNumericConstByName("ladderGap", &s_ladder_gap).isFailure()
+        || s_detsvc->getNumericConstByName("stripPerWafer", &s_stripPerWafer).isFailure()
+        || s_detsvc->getNumericConstByName("nWaferAcross", &s_n_si_dies).isFailure()
+        || s_detsvc->getNumericConstByName("SiWaferSide", &s_dice_width).isFailure()
+        || s_detsvc->getNumericConstByName("SiWaferActiveSide", &temp).isFailure()
+        ) return StatusCode::FAILURE;
+    s_guard_ring = 0.5*(s_dice_width - temp);
+    return StatusCode::SUCCESS;
 }
 
 SiStripList::~SiStripList(){ clear(); }
 
 // static variable implementations--now initialized with detsvc.
-unsigned int SiStripList::s_n_si_dies      =  0; // 4; // # of Si dies across single SSD plane
-unsigned int SiStripList::s_stripPerWafer  =  0; // 384;
-double       SiStripList::s_dice_width     = 0.; // 89.500; // width of a single silicon die 
-double       SiStripList::s_guard_ring     = 0.; // 0.974;
-double       SiStripList::s_ssd_gap        = 0.; // 0.025;            
-double       SiStripList::s_ladder_gap     = 0.; // 0.200;
+int     SiStripList::s_n_si_dies      = 0; // 4; // # of Si dies across single SSD plane
+int     SiStripList::s_stripPerWafer  = 0; // 384;
+double  SiStripList::s_dice_width     = 0.; // 89.500; // width of a single silicon die 
+double  SiStripList::s_guard_ring     = 0.; // 0.974;
+double  SiStripList::s_ssd_gap        = 0.; // 0.025;            
+double  SiStripList::s_ladder_gap     = 0.; // 0.200;
 
 
 /// number of silicon dies
-double   SiStripList::die_width () {     return s_dice_width;}
-double   SiStripList::guard_ring () {    return s_guard_ring;}
-double   SiStripList::ssd_gap () {       return s_ssd_gap;}
-double   SiStripList::ladder_gap () {    return s_ladder_gap;}
-unsigned int SiStripList::strips_per_die () {return s_stripPerWafer;}
-unsigned int SiStripList::n_si_dies() {return s_n_si_dies;}
+double   SiStripList::die_width ()      {return s_dice_width;}
+double   SiStripList::guard_ring ()     {return s_guard_ring;}
+double   SiStripList::ssd_gap ()        {return s_ssd_gap;}
+double   SiStripList::ladder_gap ()     {return s_ladder_gap;}
+int      SiStripList::strips_per_die () {return s_stripPerWafer;}
+int      SiStripList::n_si_dies()       {return s_n_si_dies;}
 
 /// si_strip_pitch - return the width of a single silicon strip
 double SiStripList::si_strip_pitch () {
@@ -69,17 +68,17 @@ unsigned int SiStripList::n_si_strips ()  {
 }
 
 /// stripId - calculate the strip ID from the plane coordinate
-unsigned int SiStripList::stripId(double x){
+int SiStripList::stripId(double x){
     return s_detsvc->stripId(x);
     
 }
 /// calculateBin - calculates the center of a given strip
-double   SiStripList::calculateBin (unsigned int ix) {
-	return s_detsvc->stripLocalX(ix);
+double   SiStripList::calculateBin (int x) {
+	return s_detsvc->stripLocalX(x);
 }
 
 /// addStrip - adds a strip to the list of strips...
-void SiStripList::addStrip(unsigned int ix, float dE)
+void SiStripList::addStrip(int ix, float dE)
 {
     if (ix != Strip::undef_strip()) {
         // search list for
@@ -114,7 +113,7 @@ void SiStripList::score(const HepPoint3D& o, const HepPoint3D& p, float eLoss)
     
     float    in = o.x();     // entry point -- x
     float    ex = p.x();     // exit point -- x
-    unsigned ins = stripId(in), exs = stripId(ex); // enter/exit strips (if valid)
+    int ins = stripId(in), exs = stripId(ex); // enter/exit strips (if valid)
     float len = dTot;  // path length through a strip
     if(fabs(xDir) > si_strip_pitch()) len *= si_strip_pitch()/fabs(xDir);
     // max. length in x in a strip

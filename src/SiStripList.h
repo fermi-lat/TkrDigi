@@ -1,4 +1,4 @@
-// $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.h,v 1.2 2002/06/20 22:23:38 burnett Exp $
+// $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.h,v 1.3 2002/07/19 16:01:04 burnett Exp $
 
 #ifndef SiStripList_H
 #define SiStripList_H
@@ -46,7 +46,7 @@ public:
         
         // static parameters
         // undefined strip (non-existent)
-        static unsigned int undef_strip () { return 65535; } 
+        static int undef_strip () { return 65535; } 
         
     private:
         int     m_index;  // strip number, -1 if invalid
@@ -57,7 +57,7 @@ public:
     
     
     /// for access to the service
-    static void initialize(IGlastDetSvc* detsvc);
+    static StatusCode initialize(IGlastDetSvc* detsvc);
     
     typedef std::vector < Strip > StripList;            // list of hit strips
     typedef StripList::const_iterator const_iterator;   // iterator
@@ -74,10 +74,10 @@ public:
     static IGlastDetSvc* s_detsvc;
     
     // compute local coordinate from strip id
-    static double calculateBin (unsigned int ix);   
+    static double calculateBin (int x);   
     
-    static unsigned int stripId(double x);
-    void addStrip(unsigned int ix, float dE);
+    static int stripId(double x);
+    void addStrip(int ix, float dE);
     
     
     // access
@@ -91,10 +91,10 @@ public:
     StripList   m_strips;
     
     /// number of silicon dies across a single layer
-    static unsigned int n_si_dies ();
+    static int n_si_dies ();
     
     /// number of silicon strips across a single die
-    static unsigned int strips_per_die ();
+    static int strips_per_die ();
     
     /// width of a single si die
     static double die_width ();
@@ -129,8 +129,8 @@ private:
     static double s_ladder_gap;
     static double s_guard_ring;
     static double s_panel_width;
-    static unsigned int s_stripPerWafer;
-    static unsigned int s_n_si_dies;
+    static int    s_stripPerWafer;
+    static int    s_n_si_dies;
         
 };
 
