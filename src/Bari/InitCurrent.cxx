@@ -27,7 +27,7 @@ InitCurrent::InitCurrent()
     //    CURR = new double[250000];
     for ( int jj=0; jj<100; jj++ )
         XXcurr[jj] = 0.0;
-    for ( int tt=0; tt<250000; tt++ )
+    for ( int tt=0; tt<ndim; tt++ )
         CURR[tt] = 0.0; 
 }
 
@@ -41,6 +41,7 @@ StatusCode InitCurrent::OpenCurrent(std::string currents)
     int ID1, ID2;
     double CurrPar[100];
     double tmp = 0.;
+    int nval=0;    
     
     std::ifstream fin(currents.c_str()); 
     if (!fin) {
@@ -48,10 +49,13 @@ StatusCode InitCurrent::OpenCurrent(std::string currents)
     }
     for(int j=0; j<2500; j++){ 
         fin >> ID1 >> ID2 ;
-        for(int k=0; k<100; k++){
+	// now read nval elements not null
+	fin >> nval;
+        for(int k=0; k<nval; k++){
+	  //        for(int k=0; k<100; k++){
             fin >> CurrPar[k];
             int ii = j*100 + k;
-            if(ii  > 249999 ){
+            if(ii  > ndim-1 ){
                 std::cout<<"OpenCurr out of range *************"<< ii <<std::endl;
             }		
             tmp = CurrPar[k];
