@@ -1,4 +1,4 @@
-// $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.cxx,v 1.7 2002/10/08 22:25:01 lsrea Exp $
+// $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.cxx,v 1.8 2003/02/22 00:51:08 xchen Exp $
 
 #include "SiStripList.h"
 #include <algorithm>
@@ -20,7 +20,6 @@ IGlastDetSvc* SiStripList::s_detsvc=0;
 StatusCode SiStripList::initialize(IGlastDetSvc * ds)
 {
     s_detsvc=ds;
-	StatusCode sc;
 	double temp;
 
     if(s_detsvc->getNumericConstByName("ssdGap", &s_ssd_gap).isFailure()
@@ -78,8 +77,9 @@ double   SiStripList::calculateBin (int x) {
 }
 
 /// addStrip - adds a strip to the list of strips...
-void SiStripList::addStrip(int ix, float dE, Event::McPositionHit * pHit)
+void SiStripList::addStrip(int ixx, float dE, Event::McPositionHit * pHit)
 {
+    unsigned int ix = ixx;
     bool noise = pHit ? false : true;
     if (ix != Strip::undef_strip()) {
         // search list for
@@ -148,9 +148,9 @@ void SiStripList::score(const HepPoint3D& o, const HepPoint3D& p,
             addStrip( exs, eLoss*frac*len/dTot, pHit);
             
             short   sinc = ( xDir > 0 ) ? -1 : 1;   // move backwards (exit strip)
-            for (unsigned int sid = exs + sinc;
-            (sid >= 0) && (sid < n_si_strips()) 
-                && ((xDir > 0) ? 
+            for (int sid = exs + sinc;
+            (sid >= 0) && (sid < n_si_strips()) && 
+                ((xDir > 0) ? 
                 (in < calculateBin( sid )) : (in > calculateBin( sid )));
             sid += sinc )
                 addStrip( sid, eLoss*len/dTot, pHit );
@@ -169,7 +169,7 @@ void SiStripList::score(const HepPoint3D& o, const HepPoint3D& p,
             addStrip( ins, eLoss*frac*len/dTot, pHit );
             
             short   sinc = ( xDir > 0 ) ? 1 : -1;   // move backwards (exit strip)
-            for (unsigned int  sid = ins + sinc;
+            for (int  sid = ins + sinc;
             (sid >= 0) && 
                 (sid < n_si_strips()) && 
                 ((xDir > 0) ? 
@@ -192,7 +192,7 @@ void SiStripList::score(const HepPoint3D& o, const HepPoint3D& p,
                 addStrip( exs, eLoss*frac*len/dTot, pHit ); // exit strip
                 
                 short sinc = ( ins < exs ) ? 1 : -1;
-                for( unsigned sid = ins + sinc; sid != exs; sid += sinc )   
+                for( int sid = ins + sinc; sid != exs; sid += sinc )   
                     addStrip( sid, eLoss*len/dTot, pHit );
                 // add energy to all strips between entry and exit
             }   // else (ins != ens)
