@@ -1,7 +1,8 @@
 /** @file release.notes
 @verbatim
  Package TkrDigi
- v2r4p1     17-Jan-2005  THB Rearrange storage for CURR, at Tracy's request
+ v2r4p1     17-Jan-2005  LSR Rearrange storage for (Bari) InitCurrent::CURR, 
+                               at Tracy's request
  v2r3p1     17-Jan-2005  THB remove obsolete RootPolicy
  v2r3       26-Dec-2004  LSR Mods to keep up with ToTSvc
  v2r2       16-Dec-2004  TU  Modify requirements to pick up new TkrUtil
