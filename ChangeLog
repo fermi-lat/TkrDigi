@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: kuss  Fri Mar 19 02:11:21 PST 2004
+TkrDigi/src/Bari
+
+Modified Files:
+	BariMcToHitTool.cxx 
+Log Message:
+Adding some DEBUG to trace a problem Leon reports but I can't reproduce.
+
+    *
+------------------------------------------------------------
 User: ngigliet  Thu Mar 18 03:35:08 PST 2004
 TkrDigi/src/Bari
 
