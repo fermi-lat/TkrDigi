@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: lsrea  Tue Oct 21 17:13:01 PDT 2003
+TkrDigi/src
+
+Modified Files:
+	TkrSimpleDigiAlg.cxx 
+Log Message:
+straighten out the tot threshold... better late than never!
+    *
+------------------------------------------------------------
 User: lsrea  Thu Oct 16 11:19:26 PDT 2003
 TkrDigi/doc
 
