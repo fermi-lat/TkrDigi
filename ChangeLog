@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: lsrea  Tue Feb 22 17:26:37 PST 2005
+TkrDigi/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+prepare for tag v2r4p1: rearrange storage for InitCurrent::CURR, at Tracy's request
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: v2r4, operation: add
 Package: TkrDigi
