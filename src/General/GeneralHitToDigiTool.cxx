@@ -6,7 +6,7 @@
  *
  * @author Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitToDigiTool.cxx,v 1.4 2004/03/13 19:43:56 lsrea Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitToDigiTool.cxx,v 1.5 2004/09/07 21:26:52 lsrea Exp $
  */
 
 #include "GeneralHitToDigiTool.h"
@@ -92,35 +92,35 @@ StatusCode GeneralHitToDigiTool::initialize()
     m_edSvc = dynamic_cast<IDataProviderSvc*>(iService);
 
     // Get the Tkr Geometry service 
-    sc = service("TkrGeometrySvc", m_tgSvc, true);
+    sc = service("TkrGeometrySvc", m_tkrGeom, true);
     if ( sc.isFailure() ) {
         log << MSG::ERROR << "Couldn't set up TkrGeometrySvc!" << endreq;
         return sc;
     }
 
     // Get the failure mode service 
-    m_tfmSvc = m_tgSvc->getTkrFailureModeSvc();
+    m_tfmSvc = m_tkrGeom->getTkrFailureModeSvc();
     if ( !m_tfmSvc )
         log << MSG::WARNING
             << "Couldn't set up TkrFailureModeSvc!" << std::endl
             << "Will assume it is not required!" << endreq;
 
     // Get the alignment service 
-    m_taSvc = m_tgSvc->getTkrAlignmentSvc();
+    m_taSvc = m_tkrGeom->getTkrAlignmentSvc();
     if ( !m_taSvc )
         log << MSG::WARNING
             << "Couldn't set up TkrAlignmentSvc!" << std::endl
             << "Will assume it is not required!" << endreq;
 
     // Get the bad strips service 
-    m_tbsSvc = m_tgSvc->getTkrBadStripsSvc();
+    m_tbsSvc = m_tkrGeom->getTkrBadStripsSvc();
     if ( !m_tbsSvc )
         log << MSG::WARNING
             << "Couldn't set up TkrBadStripsSvc!" << std::endl
             << "Will assume it is not required!" << endreq;
 
     // Get the splits service 
-    m_tspSvc = m_tgSvc->getTkrSplitsSvc();
+    m_tspSvc = m_tkrGeom->getTkrSplitsSvc();
     if ( !m_tspSvc ) {
         log << MSG::ERROR
             << "Couldn't set up TkrSplitsSvc!" << std::endl;
@@ -128,7 +128,7 @@ StatusCode GeneralHitToDigiTool::initialize()
     }
 
     // Get the ToT service 
-    m_ttotSvc = m_tgSvc->getTkrToTSvc();
+    m_ttotSvc = m_tkrGeom->getTkrToTSvc();
     if ( !m_ttotSvc ) {
         log << MSG::ERROR
             << "Couldn't set up TkrToTSvc!" << std::endl;

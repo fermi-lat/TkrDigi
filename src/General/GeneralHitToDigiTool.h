@@ -7,7 +7,7 @@
  *
  * @authors Toby Burnett, Leon Rochester, Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitToDigiTool.h,v 1.2 2004/03/10 18:37:04 lsrea Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitToDigiTool.h,v 1.3 2004/03/13 19:43:56 lsrea Exp $
  */
 
 #ifndef __GENERALHITTODIGITOOL_H__
@@ -53,7 +53,7 @@ private:
     /// Pointer to the Glast detector service
     IGlastDetSvc*       m_gdSvc;
     /// Pointer to the tracker geometry service
-    ITkrGeometrySvc*    m_tgSvc;
+    ITkrGeometrySvc*    m_tkrGeom;
     /// Pointer to the tracker failure mode service
     ITkrFailureModeSvc* m_tfmSvc;
     /// Pointer to the tracker bad strips service
