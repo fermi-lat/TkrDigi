@@ -1,4 +1,4 @@
-// $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.cxx,v 1.10 2003/03/01 17:03:05 lsrea Exp $
+// $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.cxx,v 1.11 2003/04/15 15:40:44 lsrea Exp $
 
 #include "SiStripList.h"
 #include <algorithm>
@@ -217,19 +217,19 @@ void SiStripList::addNoise(double noise_sigma, double noise_occupancy, double th
 
     static int   N = s_stripPerWafer*s_n_si_dies;
 
-    int n = static_cast<int>(RandBinomial::shoot(N, noise_occupancy));
-
-    // insert random triggered strips
-    for (int i = 0; i != n; ++i)  {
-        unsigned  strip = 
-            stripId((RandFlat::shoot())*panel_width() - panel_width()/2.);
-        for (iter = begin(); (iter != end())&&((*iter).index() != strip); iter++);
-        
-        if (iter == end())  {
-            addStrip(strip, threshold*(1. - log(RandFlat::shoot())), 0 ); //TODO: use service
+    if(noise_occupancy>0.0) {
+        int n = static_cast<int>(RandBinomial::shoot(N, noise_occupancy));
+        // insert random triggered strips
+        for (int i = 0; i < n; ++i)  {
+            // just randomize strip number... does RandFlat generate numbers on a closed or open interval?
+            unsigned  strip = RandFlat::shoot()*N;
+            for (iter = begin(); (iter != end())&&((*iter).index() != strip); ++iter);
+            if (iter == end()) {
+                addStrip(strip, threshold*(1. - log(RandFlat::shoot())), 0 ); //TODO: use service
+            }
         }
     }
-    
+
     
     // remove strips below threshold
     
