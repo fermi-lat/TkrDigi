@@ -2,6 +2,7 @@
 @verbatim
  Package TkrDigi
 
+ v1r11p2    25-mar-2003  LSR use RootIo v*
  v1r11p1    22-mar-2003  LSR generalize test for EM silicon
  v1r11      13-mar-2003  LSR Mods for new TkrUtil
  v1r10p4    01-mar-2003  LSR More cleanup of unix warning errors
