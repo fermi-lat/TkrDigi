@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: lsrea  Fri Mar 19 08:41:16 PST 2004
+TkrDigi/src/Bari
+
+Modified Files:
+	BariMcToHitTool.cxx 
+Log Message:
+Modified logic to continue even if there is no McPositionHitsCol
+
+    *
+------------------------------------------------------------
 User: kuss  Fri Mar 19 02:11:21 PST 2004
 TkrDigi/src/Bari
 
