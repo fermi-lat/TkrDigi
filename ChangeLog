@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: lsrea  Tue Feb  4 09:39:23 PST 2003
+TkrDigi/doc
+
+Modified Files:
+	release.notes 
+Log Message:
+fix test jobOptions; ready to tag v1r10p1
+    *
+------------------------------------------------------------
+User: lsrea  Tue Feb  4 09:39:23 PST 2003
 TkrDigi/cmt
 
 Modified Files:
