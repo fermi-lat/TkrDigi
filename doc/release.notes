@@ -1,6 +1,7 @@
 /** @file release.notes
  * Package TkrDigi
  *
+ * v1r5p3     09-aug-2002  Modified the wrong version; this should fix it
  * v1r5p2     08-aug-2002  Remove local constants and calculations; all from GlastDetSvc now
  * v1r4       22-jul-2002  THB Noise now in all planes, fill McTkrStripCol. 
  * v1r3       16-jul-2002  THB implement noise. 
