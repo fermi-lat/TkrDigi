@@ -6,7 +6,7 @@
  *
  * @authors Toby Burnett, Leon Rochester, Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Simple/SimpleMcToHitTool.cxx,v 1.1 2004/02/27 10:14:15 kuss Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Simple/SimpleMcToHitTool.cxx,v 1.2 2004/03/09 20:06:30 lsrea Exp $
  */
 
 #include "SimpleMcToHitTool.h"
@@ -149,7 +149,7 @@ StatusCode SimpleMcToHitTool::execute() {
 
 
 SiPlaneMapContainer::SiPlaneMap SimpleMcToHitTool::createSiHits(
-                                          const Event::McPositionHitCol& hits) {
+           const Event::McPositionHitCol& hits) {
     // Purpose and Method: reads a list of McPositionHits, and lists them in
     //                     SiStripLists according to their volume identifiers.
     // Inputs: a vector of McPositionHits
@@ -170,7 +170,15 @@ SiPlaneMapContainer::SiPlaneMap SimpleMcToHitTool::createSiHits(
     log << endreq;
 
     if (nHits==0) return siPlaneMap;
-    
+
+    // This assumes that the number of ladders equals the number of
+    // wafers/ladder.  Not true for the BFEM/BTEM!
+    static const double ladder_pitch = SiStripList::die_width()
+        + SiStripList::ladder_gap();
+    static const double ssd_pitch = SiStripList::die_width()
+        + SiStripList::ssd_gap();
+    static const double waferOffset = 0.5 * (SiStripList::n_si_dies() - 1);
+
     for ( Event::McPositionHitCol::const_iterator ihit=hits.begin();
           ihit!=hits.end(); ++ihit ) {
         const Event::McPositionHit* hit = *ihit;
@@ -184,29 +192,32 @@ SiPlaneMapContainer::SiPlaneMap SimpleMcToHitTool::createSiHits(
         if ( !volId.isTowerTkr() )
             continue;
         
-        // This assumes that the number of ladders equals the number of
-        // wafers/ladder.  Not true for the BFEM/BTEM!
-        static const double ladder_pitch = SiStripList::die_width()
-            + SiStripList::ladder_gap();
-        static const double ssd_pitch = SiStripList::die_width()
-            + SiStripList::ssd_gap();
-        static const double waferOffset = 0.5 * (SiStripList::n_si_dies() - 1);
-        
-        const int ladder = volId.getLadder();
-        const int wafer  = volId.getWafer();
-        const HepVector3D offset((ladder-waferOffset)*ladder_pitch,
-                           (wafer-waferOffset)*ssd_pitch, 0);
-        HepPoint3D entry(hit->entryPoint()+offset);
-        HepPoint3D exit (hit->exitPoint() +offset);
+        // these are in the wafer frame
+        HepPoint3D localEntry(hit->entryPoint());
+        HepPoint3D localExit (hit->exitPoint());
 
         // move hit by alignment constants
+        // the wafer constants are applied to the wafer coordinates
         if ( m_taSvc && m_taSvc->alignSim() )
-            m_taSvc->moveMCHit(volId, entry, exit);
+            m_taSvc->moveMCHit(volId, localEntry, localExit);
         
         const TkrVolumeIdentifier planeId = volId.getPlaneId();
         if( siPlaneMap.find(planeId) == siPlaneMap.end())
             siPlaneMap[planeId]= new SiStripList;
-        siPlaneMap[planeId]->score(entry, exit, hit);
+
+        // now generate the plane coordinates
+        // Since we know how the ladders and wafers are laid out
+        //    we just translate the wafer coordinates
+        const int ladder = volId.getLadder();
+        const int wafer  = volId.getWafer();
+        const HepVector3D offset((ladder-waferOffset)*ladder_pitch,
+                           (wafer-waferOffset)*ssd_pitch, 0);
+
+        HepPoint3D planeEntry(localEntry + offset);
+        HepPoint3D planeExit (localExit  + offset);
+
+        // the entry into the planeMap is in plane coordinates
+        siPlaneMap[planeId]->score(planeEntry, planeExit, hit);
     }
 
     return siPlaneMap;
