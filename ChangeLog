@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: lsrea  Sat Mar 13 11:43:56 PST 2004
+TkrDigi/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+Prepare for tag v2r0p2 -- Interface to TkrToTSvc added (simpleAlg only)
+
+    *
+------------------------------------------------------------
 User: lsrea  Wed Mar 10 10:37:05 PST 2004
 TkrDigi/src/test
 
