@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: xchen  Fri Feb 21 16:51:08 PST 2003
+TkrDigi/src
+
+Modified Files:
+	SiStripList.cxx 
+Log Message:
+use CLHEP lib to generate random number from a binomial distribution
+
+    *
+------------------------------------------------------------
 User: lsrea  Thu Feb 13 12:45:15 PST 2003
 TkrDigi/doc
 
