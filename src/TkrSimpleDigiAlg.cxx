@@ -1,5 +1,5 @@
 // File and Version Information:
-//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.29 2003/04/15 15:40:44 lsrea Exp $
+//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.30 2003/05/02 16:09:36 lsrea Exp $
 //
 // Description:
 //      TkrSimpleDigiAlg provides an example of a Gaudi algorithm.  
@@ -63,7 +63,7 @@
 *
 * @author T. Burnett
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.29 2003/04/15 15:40:44 lsrea Exp $  
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.30 2003/05/02 16:09:36 lsrea Exp $  
 */
 
 class TkrSimpleDigiAlg : public Algorithm {
@@ -128,9 +128,9 @@ const IAlgFactory& TkrSimpleDigiAlgFactory = Factory;
 TkrSimpleDigiAlg::TkrSimpleDigiAlg(const std::string& name, ISvcLocator* pSvcLocator)
 :Algorithm(name, pSvcLocator)
 {
-    declareProperty("threshold",      m_threshold     = 0.030 );  
-    declareProperty("noiseSigma",     m_noiseSigma    = 0.010 );
-    declareProperty("noiseOccupancy", m_noiseOccupancy= 1.e-5 );
+    declareProperty("threshold",      m_threshold     = 0.03875 );   // 1/4 mip, was .03
+    declareProperty("noiseSigma",     m_noiseSigma    = 0.00698 );   // to match pdr number, was .01
+    declareProperty("noiseOccupancy", m_noiseOccupancy= 5.e-5 );     // to match pdr number, was 1.e-5
     declareProperty("totAt1Mip"     , m_totAt1Mip     = 52.5  );
     declareProperty("mevPerMip"     , m_mevPerMip     = 0.155 );
     declareProperty("totThreshold"  , m_totThreshold  = 0.1   );
