@@ -1,4 +1,4 @@
-// $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.cxx,v 1.8 2003/02/22 00:51:08 xchen Exp $
+// $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.cxx,v 1.9 2003/03/01 02:16:06 lsrea Exp $
 
 #include "SiStripList.h"
 #include <algorithm>
@@ -62,7 +62,7 @@ double SiStripList::panel_width () {
     return (n_si_dies() * die_width() + (n_si_dies() - 1) * ladder_gap());
 }
 /// n_si_strips - return the number of Si strips in a single layer
-unsigned int SiStripList::n_si_strips ()  {
+int SiStripList::n_si_strips ()  {
     return (n_si_dies() * strips_per_die());
 }
 
@@ -77,16 +77,16 @@ double   SiStripList::calculateBin (int x) {
 }
 
 /// addStrip - adds a strip to the list of strips...
-void SiStripList::addStrip(int ixx, float dE, Event::McPositionHit * pHit)
+void SiStripList::addStrip(int ix, float dE, Event::McPositionHit * pHit)
 {
-    unsigned int ix = ixx;
     bool noise = pHit ? false : true;
     if (ix != Strip::undef_strip()) {
         // search list for
         iterator s = begin();
         for(; s != end(); ++s) {
-            if (ix > (*s).index()) continue;
-            if (ix == (*s).index()) {
+            int ind = static_cast<int>( (*s).index() );
+            if (ix > ind) continue;
+            if (ix == ind) {
                 (*s).addEnergy(dE);
                 (*s).addHit(pHit);
             }
@@ -216,7 +216,7 @@ void SiStripList::addNoise(double noise_sigma, double noise_occupancy, double th
 
     static int   N = s_stripPerWafer*s_n_si_dies;
 
-    int n = RandBinomial::shoot(N, noise_occupancy);
+    int n = static_cast<int>(RandBinomial::shoot(N, noise_occupancy));
 
     // insert random triggered strips
     for (int i = 0; i != n; ++i)  {
