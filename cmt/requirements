@@ -1,5 +1,5 @@
 package TkrDigi
-version v1r7r1
+version v1r7p2
 
 branches src cmt doc
 use GlastPolicy v4*
@@ -7,13 +7,13 @@ use GaudiSvc
 use GlastSvc v9*
 use Event v9*
 
+use TkrUtil v1r1
+
 use GuiSvc
 
 use facilities
 
-use xml   
-
-use TkrUtil      
+use xml      
 
 apply_pattern packageShr
 
