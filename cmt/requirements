@@ -1,6 +1,6 @@
 package TkrDigi
 
-version v2r1
+version v2r2
 
 author Monica Brigida <monica.brigida@ba.infn.it>
 author Leon Rochester <lsrea@slac.stanford.edu>
@@ -13,7 +13,7 @@ use GlastSvc v9r*
 use Event v*
 
 use GuiSvc v*
-use TkrUtil v2r*
+use TkrUtil v3r*
 use facilities v2r*
 
 ##use xml v4r*
