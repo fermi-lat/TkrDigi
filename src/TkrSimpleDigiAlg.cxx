@@ -1,5 +1,5 @@
 // File and Version Information:
-//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.25 2003/02/13 20:43:33 lsrea Exp $
+//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.26 2003/03/01 02:16:06 lsrea Exp $
 //
 // Description:
 //      TkrSimpleDigiAlg provides an example of a Gaudi algorithm.  
@@ -63,7 +63,7 @@
 *
 * @author T. Burnett
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.25 2003/02/13 20:43:33 lsrea Exp $  
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.26 2003/03/01 02:16:06 lsrea Exp $  
 */
 
 class TkrSimpleDigiAlg : public Algorithm {
@@ -342,7 +342,7 @@ StatusCode TkrSimpleDigiAlg::execute()
             
             // add the strip with the correct controller number
             // and do the ToT
-            int thisToT = (int) (e/m_mevPerMip - m_totThreshold)*totFactor;
+            int thisToT = static_cast<int>( (e/m_mevPerMip - m_totThreshold)*totFactor );
             int breakPoint = SiStripList::n_si_strips()/2;
             if (stripId<breakPoint) {
                 pDigi->addC0Hit(stripId, thisToT);

@@ -1,4 +1,4 @@
-// $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.h,v 1.4 2002/09/08 15:36:06 lsrea Exp $
+// $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.h,v 1.5 2002/10/08 22:25:01 lsrea Exp $
 
 #ifndef SiStripList_H
 #define SiStripList_H
@@ -125,7 +125,7 @@ public:
     static double die_width ();
     
     /// number of silicon strips in a single layer
-    static unsigned int n_si_strips ();
+    static int n_si_strips ();
     
     /// number of front-end chips on a single si die
     static unsigned int n_fe_chips ();
