@@ -24,15 +24,17 @@ InitCurrent::InitCurrent()
     // I define it with dimension 250000 directly in the header file.
     // Anyway, one should define dimensions in constants and use these in the
     // code, instead of carrying numbers around in the code.
-    //    CURR = new double[250000];
-    for ( int jj=0; jj<100; jj++ )
-        XXcurr[jj] = 0.0;
-    for ( int tt=0; tt<ndim; tt++ )
-        CURR[tt] = 0.0; 
+
+    // But this seems to add bit chunks of memory to the program, even when Bari
+    // is not being used, because FluxSvc and RandomSvc instantiate these things
+    // and apparently don't close them!
+
+    CURR = 0;
 }
 
 InitCurrent::~InitCurrent()
 {
+    if (CURR) delete CURR;
 }
 
 StatusCode InitCurrent::OpenCurrent(std::string currents)
@@ -41,7 +43,14 @@ StatusCode InitCurrent::OpenCurrent(std::string currents)
     int ID1, ID2;
     double CurrPar[100];
     double tmp = 0.;
-    int nval=0;    
+    int nval=0; 
+
+    if (!CURR) CURR = new double[250000];
+    for ( int jj=0; jj<100; jj++ )
+        XXcurr[jj] = 0.0;
+    for ( int tt=0; tt<ndim; tt++ )
+        CURR[tt] = 0.0; 
+
     
     std::ifstream fin(currents.c_str()); 
     if (!fin) {
