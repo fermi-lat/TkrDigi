@@ -1,4 +1,4 @@
-// $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.cxx,v 1.5 2002/08/15 21:02:11 lsrea Exp $
+// $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.cxx,v 1.6 2002/09/08 15:36:06 lsrea Exp $
 
 #include "SiStripList.h"
 #include <algorithm>
@@ -78,22 +78,26 @@ double   SiStripList::calculateBin (int x) {
 }
 
 /// addStrip - adds a strip to the list of strips...
-void SiStripList::addStrip(int ix, float dE)
+void SiStripList::addStrip(int ix, float dE, Event::McPositionHit * pHit)
 {
+    bool noise = pHit ? false : true;
     if (ix != Strip::undef_strip()) {
         // search list for
         iterator s = begin();
         for(; s != end(); ++s) {
             if (ix > (*s).index()) continue;
-            if (ix == (*s).index()) (*s).addEnergy(dE);    
+            if (ix == (*s).index()) {
+                (*s).addEnergy(dE);
+                (*s).addHit(pHit);
+            }
             else  // add before the next, to keep in order of the index
-                insert(s, Strip(ix, dE));
+                insert(s, Strip(ix, dE, noise, pHit));
             return;
         }
         
         ///  If the strip isn't in the list yet, and no others have higher ids, 
         /// add it to the end of the list.
-        push_back(Strip(ix, dE));
+        push_back(Strip(ix, dE, noise, pHit));
     }
 }
 
@@ -101,8 +105,10 @@ void SiStripList::addStrip(int ix, float dE)
 // score - distribute energies among the various strips as the particle
 // passes through the detector
 // p and o must be in local coordinates...
-void SiStripList::score(const HepPoint3D& o, const HepPoint3D& p, float eLoss)
+void SiStripList::score(const HepPoint3D& o, const HepPoint3D& p,
+                        Event::McPositionHit* pHit)
 {
+    float eLoss = pHit->depositedEnergy();
     if( eLoss == 0 )
         return;
     
@@ -139,7 +145,7 @@ void SiStripList::score(const HepPoint3D& o, const HepPoint3D& p, float eLoss)
             // fraction of strip crossed
             float dx = si_strip_pitch()/2. + (ex-sx)*copysign(1.,xDir);
             float frac = dx/dx_max;
-            addStrip( exs, eLoss*frac*len/dTot );
+            addStrip( exs, eLoss*frac*len/dTot, pHit);
             
             short   sinc = ( xDir > 0 ) ? -1 : 1;   // move backwards (exit strip)
             for (unsigned int sid = exs + sinc;
@@ -147,7 +153,7 @@ void SiStripList::score(const HepPoint3D& o, const HepPoint3D& p, float eLoss)
                 && ((xDir > 0) ? 
                 (in < calculateBin( sid )) : (in > calculateBin( sid )));
             sid += sinc )
-                addStrip( sid, eLoss*len/dTot );
+                addStrip( sid, eLoss*len/dTot, pHit );
             // scans for until it crosses the entered gap
             
         } else return;   // entered & exited through a gap (assume no strips hit)
@@ -160,7 +166,7 @@ void SiStripList::score(const HepPoint3D& o, const HepPoint3D& p, float eLoss)
             // fraction of strip crossed
             float dx = si_strip_pitch()/2. - (in-sx)*copysign(1.,xDir);
             float frac = dx/dx_max;   
-            addStrip( ins, eLoss*frac*len/dTot );
+            addStrip( ins, eLoss*frac*len/dTot, pHit );
             
             short   sinc = ( xDir > 0 ) ? 1 : -1;   // move backwards (exit strip)
             for (unsigned int  sid = ins + sinc;
@@ -169,25 +175,25 @@ void SiStripList::score(const HepPoint3D& o, const HepPoint3D& p, float eLoss)
                 ((xDir > 0) ? 
                 (ex > calculateBin( sid )):(ex < calculateBin( sid )));
             sid += sinc )
-                addStrip( sid, eLoss*len/dTot );
+                addStrip( sid, eLoss*len/dTot, pHit );
             // scans for until it crosses the exited gap
             
         } else {                // entered + exited through strips
             
-            if ( ins == exs )   addStrip ( ins, eLoss );
+            if ( ins == exs )   addStrip ( ins, eLoss, pHit );
             else {
                 float sx = calculateBin ( ins );
                 float dx = si_strip_pitch()/2. - (in-sx)*copysign(1.,xDir);
                 float frac = dx/dx_max;
-                addStrip( ins, eLoss*frac*len/dTot ); // entry strip
+                addStrip( ins, eLoss*frac*len/dTot, pHit ); // entry strip
                 sx = calculateBin ( exs );
                 dx = si_strip_pitch()/2. + (ex-sx)*copysign(1.,xDir);
                 frac = dx/dx_max;
-                addStrip( exs, eLoss*frac*len/dTot ); // exit strip
+                addStrip( exs, eLoss*frac*len/dTot, pHit ); // exit strip
                 
                 short sinc = ( ins < exs ) ? 1 : -1;
                 for( unsigned sid = ins + sinc; sid != exs; sid += sinc )   
-                    addStrip( sid, eLoss*len/dTot );
+                    addStrip( sid, eLoss*len/dTot, pHit );
                 // add energy to all strips between entry and exit
             }   // else (ins != ens)
             
@@ -220,7 +226,7 @@ void SiStripList::addNoise(double noise_sigma, double noise_occupancy, double th
         for (iter = begin(); (iter != end())&&((*iter).index() != strip); iter++);
         
         if (iter == end())  {
-            addStrip(strip, threshold*(1. - log(RandFlat::shoot())) ); //TODO: use service
+            addStrip(strip, threshold*(1. - log(RandFlat::shoot())), 0 ); //TODO: use service
         }
     }
     
