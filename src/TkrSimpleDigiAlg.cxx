@@ -1,5 +1,5 @@
 // File and Version Information:
-//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.37 2003/10/22 04:58:07 lsrea Exp $
+//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.38 2003/11/06 19:03:01 lsrea Exp $
 //
 // Description:
 //      TkrSimpleDigiAlg provides an example of a Gaudi algorithm.  
@@ -39,6 +39,7 @@
 /// Glast specific includes
 #include "Event/TopLevel/EventModel.h"
 #include "Event/TopLevel/Event.h"
+#include "Event/TopLevel/DigiEvent.h"
 #include "Event/Digi/TkrDigi.h"
 #include "Event/MonteCarlo/McTkrStrip.h"
 #include "Event/RelTable/RelTable.h"
@@ -63,7 +64,7 @@
 *
 * @author T. Burnett
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.37 2003/10/22 04:58:07 lsrea Exp $  
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.38 2003/11/06 19:03:01 lsrea Exp $  
 */
 
 class TkrSimpleDigiAlg : public Algorithm {
@@ -269,7 +270,7 @@ StatusCode TkrSimpleDigiAlg::execute()
 	sc = eventSvc()->retrieveObject( EventModel::Digi::Event, pNode);
 
 	if (sc.isFailure()) {
-		sc = eventSvc()->registerObject(EventModel::Digi::Event,new DataObject);
+		sc = eventSvc()->registerObject(EventModel::Digi::Event,new Event::DigiEvent);
 		if( sc.isFailure() ) {
 			log << MSG::ERROR << "could not register "<< EventModel::Digi::Event << endreq;
 			return sc;
