@@ -11,7 +11,7 @@
  * @author Toby Burnett, Leon Rochester (original authors)
  * @author Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigiSandBox/src/SiStripList.h,v 1.21 2004/02/24 13:57:32 kuss Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.h,v 1.7 2004/02/27 10:14:13 kuss Exp $
 */
 
 #ifndef SISTRIPLIST_H
@@ -181,13 +181,10 @@ class SiStripList {
      * @param controller  controller
      * @return            ToT in units of 200ns
      */
- private:
-    int getToT(const int sep, const int controller) const;
  public:
-    /// ToT for controller 0
-    int getToT0(const int sep)   const { return getToT(sep, 0); }
-    /// ToT for controller 1
-    int getToT1(const int sep=0) const { return getToT(sep, 1); }
+    ///
+    static const int sepSentinel=100000;
+    void getToT(int* ToT, const int sep=sepSentinel) const;
 
     /**
      * noise member functions.  The parameters denote:

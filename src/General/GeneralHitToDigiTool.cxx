@@ -6,7 +6,7 @@
  *
  * @author Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitToDigiTool.cxx,v 1.1 2004/02/27 10:14:15 kuss Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitToDigiTool.cxx,v 1.2 2004/03/09 20:06:30 lsrea Exp $
  */
 
 #include "GeneralHitToDigiTool.h"
@@ -116,6 +116,14 @@ StatusCode GeneralHitToDigiTool::initialize()
         log << MSG::WARNING
             << "Couldn't set up TkrBadStripsSvc!" << std::endl
             << "Will assume it is not required!" << endreq;
+
+    // Get the splits service 
+    m_tspSvc = m_tgSvc->getTkrSplitsSvc();
+    if ( !m_tspSvc ) {
+        log << MSG::ERROR
+            << "Couldn't set up TkrSplitsSvc!" << std::endl;
+        return StatusCode::FAILURE;
+    }
 
     // Get the Glast detector service 
     sc = service("GlastDetSvc", m_gdSvc);
@@ -247,11 +255,13 @@ StatusCode GeneralHitToDigiTool::execute()
                 itStrip->setBadStrip();
         }
 
-        static const int breakPoint = SiStripList::n_si_strips() / 2;
+        //  breakPoint is defined as the highest C0 strip, 
+        //       ordinarily 767 for the flight instrument
+        int breakPoint = m_tspSvc->getSplitPoint(theTower, bilayer, view);
         int ToT[2] = { 0, 0 };
-        ToT[0] = sList->getToT0(breakPoint);
-        ToT[1] = sList->getToT1(breakPoint);
-        const int ToTlayer = sList->getToT1();  // full plane ToT (debugging)
+        sList->getToT(ToT, breakPoint);
+        int ToTLayer;
+        sList->getToT(&ToTLayer);  // full plane ToT (debugging)
 
         Event::TkrDigi* pDigi = new Event::TkrDigi(bilayer, axis, tower, ToT);
         nStrips = 0;
@@ -260,7 +270,8 @@ StatusCode GeneralHitToDigiTool::execute()
         if (log.isActive()) 
             log << "tower " << tower.id() << " bilayer " << bilayer
             << " view " << axis << " ToT " << ToT[0] << " " << ToT[1]
-            << " ( " << ToTlayer << " )" ;
+
+            << " ( " << ToTLayer << " )" ;
         log << endreq;
 
         // now loop over contained list of strips
@@ -271,7 +282,7 @@ StatusCode GeneralHitToDigiTool::execute()
             nStrips++;
             
             // add the strip to the correct controller
-            if ( stripId < breakPoint )
+            if ( stripId <= breakPoint )
                 pDigi->addC0Hit(stripId);
             else
                 pDigi->addC1Hit(stripId);
