@@ -6,7 +6,7 @@
  *
  * @authors Toby Burnett, Leon Rochester, Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigiSandBox/src/Simple/SimpleMcToHitTool.cxx,v 1.1 2004/02/24 13:57:34 kuss Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Simple/SimpleMcToHitTool.cxx,v 1.1 2004/02/27 10:14:15 kuss Exp $
  */
 
 #include "SimpleMcToHitTool.h"
@@ -47,7 +47,7 @@ StatusCode SimpleMcToHitTool::initialize() {
 
     StatusCode sc = StatusCode::SUCCESS;
     MsgStream log(msgSvc(), name());
-    log << MSG::INFO << "initialize " << name() << endreq;
+    log << MSG::INFO << "initialize " << endreq;
 
     // Get the Glast detector service 
     sc = service("GlastDetSvc", m_gdSvc);
@@ -108,17 +108,16 @@ StatusCode SimpleMcToHitTool::execute() {
 
     StatusCode sc = StatusCode::SUCCESS;
     MsgStream log(msgSvc(), name());
-    log << MSG::INFO << "execute " << name() << endreq;
+    log << MSG::DEBUG << "execute " << endreq;
 
     // Look to see if the McPositionHitCol object is in the TDS
     SmartDataPtr<Event::McPositionHitCol>
         mcHits(m_edSvc, EventModel::MC::McPositionHitCol);
 	if( !mcHits)  { 
 		log << MSG::DEBUG;
-		if (log.isActive() ) {
+		if (log.isActive() )
 			log << "could not find \""<< "EventModel::MC::McPositionHitCol" 
 				<<"\". ";
-		}
         log << endreq;
 	}
     
@@ -166,9 +165,8 @@ SiPlaneMapContainer::SiPlaneMap SimpleMcToHitTool::createSiHits(
     if (&hits) nHits = (int) hits.size();
    
     log << MSG::DEBUG;
-    if (log.isActive() ) {
+    if (log.isActive() )
         log << "Number of position hits found = " << nHits;
-    }
     log << endreq;
 
     if (nHits==0) return siPlaneMap;

@@ -5,7 +5,7 @@
  *
  * @author Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigiSandBox/src/GaudiAlg/TkrDigiHitToDigiAlg.cxx,v 1.1 2004/02/24 13:57:34 kuss Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/GaudiAlg/TkrDigiHitToDigiAlg.cxx,v 1.1 2004/02/27 10:14:15 kuss Exp $
  */
 
 #include "TkrDigiHitToDigiAlg.h"
@@ -70,7 +70,7 @@ StatusCode TkrDigiHitToDigiAlg::execute() {
 
     StatusCode sc = StatusCode::SUCCESS;
     MsgStream log(msgSvc(), name());
-    log << MSG::INFO << "execute" << endreq;
+    log << MSG::DEBUG << "execute" << endreq;
 
     sc = m_tool->execute();
 

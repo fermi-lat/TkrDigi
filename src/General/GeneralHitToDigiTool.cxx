@@ -6,7 +6,7 @@
  *
  * @author Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigiSandBox/src/General/GeneralHitToDigiTool.cxx,v 1.1 2004/02/24 13:57:34 kuss Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitToDigiTool.cxx,v 1.1 2004/02/27 10:14:15 kuss Exp $
  */
 
 #include "GeneralHitToDigiTool.h"
@@ -72,7 +72,7 @@ StatusCode GeneralHitToDigiTool::initialize()
 
     StatusCode sc = StatusCode::SUCCESS;
     MsgStream log(msgSvc(), name());
-    log << MSG::INFO << "initialize " << name() << endreq;
+    log << MSG::INFO << "initialize " << endreq;
 
     if ( s_totThreshold != GeneralNoiseTool::noiseThreshold() )
         log << MSG::WARNING
@@ -156,7 +156,7 @@ StatusCode GeneralHitToDigiTool::execute()
 
     StatusCode sc = StatusCode::SUCCESS;
     MsgStream log(msgSvc(), name());
-    log << MSG::INFO << "execute " << name() << endreq;
+    log << MSG::DEBUG << "execute " << endreq;
 
     // Take care of insuring that the data area has been created
     DataObject* pDummy;
@@ -256,10 +256,12 @@ StatusCode GeneralHitToDigiTool::execute()
         Event::TkrDigi* pDigi = new Event::TkrDigi(bilayer, axis, tower, ToT);
         nStrips = 0;
 
-        log << MSG::DEBUG << "tower " << tower.id() << " bilayer " << bilayer
+        log << MSG::DEBUG;
+        if (log.isActive()) 
+            log << "tower " << tower.id() << " bilayer " << bilayer
             << " view " << axis << " ToT " << ToT[0] << " " << ToT[1]
-            << " ( " << ToTlayer << " )"
-            << endreq;
+            << " ( " << ToTlayer << " )" ;
+        log << endreq;
 
         // now loop over contained list of strips
         for (itStrip=sList->begin(); itStrip!=sList->end(); ++itStrip ) {
@@ -273,11 +275,12 @@ StatusCode GeneralHitToDigiTool::execute()
                 pDigi->addC0Hit(stripId);
             else
                 pDigi->addC1Hit(stripId);
-            log << MSG::DEBUG
-                << "    strip " << itStrip->index()
+            log << MSG::DEBUG;
+            if (log.isActive()) 
+                log << "    strip " << itStrip->index()
                 << " energy " << itStrip->energy()
-                << " noise " << itStrip->noise()
-                << endreq;
+                << " noise " << itStrip->noise();
+            log << endreq;
             // get the alignment offset of the strip
             HepPoint3D point(0);
             double deltaX = 0;
@@ -357,8 +360,11 @@ StatusCode GeneralHitToDigiTool::execute()
     // sort by volume id
     std::sort(pTkrDigi->begin(), pTkrDigi->end(), Event::TkrDigi::digiLess());
 
-    log << MSG::DEBUG << " X digis/strips: " << nDigi[0] << " " << nStrip[0]
-        << " Y digis/strips: " << nDigi[1] << " " << nStrip[1] << endreq;
+    log << MSG::DEBUG;
+    if (log.isActive()) 
+        log << " X digis/strips: " << nDigi[0] << " " << nStrip[0]
+        << " Y digis/strips: " << nDigi[1] << " " << nStrip[1];
+        log << endreq;
 
     return sc;
 }
