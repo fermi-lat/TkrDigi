@@ -1,5 +1,15 @@
 ------------------------------------------------------------
 User: burnett  Fri Aug 16 13:08:05 PDT 2002
+TkrDigi/src/test
+
+Modified Files:
+	jobOptions.txt 
+Log Message:
+
+use prefix for ids. fix joboptions so test job runs.
+    *
+------------------------------------------------------------
+User: burnett  Fri Aug 16 13:08:05 PDT 2002
 TkrDigi/src
 
 Modified Files:
