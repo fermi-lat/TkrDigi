@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: lsrea  Sat Mar 22 14:55:08 PST 2003
+TkrDigi/src
+
+Modified Files:
+	SiLayerList.cxx 
+Log Message:
+Generalize test for si detector elements to allow for special EM wafers
+    *
+------------------------------------------------------------
 User: lsrea  Thu Mar 13 12:00:45 PST 2003
 TkrDigi/doc
 
