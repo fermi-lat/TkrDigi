@@ -2,6 +2,7 @@
 @verbatim
  Package TkrDigi
 
+ v2r0p5     10-may-2004  LSR use new TkrToTSvc params
  v2r0p4     30-apr-2004  LSR fix requirements for latest
  v2r0p3     13-mar-2004  LSR Interface to new TkrToTSvc (simpleAlg only) 
  v2r0p2     10-mar-2004  LSR Interface to new TkrSplitsSvc 
