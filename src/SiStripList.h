@@ -11,7 +11,7 @@
  * @author Toby Burnett, Leon Rochester (original authors)
  * @author Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.h,v 1.7 2004/02/27 10:14:13 kuss Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.h,v 1.8 2004/03/10 18:37:04 lsrea Exp $
 */
 
 #ifndef SISTRIPLIST_H
@@ -184,7 +184,8 @@ class SiStripList {
  public:
     ///
     static const int sepSentinel=100000;
-    void getToT(int* ToT, const int sep=sepSentinel) const;
+    void getToT(int* ToT, const int tower, const int layer, const int view,
+        const ITkrToTSvc* pToTSvc, const int sep=sepSentinel) const;
 
     /**
      * noise member functions.  The parameters denote:

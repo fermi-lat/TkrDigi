@@ -6,7 +6,7 @@
  *
  * @author Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitToDigiTool.cxx,v 1.2 2004/03/09 20:06:30 lsrea Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitToDigiTool.cxx,v 1.3 2004/03/10 18:37:04 lsrea Exp $
  */
 
 #include "GeneralHitToDigiTool.h"
@@ -38,7 +38,8 @@
 static const ToolFactory<GeneralHitToDigiTool>    s_factory;
 const IToolFactory& GeneralHitToDigiToolFactory = s_factory;
 
-double GeneralHitToDigiTool::s_totAt1Mip    = 43.8;
+//double GeneralHitToDigiTool::s_totAt1Mip    = 43.8;
+double GeneralHitToDigiTool::s_fCPerMip     = 4.667;
 double GeneralHitToDigiTool::s_mevPerMip    = 0.155;
 double GeneralHitToDigiTool::s_totThreshold =GeneralNoiseTool::noiseThreshold();
 int    GeneralHitToDigiTool::s_totMax       = 250;
@@ -54,7 +55,8 @@ GeneralHitToDigiTool::GeneralHitToDigiTool(const std::string& type,
 
     declareProperty("killBadStrips", m_killBadStrips = false );
     declareProperty("killFailed",    m_killFailed    = true  );
-    declareProperty("totAt1Mip",     s_totAt1Mip);
+    //declareProperty("totAt1Mip",     s_totAt1Mip);
+    declareProperty("fCPerMip",      s_fCPerMip);
     declareProperty("mevPerMip",     s_mevPerMip);
     declareProperty("totThreshold",  s_totThreshold);
     declareProperty("totMax",        s_totMax);
@@ -122,6 +124,14 @@ StatusCode GeneralHitToDigiTool::initialize()
     if ( !m_tspSvc ) {
         log << MSG::ERROR
             << "Couldn't set up TkrSplitsSvc!" << std::endl;
+        return StatusCode::FAILURE;
+    }
+
+    // Get the ToT service 
+    m_ttotSvc = m_tgSvc->getTkrToTSvc();
+    if ( !m_ttotSvc ) {
+        log << MSG::ERROR
+            << "Couldn't set up TkrToTSvc!" << std::endl;
         return StatusCode::FAILURE;
     }
 
@@ -259,9 +269,9 @@ StatusCode GeneralHitToDigiTool::execute()
         //       ordinarily 767 for the flight instrument
         int breakPoint = m_tspSvc->getSplitPoint(theTower, bilayer, view);
         int ToT[2] = { 0, 0 };
-        sList->getToT(ToT, breakPoint);
+        sList->getToT(ToT, theTower, bilayer, view, m_ttotSvc, breakPoint);
         int ToTLayer;
-        sList->getToT(&ToTLayer);  // full plane ToT (debugging)
+        sList->getToT(&ToTLayer, theTower, bilayer, view, m_ttotSvc);  // full plane ToT (debugging)
 
         Event::TkrDigi* pDigi = new Event::TkrDigi(bilayer, axis, tower, ToT);
         nStrips = 0;
