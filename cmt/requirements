@@ -1,19 +1,16 @@
 package TkrDigi
-version v1r8
+version v1r9
 
 branches src cmt doc
-use GlastPolicy v4*
-use GaudiSvc
-use GlastSvc v9*
-use Event v9*
+use GlastPolicy v5r*
+use GlastSvc v9r*
+use Event v9r*
 
-use TkrUtil v1r1
+use GuiSvc v3r*
+use TkrUtil v1r*
+use facilities v2r*
 
-use GuiSvc
-
-use facilities
-
-use xml      
+use xml v4r*      
 
 apply_pattern packageShr
 
@@ -21,8 +18,8 @@ set JOBOPTIONS ${TKRDIGIROOT}/src/test/jobOptions.txt
 
 #=============================================================
 private
-
-use RootIo v4*
+use RootPolicy v2r*
+use RootIo v6*
 
 apply_pattern package_headers
 
