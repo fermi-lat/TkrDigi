@@ -1,5 +1,5 @@
 // File and Version Information:
-//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.21 2003/01/27 19:46:35 lsrea Exp $
+//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.22 2003/01/29 23:18:59 lsrea Exp $
 //
 // Description:
 //      TkrSimpleDigiAlg provides an example of a Gaudi algorithm.  
@@ -63,7 +63,7 @@
 *
 * @author T. Burnett
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.21 2003/01/27 19:46:35 lsrea Exp $  
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.22 2003/01/29 23:18:59 lsrea Exp $  
 */
 
 class TkrSimpleDigiAlg : public Algorithm {
@@ -313,7 +313,7 @@ StatusCode TkrSimpleDigiAlg::execute()
         idents::GlastAxis::axis iview = (view==0 ? idents::GlastAxis::X : idents::GlastAxis::Y);
         int theTower = tower.id();
 
-        if (m_fsv && m_fsv->isFailed(theTower, layer, view)) continue;
+        if (m_fsv && m_fsv->getFailureModes() && m_fsv->isFailed(theTower, layer, view)) continue;
         
         TkrDigi* pDigi  = new TkrDigi(layer, iview, tower, ToT);
         
@@ -326,7 +326,7 @@ StatusCode TkrSimpleDigiAlg::execute()
             const SiStripList::Strip & strip = *i;
             int stripId = strip.index();
             // kill bad strips
-            if(m_bsv && m_bsv->isBadStrip(theTower, layer, iview, stripId)) continue;
+            if(m_bsv && !m_bsv->empty() && m_bsv->isBadStrip(theTower, layer, iview, stripId)) continue;
             nStrips++;
             float e = strip.energy();
             bool noise  = strip.noise();
