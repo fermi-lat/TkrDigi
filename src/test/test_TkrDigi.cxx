@@ -1,4 +1,4 @@
-// $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/test/test_TkrDigi.cxx,v 1.1 2002/08/25 17:13:12 lsrea Exp $
+// $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/test/test_TkrDigi.cxx,v 1.2 2002/11/08 22:10:03 lsrea Exp $
 
 // Include files
 // Gaudi system includes
@@ -90,7 +90,6 @@ StatusCode test_TkrDigi::execute()
                 log << endreq;
             }
         }
-
     }
     
     
