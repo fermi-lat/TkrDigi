@@ -2,7 +2,7 @@
 @verbatim
  Package TkrDigi
 
- v2r0p2     13-mar-2004  LSR Interface to new TkrToTSvc (simpleAlg only) 
+ v2r0p3     13-mar-2004  LSR Interface to new TkrToTSvc (simpleAlg only) 
  v2r0p2     10-mar-2004  LSR Interface to new TkrSplitsSvc 
  v2r0p1     03-mar-2004  LSR Cleanup for debug output before move to head of GlastRelease
  v2r0       27-feb-2004  MK  Port of sandbox to TkrDigi
