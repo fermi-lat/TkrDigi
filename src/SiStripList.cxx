@@ -1,4 +1,4 @@
-// $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.cxx,v 1.9 2003/03/01 02:16:06 lsrea Exp $
+// $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.cxx,v 1.10 2003/03/01 17:03:05 lsrea Exp $
 
 #include "SiStripList.h"
 #include <algorithm>
@@ -119,6 +119,7 @@ void SiStripList::score(const HepPoint3D& o, const HepPoint3D& p,
     
     float    in = o.x();     // entry point -- x
     float    ex = p.x();     // exit point -- x
+
     int ins = stripId(in), exs = stripId(ex); // enter/exit strips (if valid)
     float len = dTot;  // path length through a strip
     if(fabs(xDir) > si_strip_pitch()) len *= si_strip_pitch()/fabs(xDir);
