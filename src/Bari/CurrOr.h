@@ -6,7 +6,7 @@
  *
  * @authors  M. Brigida, M. Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigiSandBox/src/Bari/CurrOr.h,v 1.1 2004/02/24 13:57:33 kuss Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Bari/CurrOr.h,v 1.1 2004/02/27 10:14:14 kuss Exp $
  */
 
 #ifndef CURROR_H
@@ -32,7 +32,7 @@ class CurrOr {
 
     /// adds a DigiElem
     void add(const DigiElem*);
-
+    void addnew(const DigiElem*);
     /**
      * adds a DigiElem via it's components
      * @param 1  volume identifier

@@ -5,11 +5,16 @@
  *
  * authors: M. Brigida, N. Giglietto, M. Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigiSandBox/src/Bari/DigiElem.cxx,v 1.1 2004/02/24 13:57:33 kuss Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Bari/DigiElem.cxx,v 1.1 2004/02/27 10:14:14 kuss Exp $
  */
 
 #include "DigiElem.h"
 
+
+DigiElem::DigiElem(){
+    for ( int i=0; i<100; ++i )
+	m_Ic[i] = 0;
+}
 
 DigiElem::DigiElem(const idents::VolumeIdentifier volId, const int strip,
                    const double* Ic,

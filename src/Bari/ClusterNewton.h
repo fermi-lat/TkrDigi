@@ -21,6 +21,9 @@ class ClusterNewton    //class declaration
     int mfir; 
     double nus, a2s, a1s, cis, dts, tfin;
 	double qtot;
+    double Vouts[10000]; // ndim
+    double Vapp[10000];
+
   public:  
 ClusterNewton();
 ~ClusterNewton();

@@ -6,7 +6,7 @@
  *
  * @authors Nico Giglietto, Monica Brigida, Leon Rochester, Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Bari/BariMcToHitTool.cxx,v 1.1 2004/02/27 10:14:14 kuss Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Bari/BariMcToHitTool.cxx,v 1.2 2004/03/09 20:06:30 lsrea Exp $
  */
 
 #include "BariMcToHitTool.h"
@@ -136,7 +136,7 @@ StatusCode BariMcToHitTool::execute()
     //    CurrOr* CurrentOr = new CurrOr();
     CurrOr CurrentOr;
     TkrDigitizer Digit;
-
+    Digit.Clean();
     int kk = 0;
 
     static const double ladder_pitch = SiStripList::die_width()
