@@ -16,7 +16,7 @@ use GuiSvc v*
 use TkrUtil v2r*
 use facilities v2r*
 
-use xml v4r*
+##use xml v4r*
 
 apply_pattern packageShr
 
