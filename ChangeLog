@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: lsrea  Mon Aug 12 16:07:26 PDT 2002
+TkrDigi/src
+
+Modified Files:
+	SiStripList.cxx 
+Log Message:
+Fix typo in method score(): exit strip was not getting scored before.
+
+    *
+------------------------------------------------------------
 User: lsrea  Thu Aug  8 22:06:16 PDT 2002
 TkrDigi/src
 
