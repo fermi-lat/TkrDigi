@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: lsrea  Sun Dec 26 15:28:19 PST 2004
+TkrDigi/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+Prepare for tag v3r3: mods to ToT calls
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: v2r2, operation: add
 Package: TkrDigi
