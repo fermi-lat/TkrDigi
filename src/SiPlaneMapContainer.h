@@ -8,7 +8,7 @@
  *
  * @author Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigiSandBox/src/SiPlaneMapContainer.h,v 1.8 2004/02/24 13:57:32 kuss Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiPlaneMapContainer.h,v 1.1 2004/02/27 10:14:13 kuss Exp $
 */
 
 #ifndef __SIPLANEMAPCONTAINER_H__
@@ -30,15 +30,26 @@ class SiPlaneMapContainer : public DataObject {
     typedef std::map<idents::VolumeIdentifier, SiStripList*> SiPlaneMap;
 
     /// Initializes the container with a SiPlaneMap
-    SiPlaneMapContainer(const SiPlaneMap m): m_SiPlaneMap(m) {}
+    SiPlaneMapContainer(const SiPlaneMap m): m_siPlaneMap(m) {}
+
+    /// Deletes the contained SiStripLists
+    SiPlaneMapContainer::~SiPlaneMapContainer() {
+        for ( SiPlaneMap::iterator it=m_siPlaneMap.begin();
+              it!=m_siPlaneMap.end(); ++it ) {
+            delete (*it).second;
+            (*it).second = 0;
+        }
+        m_siPlaneMap.clear();
+    }
 
     /// Returns the SiPlaneMap
-    SiPlaneMap& getSiPlaneMap() { return m_SiPlaneMap; }
+    SiPlaneMap& getSiPlaneMap() { return m_siPlaneMap; }
 
  private:
 
-    SiPlaneMap m_SiPlaneMap;
+    SiPlaneMap m_siPlaneMap;
 
 };
 
 #endif
+
