@@ -1,4 +1,4 @@
-//$Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiLayerList.cxx,v 1.2 2002/08/16 20:08:05 burnett Exp $
+//$Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiLayerList.cxx,v 1.3 2003/03/01 02:16:06 lsrea Exp $
 #include "SiLayerList.h"
 
 
@@ -15,7 +15,8 @@ IGeometry::VisitorRet
         m_idValues.push_back(static_cast<unsigned int>(*u));
     }
     // is this what we want? add to the list if so and abort
-    if(name=="SiLayerBox" || name.substr(0,9)=="SiLadders" ) {
+    if(name.find("SiLayerBox")!=std::string::npos || 
+        name.find("SiLadders")!=std::string::npos ) {
         this->push_back(getId());
         return AbortSubtree;
     }
