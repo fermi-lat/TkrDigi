@@ -1,5 +1,5 @@
 // File and Version Information:
-//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.7 2002/08/09 05:06:16 lsrea Exp $
+//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.8 2002/08/14 17:07:42 lsrea Exp $
 //
 // Description:
 //      TkrSimpleDigiAlg provides an example of a Gaudi algorithm.  
@@ -52,7 +52,7 @@
 *
 * @author T. Burnett
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.7 2002/08/09 05:06:16 lsrea Exp $  
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.8 2002/08/14 17:07:42 lsrea Exp $  
 */
 
 class TkrSimpleDigiAlg : public Algorithm {
@@ -133,6 +133,14 @@ StatusCode TkrSimpleDigiAlg::initialize(){
     
     // pass the GlastDetSvc pointer to the SiStripList static functions
     SiStripList::initialize(m_gsv);
+
+    log << MSG::INFO << "ssdgap " << SiStripList::ssd_gap() 
+        << " laddergap " << SiStripList::ladder_gap()
+        << " strips/wafer " << SiStripList::strips_per_die() 
+        << " #ladders " << SiStripList::n_si_dies() 
+        << " waferside " << SiStripList::die_width() 
+        << " deadgap " << SiStripList::guard_ring() 
+        << endreq;
     
     // get the list of layers, to be used to add noise to otherwise empty layers
     m_gsv->accept(m_layers);
