@@ -6,7 +6,7 @@
  *
  * @authors Nico Giglietto, Monica Brigida, Leon Rochester, Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigiSandBox/src/Bari/BariMcToHitTool.cxx,v 1.2 2004/02/25 10:45:28 kuss Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Bari/BariMcToHitTool.cxx,v 1.1 2004/02/27 10:14:14 kuss Exp $
  */
 
 #include "BariMcToHitTool.h"
@@ -59,7 +59,7 @@ StatusCode BariMcToHitTool::initialize()
 
     StatusCode sc = StatusCode::SUCCESS;
     MsgStream log(msgSvc(), name());
-    log << MSG::INFO << "initialize " << name() << endreq;
+    log << MSG::INFO << "initialize " << endreq;
 
     // Set a default current file
     declareProperty("CurrentsFile",
@@ -122,7 +122,7 @@ StatusCode BariMcToHitTool::execute()
 
     StatusCode sc = StatusCode::SUCCESS;
     MsgStream log(msgSvc(), name());
-    log << MSG::INFO << "execute " << name() << endreq;
+    log << MSG::DEBUG << "execute " << endreq;
 
     //Look to see if the McPositionHitCol object is in the TDS
     SmartDataPtr<Event::McPositionHitCol>
@@ -173,13 +173,15 @@ StatusCode BariMcToHitTool::execute()
             
         const double energy = pHit->depositedEnergy();
 
-        log << MSG::DEBUG << "Hit " << ++kk << " tower " << tower
+        log << MSG::DEBUG;
+		if (log.isActive() ) 
+        log << "Hit " << ++kk << " tower " << tower
             << " layer " << bilayer << " view "  << view
-            <<" ene " << energy << endreq;
-        log << MSG::DEBUG << "      "
+            <<" ene " << energy << endreq
+            << "      "
             << " entry(" << entry.x()<<", "<<entry.y()<<", "<<entry.z() 
-            << ") exit (" << exit.x()<<", "<<exit.y()<<", "<<exit.z() << ")" 
-            << endreq;
+            << ") exit (" << exit.x()<<", "<<exit.y()<<", "<<exit.z() << ")";
+        log << endreq;
             
         // set variables
         // getPlaneId() returns a volId with ladder and wafer info stripped
@@ -192,8 +194,11 @@ StatusCode BariMcToHitTool::execute()
     // digital section
     const TotOr* const DigiOr = Digit.digitize(CurrentOr);
 
-    log << MSG::INFO << " END DIGITAL SECTION: " << kk << " MC hits found; "
-        << DigiOr->size() << " digits stored in the TDS" << endreq;
+    log << MSG::DEBUG;
+    if (log.isActive()) 
+        log << " END DIGITAL SECTION: " << kk << " MC hits found; "
+        << DigiOr->size() << " digits stored in the TDS";
+    log << endreq;
 
     // Take care of insuring that the data area has been created
     DataObject* pNode = 0;

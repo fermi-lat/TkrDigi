@@ -6,7 +6,7 @@
  *
  * @author Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigiSandBox/src/General/GeneralNoiseTool.cxx,v 1.1 2004/02/24 13:57:34 kuss Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralNoiseTool.cxx,v 1.1 2004/02/27 10:14:15 kuss Exp $
  */
 
 #include "GeneralNoiseTool.h"
@@ -55,7 +55,7 @@ StatusCode GeneralNoiseTool::initialize() {
 
     StatusCode sc = StatusCode::SUCCESS;
     MsgStream log(msgSvc(), name());
-    log << MSG::INFO << "initialize " << name() << endreq;
+    log << MSG::INFO << "initialize " << endreq;
 
     // Get the Glast detector service 
     sc = service("GlastDetSvc", m_gdSvc);
@@ -94,7 +94,7 @@ StatusCode GeneralNoiseTool::execute() {
     
     StatusCode sc = StatusCode::SUCCESS;
     MsgStream log(msgSvc(), name());
-    log << MSG::INFO << "execute " << name() << endreq;
+    log << MSG::DEBUG << "execute " << endreq;
 
     // retrieve the pointer to the SiPlaneMapContainer from TDS
     SmartDataPtr<SiPlaneMapContainer> pObject(m_edSvc,
