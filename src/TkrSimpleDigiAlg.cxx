@@ -1,5 +1,5 @@
 // File and Version Information:
-//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.30 2003/05/02 16:09:36 lsrea Exp $
+//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.31 2003/05/02 16:34:09 lsrea Exp $
 //
 // Description:
 //      TkrSimpleDigiAlg provides an example of a Gaudi algorithm.  
@@ -63,7 +63,7 @@
 *
 * @author T. Burnett
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.30 2003/05/02 16:09:36 lsrea Exp $  
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.31 2003/05/02 16:34:09 lsrea Exp $  
 */
 
 class TkrSimpleDigiAlg : public Algorithm {
@@ -355,17 +355,6 @@ StatusCode TkrSimpleDigiAlg::execute()
             HepPoint3D point(0);
             double deltaX = 0;
             double deltaY = 0;
-            /*
-            if( m_asv && m_asv->alignSim()) {
-                HepPoint3D entry(0., 0., 0.);
-                HepPoint3D  exit(0., 0., 1.);               
-                m_asv->moveMCHit(id, entry, exit);
-                deltaX = -entry.x();
-                deltaY = -entry.y();
-                std::cout << "layer " << layer << " view " << view 
-                    << ", move hit by: " << deltaX << " " << deltaY << std::endl;                
-            }
-            */
 
             // save the hit here
             Event::McTkrStrip* pStrip = 
@@ -488,7 +477,18 @@ void TkrSimpleDigiAlg::createSiHits(const Event::McPositionHitVector& hits)
         // check for correct length
         if (id.size()!=9) continue;
         // check that it's really a TKR hit (probably overkill)
+
         if (!(id[0]==0 && id[3]==1)) continue; // !(LAT && TKR)
+        int ladder = id[7], wafer=id[8];
+    
+        HepPoint3D entry(hit.entryPoint());
+        HepPoint3D exit(hit.exitPoint());
+
+        // Alignment works on the *local* coordinates, so do it *before* the coordinates are
+        //   offset!  Maybe things will come out right now!
+
+        // move hit by alignment constants
+        if( m_asv && m_asv->alignSim()) m_asv->moveMCHit(id, entry, exit);
         
         // this assumes that the number of ladders equals the number of wafers/ladder
         // not true for the BFEM/BTEM!
@@ -496,22 +496,11 @@ void TkrSimpleDigiAlg::createSiHits(const Event::McPositionHitVector& hits)
         static double ssd_pitch    = SiStripList::die_width()+SiStripList::ssd_gap();
         static double waferOffset = 0.5*(SiStripList::n_si_dies() - 1);
         
-        int ladder = id[7], wafer=id[8];
         HepVector3D 
             offset( (ladder-waferOffset)*ladder_pitch, (wafer-waferOffset)*ssd_pitch, 0);
-        HepPoint3D
-            entry(hit.entryPoint()+offset),
-            exit( hit.exitPoint()+offset);
+        entry += offset;
+        exit  += offset;
 
-        //HepVector3D before = entry;
-
-        // move hit by alignment constants
-        if( m_asv && m_asv->alignSim()) m_asv->moveMCHit(id, entry, exit);
-
-        //HepVector3D delta = entry - before;
-        //std::cout << "Digi Shift: " << id.name() << " " 
-        //    << delta.x() << " " << delta.y() << std::endl;
-        
         //now truncate the id to the plane.
         idents::VolumeIdentifier planeId;
         for( int j=0; j<7; ++j) planeId.append(id[j]);
