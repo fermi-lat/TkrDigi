@@ -1,5 +1,18 @@
 ------------------------------------------------------------
 User: kuss  Fri Feb 27 02:14:15 PST 2004
+TkrDigi/src/Simple
+
+Added Files:
+	SimpleMcToHitTool.cxx SimpleMcToHitTool.h 
+Log Message:
+Commit of the sand box.  Bari specific files are in src/Bari, old-TkrDigi
+specific ones in src/Simple (left-overs of src/TkrSimpleDigiAlg.cxx), and
+common ones in src/General.  src/GaudiAlg contains the steering alg TkrDigiAlg,
+and the sub algorithms.  It should work!
+
+    *
+------------------------------------------------------------
+User: kuss  Fri Feb 27 02:14:15 PST 2004
 TkrDigi/src/General
 
 Added Files:
