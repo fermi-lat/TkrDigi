@@ -2,6 +2,8 @@
 @verbatim
  Package TkrDigi
 
+ v1r11p10   10-feb-2004  LSR Various fixes, mostly for special cases
+ v1r11p9    19-jan-2004  LSR Fix call to DataObject for new Root converters
  v1r11p8    06-nov-2003  LSR limit number of hitw per side to m_maxHits (default = 63)
  v1r11p7    22-oct-2003  LSR Fix ToT threshold
  v1r11p6    16-oct-2003  LSR Truncate ToT to saturation value
