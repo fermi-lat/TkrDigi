@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: lsrea  Mon Jan  6 11:48:28 PST 2003
+TkrDigi/doc
+
+Modified Files:
+	release.notes 
+Log Message:
+kill bad strips in digi, and prepare for tag v1r8
+    *
+------------------------------------------------------------
 User: lsrea  Mon Jan  6 11:48:27 PST 2003
 TkrDigi/cmt
 
