@@ -6,7 +6,7 @@
 *
 * @authors Nico Giglietto, Monica Brigida, Leon Rochester, Michael Kuss
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Bari/BariMcToHitTool.cxx,v 1.6 2004/06/16 23:53:17 lsrea Exp $
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Bari/BariMcToHitTool.cxx,v 1.7 2004/06/17 14:34:27 lsrea Exp $
 */
 
 #include "BariMcToHitTool.h"
@@ -94,9 +94,10 @@ StatusCode BariMcToHitTool::initialize()
         return sc;
     }
 
-    sc = service("TkrGeometrySvc", m_geoSvc);
+    sc = service("TkrGeometrySvc", m_geoSvc, true);
     if( sc.isFailure() ) {
-        log << MSG::ERROR << "could not find TkrGeometrySvc !" << endreq;
+        log << MSG::ERROR << "Couldn't set up TkrGeometrySvc!" << endreq;
+        //        log << MSG::ERROR << "could not find TkrGeometrySvc !" << endreq;
         return sc;
     }
 
