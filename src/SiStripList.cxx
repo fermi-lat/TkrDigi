@@ -1,4 +1,4 @@
-// $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.cxx,v 1.2 2002/06/20 22:23:38 burnett Exp $
+// $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.cxx,v 1.3 2002/08/07 07:13:23 lsrea Exp $
 
 #include "SiStripList.h"
 #include <algorithm>
@@ -189,7 +189,7 @@ void SiStripList::score(const HepPoint3D& o, const HepPoint3D& p, float eLoss)
                 sx = calculateBin ( exs );
                 dx = si_strip_pitch()/2. + (ex-sx)*copysign(1.,xDir);
                 frac = dx/dx_max;
-                addStrip( ins, eLoss*frac*len/dTot ); // exit strip
+                addStrip( exs, eLoss*frac*len/dTot ); // exit strip
                 
                 short sinc = ( ins < exs ) ? 1 : -1;
                 for( unsigned sid = ins + sinc; sid != exs; sid += sinc )   
