@@ -1,5 +1,15 @@
 ------------------------------------------------------------
 User: lsrea  Sat Mar 13 11:43:56 PST 2004
+TkrDigi/src/General
+
+Modified Files:
+	GeneralHitToDigiTool.cxx GeneralHitToDigiTool.h 
+Log Message:
+Prepare for tag v2r0p2 -- Interface to TkrToTSvc added (simpleAlg only)
+
+    *
+------------------------------------------------------------
+User: lsrea  Sat Mar 13 11:43:56 PST 2004
 TkrDigi/src
 
 Modified Files:
