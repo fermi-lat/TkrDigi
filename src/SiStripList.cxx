@@ -1,4 +1,4 @@
-// $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.cxx,v 1.1.1.1 2002/05/26 17:17:19 burnett Exp $
+// $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.cxx,v 1.2 2002/06/20 22:23:38 burnett Exp $
 
 #include "SiStripList.h"
 #include <algorithm>
@@ -10,7 +10,7 @@
 
 
 
-// utility function declarations
+//  utility function declarations
 #ifdef _MSC_VER
 inline double copysign(double a, double b){return _copysign(a,b);}
 #endif
@@ -20,17 +20,35 @@ IGlastDetSvc* SiStripList::s_detsvc=0;
 void SiStripList::initialize(IGlastDetSvc * ds)
 {
     s_detsvc=ds;
+	StatusCode sc;
+	double temp;
+
+	sc = s_detsvc->getNumericConstByName("ssdGap", &s_ssd_gap);
+	sc = s_detsvc->getNumericConstByName("ladderGap", &s_ladder_gap);
+	sc = s_detsvc->getNumericConstByName("stripPerWafer", &temp);
+	s_stripPerWafer = temp + 0.5;
+	sc = s_detsvc->getNumericConstByName("nWaferAcross", &temp);
+	s_n_si_dies = temp + 0.5;
+	sc = s_detsvc->getNumericConstByName("SiWaferSide", &s_dice_width);
+	sc = s_detsvc->getNumericConstByName("SiWaferActiveSide", &temp);
+	s_guard_ring = 0.5*(s_dice_width - temp);
+	
+     
+	std::cout << "SPG init: ssdgap " << s_ssd_gap << " laddergap " << s_ladder_gap 
+		<< " stripperwafer " << s_stripPerWafer << " ndies " << s_n_si_dies 
+		<< " waferside " << s_dice_width << " deaddist " << s_guard_ring << std::endl;
     
+   
 }
 SiStripList::~SiStripList(){ clear(); }
 
-// static variable implementations--TODO: initialize with detsvc.
-unsigned int SiStripList::s_n_si_dies      =  4; // # of Si dies across single SSD plane
-unsigned int SiStripList::s_stripPerWafer  =384;
-double       SiStripList::s_dice_width     =89.500; // width of a single silicon die 
-double       SiStripList::s_guard_ring     = 0.974;
-double       SiStripList::s_ssd_gap        = 0.025;            
-double       SiStripList::s_ladder_gap     = 0.200;
+// static variable implementations--now initialized with detsvc.
+unsigned int SiStripList::s_n_si_dies      =  0; // 4; // # of Si dies across single SSD plane
+unsigned int SiStripList::s_stripPerWafer  =  0; // 384;
+double       SiStripList::s_dice_width     = 0.; // 89.500; // width of a single silicon die 
+double       SiStripList::s_guard_ring     = 0.; // 0.974;
+double       SiStripList::s_ssd_gap        = 0.; // 0.025;            
+double       SiStripList::s_ladder_gap     = 0.; // 0.200;
 
 
 /// number of silicon dies
@@ -55,20 +73,14 @@ unsigned int SiStripList::n_si_strips ()  {
     return (n_si_dies() * strips_per_die());
 }
 
+/// stripId - calculate the strip ID from the plane coordinate
 unsigned int SiStripList::stripId(double x){
     return s_detsvc->stripId(x);
     
 }
 /// calculateBin - calculates the center of a given strip
-inline double   SiStripList::calculateBin (unsigned int ix) {
-    double  nstrips = static_cast<double>(strips_per_die());
-    double  i = fmod(static_cast<double>(ix),nstrips);
-    // strip relative to wafer
-    double  n = (die_width() + ssd_gap()) * 
-        floor(static_cast<double>(ix)/nstrips);
-    // die number
-    
-    return  n + (i + 0.5) * si_strip_pitch() - panel_width()/2. + guard_ring();
+double   SiStripList::calculateBin (unsigned int ix) {
+	return s_detsvc->stripLocalX(ix);
 }
 
 /// addStrip - adds a strip to the list of strips...
