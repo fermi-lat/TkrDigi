@@ -1,6 +1,7 @@
 /** @file release.notes
  * Package TkrDigi
  *
+ * v1r6       08-sep-2002  LSR update for new Event, GlastSvc
  * v1r5p7     25-Aug-2002  LSR working test program  test_TkrDigi
  * v1r5p6     16-aug-2002  THB use prefix for si plane list.
  * v1r5p5     14-aug-2002  LSR Remove code for handling incomplete ID's; check for TKR hit
