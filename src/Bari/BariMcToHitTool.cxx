@@ -6,7 +6,7 @@
 *
 * @authors Nico Giglietto, Monica Brigida, Leon Rochester, Michael Kuss
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Bari/BariMcToHitTool.cxx,v 1.9 2004/07/27 15:09:22 ngigliet Exp $
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Bari/BariMcToHitTool.cxx,v 1.10 2004/07/27 16:11:29 ngigliet Exp $
 */
 
 #include "BariMcToHitTool.h"
@@ -96,7 +96,7 @@ StatusCode BariMcToHitTool::initialize()
         return sc;
     }
 
-    sc = service("TkrGeometrySvc", m_geoSvc, true);
+    sc = service("TkrGeometrySvc", m_tkrGeom, true);
     if( sc.isFailure() ) {
         log << MSG::ERROR << "Couldn't set up TkrGeometrySvc!" << endreq;
         //        log << MSG::ERROR << "could not find TkrGeometrySvc !" << endreq;
@@ -153,7 +153,7 @@ StatusCode BariMcToHitTool::execute()
             + SiStripList::ssd_gap();
         static const double waferOffset  = 0.5*(SiStripList::n_si_dies() - 1);
 
-        ITkrAlignmentSvc* alsv = m_geoSvc->getTkrAlignmentSvc();
+        ITkrAlignmentSvc* alsv = m_tkrGeom->getTkrAlignmentSvc();
 
         // start hits loop 
         Event::McPositionHitCol::iterator it;        

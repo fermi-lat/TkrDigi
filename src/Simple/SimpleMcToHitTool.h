@@ -6,7 +6,7 @@
  *
  * @authors Toby Burnett, Leon Rochester, Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigiSandBox/src/Simple/SimpleMcToHitTool.h,v 1.1 2004/02/24 13:57:34 kuss Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Simple/SimpleMcToHitTool.h,v 1.1 2004/02/27 10:14:15 kuss Exp $
  */
 
 #ifndef __SIMPLEMCTOHITTOOL_H__
@@ -51,7 +51,7 @@ class SimpleMcToHitTool : public AlgTool, virtual public IMcToHitTool {
     /// Pointer to the Glast detector service
     IGlastDetSvc*       m_gdSvc;
     /// Pointer to the tracker geometry service
-    ITkrGeometrySvc*    m_tgSvc;
+    ITkrGeometrySvc*    m_tkrGeom;
     /// Pointer to the tracker alignment service
     ITkrAlignmentSvc*   m_taSvc;
 

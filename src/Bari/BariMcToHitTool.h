@@ -6,7 +6,7 @@
  *
  * @authors Nico Giglietto, Monica Brigida, Leon Rochester, Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Bari/BariMcToHitTool.h,v 1.1 2004/02/27 10:14:14 kuss Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Bari/BariMcToHitTool.h,v 1.2 2004/06/16 23:53:17 lsrea Exp $
  */
 
 #ifndef __BARIMCTOHITTOOL_H__
@@ -43,7 +43,7 @@ private:
     /// Extracted current information
     InitCurrent       m_openCurr;
     /// pointer to geometry svc
-    ITkrGeometrySvc* m_geoSvc;
+    ITkrGeometrySvc* m_tkrGeom;
 
 };
 

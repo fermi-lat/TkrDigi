@@ -6,7 +6,7 @@
  *
  * @authors Toby Burnett, Leon Rochester, Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Simple/SimpleMcToHitTool.cxx,v 1.3 2004/06/16 23:53:17 lsrea Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Simple/SimpleMcToHitTool.cxx,v 1.4 2004/09/07 21:26:52 lsrea Exp $
  */
 
 #include "SimpleMcToHitTool.h"
@@ -72,14 +72,14 @@ StatusCode SimpleMcToHitTool::initialize() {
         << endreq;
 
     // Get the Tkr Geometry service 
-    sc = service("TkrGeometrySvc", m_tgSvc, true);
+    sc = service("TkrGeometrySvc", m_tkrGeom, true);
     if ( sc.isFailure() ) {
         log << MSG::ERROR << "Couldn't set up TkrGeometrySvc!" << endreq;
         return sc;
     }
 
     // Get the alignment service 
-    m_taSvc = m_tgSvc->getTkrAlignmentSvc();
+    m_taSvc = m_tkrGeom->getTkrAlignmentSvc();
     if ( !m_taSvc ) {
         log << MSG::WARNING << "Couldn't set up TkrAlignmentSvc!"
             << std::endl << "Will assume it is not required!" << endreq;
