@@ -33,7 +33,9 @@ private:
     double Thick;
     //#define nbin = 50;
     int nbin;
-    double CURR[250000];
+  static const int ndim=250000;
+
+    double CURR[ndim];
     double XXcurr[100];
     int ID1, ID2, IDD;
     double CurrPar[100];
