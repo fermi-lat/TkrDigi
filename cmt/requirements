@@ -1,0 +1,26 @@
+package TkrDigi
+version v1r0
+
+branches src mgr doc
+
+use GlastSvc v8*
+use Event v8*
+
+use facilities
+
+use xml          
+
+apply_pattern packageShr
+
+
+#=============================================================
+private
+
+apply_pattern package_headers
+
+
+library TkrDigi   *.cxx   Dll/*.cxx   ${GlastDigi_headers}               
+
+apply_pattern package_Cshlibflags
+
+apply_pattern package_test
