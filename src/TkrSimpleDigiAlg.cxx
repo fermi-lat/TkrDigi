@@ -1,5 +1,5 @@
 // File and Version Information:
-//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.3 2002/06/22 01:05:12 lsrea Exp $
+//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.4 2002/07/19 15:59:17 burnett Exp $
 //
 // Description:
 //      TkrSimpleDigiAlg provides an example of a Gaudi algorithm.  
@@ -35,6 +35,8 @@
 #include "Event/TopLevel/EventModel.h"
 #include "Event/TopLevel/Event.h"
 #include "Event/Digi/TkrDigi.h"
+#include "Event/MonteCarlo/McTkrStrip.h"
+
 
 #include "SiStripList.h"
 #include "SiLayerList.h"
@@ -50,7 +52,7 @@
 *
 * @author T. Burnett
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.3 2002/06/22 01:05:12 lsrea Exp $  
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.4 2002/07/19 15:59:17 burnett Exp $  
 */
 
 class TkrSimpleDigiAlg : public Algorithm {
@@ -186,7 +188,17 @@ StatusCode TkrSimpleDigiAlg::execute()
             return sc;
         }
     }
+    // Create the collection of hit strip objects
+    McTkrStripCol* strips = new McTkrStripCol;
+    sc = eventSvc()->registerObject( EventModel::MC::McTkrStripCol, strips);
     
+    if (sc != StatusCode::SUCCESS){
+        log << MSG::INFO << "Failed to register TkrStrip vector" << endreq;
+        return sc;
+    }
+
+
+
     //Create the collection of digi objects - will be empty at this point
     TkrDigiCol*  pTkrDigi   = new TkrDigiCol;
     
@@ -202,7 +214,8 @@ StatusCode TkrSimpleDigiAlg::execute()
     // finally make digis from the hits
     for(SiPlaneMap::iterator si = m_SiMap.begin(); si != m_SiMap.end(); ++si){
         SiStripList& sidet = *si->second;
-        idents::VolumeIdentifier id = si->first;          
+        idents::VolumeIdentifier id = si->first;  
+        
        
         // unpack the id: the order is correct!
 #if 1 //  old way
@@ -238,7 +251,10 @@ StatusCode TkrSimpleDigiAlg::execute()
             
             //TODO: apply threshold, add strip to TkrDigi
             pDigi->addC0Hit(stripId);
-            
+
+            // save the hit here
+            strips->push_back(new Event::McTkrStrip(id, stripId, e));
+
         }
     }
     
