@@ -1,5 +1,16 @@
 ------------------------------------------------------------
 User: lsrea  Wed Jun 16 16:53:17 PDT 2004
+TkrDigi/doc
+
+Modified Files:
+	release.notes 
+Log Message:
+prepare for tag v2r0p6
+Fix bug in alignment code in simple alg and add alignment code to Bari alg.
+
+    *
+------------------------------------------------------------
+User: lsrea  Wed Jun 16 16:53:17 PDT 2004
 TkrDigi/cmt
 
 Modified Files:
