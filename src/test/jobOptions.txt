@@ -38,9 +38,10 @@ TkrBadStripsSvc.badStripsFile = "$(TKRUTILROOT)/src/test/badStrips.txt";
 // ----------------------------
 //  Geometry definition
 //
-ApplicationMgr.DLLs += {"GlastSvc"};
+ApplicationMgr.DLLs += {"GlastSvc", "G4Generator", "G4Propagator"};
 ApplicationMgr.ExtSvc += { "GlastDetSvc"};
-ApplicationMgr.ExtSvc += { "TkrGeometrySvc"};
+ApplicationMgr.ExtSvc += { "TkrGeometrySvc" };
+
 GlastDetSvc.topVolume="LAT"; 
 
 GlastDetSvc.xmlfile="$(XMLGEODBSROOT)/xml/flight/flightSegVols.xml";
