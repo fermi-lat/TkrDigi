@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: lsrea  Fri Feb  7 12:43:22 PST 2003
+TkrDigi/src
+
+Modified Files:
+	TkrSimpleDigiAlg.cxx 
+Log Message:
+use new badstrips empty()
+    *
+------------------------------------------------------------
 User: lsrea  Tue Feb  4 09:39:23 PST 2003
 TkrDigi/src/test
 
