@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: lsrea  Thu May  8 19:40:47 PDT 2003
+TkrDigi/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+Fixed bug in alignment code
+    *
+------------------------------------------------------------
 User: lsrea  Fri May  2 09:34:09 PDT 2003
 TkrDigi/src
 
