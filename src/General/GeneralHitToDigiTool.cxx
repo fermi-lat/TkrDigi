@@ -6,7 +6,7 @@
  *
  * @author Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitToDigiTool.cxx,v 1.5 2004/09/07 21:26:52 lsrea Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitToDigiTool.cxx,v 1.6 2004/10/12 19:02:28 lsrea Exp $
  */
 
 #include "GeneralHitToDigiTool.h"
@@ -38,11 +38,7 @@
 static const ToolFactory<GeneralHitToDigiTool>    s_factory;
 const IToolFactory& GeneralHitToDigiToolFactory = s_factory;
 
-//double GeneralHitToDigiTool::s_totAt1Mip    = 43.8;
-double GeneralHitToDigiTool::s_fCPerMip     = 4.667;
-double GeneralHitToDigiTool::s_mevPerMip    = 0.155;
 double GeneralHitToDigiTool::s_totThreshold =GeneralNoiseTool::noiseThreshold();
-int    GeneralHitToDigiTool::s_totMax       = 250;
 int    GeneralHitToDigiTool::s_maxHits      = 63;
 
 
@@ -53,13 +49,9 @@ GeneralHitToDigiTool::GeneralHitToDigiTool(const std::string& type,
     //Declare the additional interface
     declareInterface<IHitToDigiTool>(this);
 
-    declareProperty("killBadStrips", m_killBadStrips = false );
+    declareProperty("killBadStrips", m_killBadStrips = true );
     declareProperty("killFailed",    m_killFailed    = true  );
-    //declareProperty("totAt1Mip",     s_totAt1Mip);
-    declareProperty("fCPerMip",      s_fCPerMip);
-    declareProperty("mevPerMip",     s_mevPerMip);
     declareProperty("totThreshold",  s_totThreshold);
-    declareProperty("totMax",        s_totMax);
     declareProperty("maxHits",       s_maxHits);
 }
 
@@ -302,19 +294,6 @@ StatusCode GeneralHitToDigiTool::execute()
                 << " energy " << itStrip->energy()
                 << " noise " << itStrip->noise();
             log << endreq;
-            // get the alignment offset of the strip
-            HepPoint3D point(0);
-            double deltaX = 0;
-            double deltaY = 0;
-            /*
-            if ( m_taSvc && m_taSvc->alignSim() ) {
-                HepPoint3D entry(0., 0., 0.);
-                HepPoint3D  exit(0., 0., 1.);
-                m_taSvc->moveMCHit(volId, entry, exit);
-                deltaX = -entry.x();
-                deltaY = -entry.y();
-            }
-            */
 
             const SiStripList::hitList& hits = itStrip->getHits();
 

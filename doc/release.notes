@@ -1,6 +1,7 @@
 /** @file release.notes
 @verbatim
  Package TkrDigi
+ v2r1       13-Dec-2004  LSR modify for TkrUtil changes
  v2r0p15    23-Nov-2004  LSR switch to facilities::Util::expandEnvVar() 
  v2r0p14    10-Nov-2004  jrb eliminate unnecessary (I think) use of xml 
             12-Oct-2004  LSR change tkrgeom pointer to m_tkrGeom throughout

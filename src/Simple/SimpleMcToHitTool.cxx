@@ -6,7 +6,7 @@
  *
  * @authors Toby Burnett, Leon Rochester, Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Simple/SimpleMcToHitTool.cxx,v 1.4 2004/09/07 21:26:52 lsrea Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Simple/SimpleMcToHitTool.cxx,v 1.5 2004/10/12 19:02:28 lsrea Exp $
  */
 
 #include "SimpleMcToHitTool.h"
@@ -35,8 +35,9 @@ SimpleMcToHitTool::SimpleMcToHitTool(const std::string& type,
     AlgTool(type, name, parent) {
     // Declare the additional interface
     declareInterface<IMcToHitTool>(this);
-}
 
+    declareProperty("test", m_test = false);
+}
 
 StatusCode SimpleMcToHitTool::initialize() {
     // Purpose and Method: initializes the tool
@@ -48,6 +49,8 @@ StatusCode SimpleMcToHitTool::initialize() {
     StatusCode sc = StatusCode::SUCCESS;
     MsgStream log(msgSvc(), name());
     log << MSG::INFO << "initialize " << endreq;
+
+    setProperties();
 
     // Get the Glast detector service 
     sc = service("GlastDetSvc", m_gdSvc);
@@ -217,7 +220,7 @@ SiPlaneMapContainer::SiPlaneMap SimpleMcToHitTool::createSiHits(
         HepPoint3D planeExit (localExit  + offset);
 
         // the entry into the planeMap is in plane coordinates
-        siPlaneMap[planeId]->score(planeEntry, planeExit, hit);
+        siPlaneMap[planeId]->score(planeEntry, planeExit, hit, m_test);
     }
 
     return siPlaneMap;

@@ -6,7 +6,7 @@
 * @author Toby Burnett, Leon Rochester (original authors)
 * @author Michael Kuss
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.cxx,v 1.15 2004/03/13 19:43:56 lsrea Exp $
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.cxx,v 1.16 2004/05/11 00:09:54 lsrea Exp $
 */
 
 #include "SiStripList.h"
@@ -152,16 +152,17 @@ export template<class T> void SiStripList::addStrip(const int strip,
 
 
 void SiStripList::score(const HepPoint3D& o, const HepPoint3D& p,
-                        const Event::McPositionHit* hit) 
+                        const Event::McPositionHit* hit, bool test) 
 {
     // Purpose and Method: distribute energy among the various strips as the
     //                     particle passes through the detector.
     // Inputs: entry and exit point (in local coordinates), and a pointer to a
-    //         McPositionHit.
+    //         McPositionHit. If "test" is true, a constant 0.155 MeV is deposited.
     // Outputs: none
     // Dependencies: none
 
-    double eLoss = hit->depositedEnergy();
+
+    double eLoss = ( test ? 0.155 : hit->depositedEnergy());
     if( eLoss == 0 )
         return;
 
@@ -178,6 +179,7 @@ void SiStripList::score(const HepPoint3D& o, const HepPoint3D& p,
         len *= si_strip_pitch() / fabs(xDir);
     // max. length in x in a strip
     float dx_max = fabs(xDir)<si_strip_pitch() ? fabs(xDir) : si_strip_pitch();
+    float dE = (test ? 0.155 : eLoss*len/dTot);
 
     // There are four likely cases to deal with here: 
     // 1) particle entered & exited entirely in a gap 
@@ -196,8 +198,8 @@ void SiStripList::score(const HepPoint3D& o, const HepPoint3D& p,
             float sx = calculateBin(exs);
             // fraction of strip crossed
             float dx = si_strip_pitch() / 2.0 + (ex-sx) * copysign(1.0, xDir);
-            float frac = dx / dx_max;
-            addStrip(exs, eLoss*frac*len/dTot, hit);
+            float frac = (test ? 1.0 : dx / dx_max);
+            addStrip(exs, dE*frac, hit);
 
             short sinc = (xDir>0) ? -1 : 1; // move backwards (exit strip)
             for ( int sid=exs+sinc;
@@ -208,7 +210,7 @@ void SiStripList::score(const HepPoint3D& o, const HepPoint3D& p,
                 xDir>0 ? (in<calculateBin(sid)) : (in>calculateBin(sid))
                 );
             sid+=sinc )
-                addStrip(sid, eLoss*len/dTot, hit);
+                addStrip(sid, dE, hit);
             // scans for until it crosses the entered gap
         }
         else
@@ -219,8 +221,8 @@ void SiStripList::score(const HepPoint3D& o, const HepPoint3D& p,
             float sx = calculateBin(ins);
             // fraction of strip crossed
             float dx = si_strip_pitch() / 2.0 - (in-sx) * copysign(1.0, xDir);
-            float frac = dx / dx_max;   
-            addStrip(ins, eLoss*frac*len/dTot, hit);
+            float frac = ( test ? 1.0 : dx / dx_max);
+            addStrip(ins, dE*frac, hit);
 
             short sinc = (xDir>0) ? 1 : -1;   // move backwards (exit strip)
             for ( int sid=ins+sinc;
@@ -231,7 +233,7 @@ void SiStripList::score(const HepPoint3D& o, const HepPoint3D& p,
                 xDir>0 ? (ex>calculateBin(sid)) : (ex<calculateBin(sid))
                 );
             sid+=sinc )
-                addStrip(sid, eLoss*len/dTot, hit);
+                addStrip(sid, dE, hit);
             // scans for until it crosses the exited gap
         }
         else {                // entered + exited through strips
@@ -240,16 +242,16 @@ void SiStripList::score(const HepPoint3D& o, const HepPoint3D& p,
             else {
                 float sx = calculateBin(ins);
                 float dx = si_strip_pitch() / 2. - (in-sx) * copysign(1., xDir);
-                float frac = dx / dx_max;
-                addStrip(ins, eLoss*frac*len/dTot, hit); // entry strip
+                float frac = ( test ? 1.0 : dx / dx_max);
+                addStrip(ins, dE*frac, hit); // entry strip
                 sx = calculateBin(exs);
                 dx = si_strip_pitch() / 2.0 + (ex-sx) * copysign(1.0, xDir);
-                frac = dx / dx_max;
-                addStrip(exs, eLoss*frac*len/dTot, hit); // exit strip
+                frac = ( test ? 1.0 : dx / dx_max);
+                addStrip(exs, dE*frac, hit); // exit strip
 
                 short sinc = (ins<exs) ? 1 : -1;
                 for ( int sid=ins+sinc; sid!=exs; sid+=sinc )   
-                    addStrip(sid, eLoss*len/dTot, hit);
+                    addStrip(sid, dE, hit);
                 // add energy to all strips between entry and exit
             }   // else (ins != ens)
         }   // else (exs != undef_strip())
@@ -394,9 +396,10 @@ void SiStripList::getToT(int* ToT, const int tower, const int layer, const int v
     int t2[2]     = {INT_MIN, INT_MIN};
     int simpleToT[2] = {INT_MIN, INT_MIN};
 
-    double mevPerMip = GeneralHitToDigiTool::mevPerMip();    
-    double fCPerMip  = GeneralHitToDigiTool::fCPerMip();
+    double mevPerMip = pToTSvc->getMevPerMip();    
+    double fCPerMip  = pToTSvc->getFCPerMip();
     double countsPerMicrosecond = pToTSvc->getCountsPerMicrosecond();
+    int    totMax    = pToTSvc->getMaxToT();
 
     int size = m_strips.size();
     int controller = 0;
@@ -434,8 +437,6 @@ void SiStripList::getToT(int* ToT, const int tower, const int layer, const int v
     // These values reproduce the previous results 
     //double rawGain   = 2.50267833;
     //double rawThresh = -2.92;
-
-    int    totMax    = GeneralHitToDigiTool::totMax();
 
     // loop over controllers
     for(i=0; i<2; ++i) {
