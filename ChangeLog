@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: lsrea  Wed Aug  7 00:13:23 PDT 2002
+TkrDigi/src
+
+Modified Files:
+	SiStripList.cxx TkrSimpleDigiAlg.cxx 
+Log Message:
+hardwired constants removed.  All except trivial geometry now done through GlastDetSvc
+
+    *
+------------------------------------------------------------
 User: burnett  Mon Jul 22 05:24:47 PDT 2002
 TkrDigi/src
 
