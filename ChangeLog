@@ -1,5 +1,16 @@
 ------------------------------------------------------------
 User: lsrea  Tue Feb 10 22:07:15 PST 2004
+TkrDigi/doc
+
+Modified Files:
+	release.notes 
+Log Message:
+prepare for tag v1r11p11
+new muon_mc.root
+
+    *
+------------------------------------------------------------
+User: lsrea  Tue Feb 10 22:07:15 PST 2004
 TkrDigi/cmt
 
 Modified Files:
