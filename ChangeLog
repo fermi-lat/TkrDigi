@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: lsrea  Mon Jan  6 10:37:10 PST 2003
+TkrDigi/doc
+
+Modified Files:
+	release.notes 
+Log Message:
+point to new TkrUtil (necessary until Gleam uses TkrUtil)
+    *
+------------------------------------------------------------
+User: lsrea  Mon Jan  6 10:37:10 PST 2003
 TkrDigi/cmt
 
 Modified Files:
