@@ -1,5 +1,8 @@
 package TkrDigi
-version v1r11p2
+version v1r11p3
+
+author Toby Burnett <tburnett@u.washington.edu>
+author Leon Rochester <lsrea@slac.stanford.edu>
 
 branches src cmt doc
 use GlastPolicy v5r*

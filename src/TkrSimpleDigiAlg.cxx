@@ -1,5 +1,5 @@
 // File and Version Information:
-//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.27 2003/03/01 17:03:05 lsrea Exp $
+//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.28 2003/03/13 19:07:23 lsrea Exp $
 //
 // Description:
 //      TkrSimpleDigiAlg provides an example of a Gaudi algorithm.  
@@ -63,7 +63,7 @@
 *
 * @author T. Burnett
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.27 2003/03/01 17:03:05 lsrea Exp $  
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.28 2003/03/13 19:07:23 lsrea Exp $  
 */
 
 class TkrSimpleDigiAlg : public Algorithm {
@@ -355,13 +355,17 @@ StatusCode TkrSimpleDigiAlg::execute()
             HepPoint3D point(0);
             double deltaX = 0;
             double deltaY = 0;
+            /*
             if( m_asv && m_asv->alignSim()) {
                 HepPoint3D entry(0., 0., 0.);
-                HepPoint3D  exit(0., 0., 1.);
+                HepPoint3D  exit(0., 0., 1.);               
                 m_asv->moveMCHit(id, entry, exit);
                 deltaX = -entry.x();
                 deltaY = -entry.y();
+                std::cout << "layer " << layer << " view " << view 
+                    << ", move hit by: " << deltaX << " " << deltaY << std::endl;                
             }
+            */
 
             // save the hit here
             Event::McTkrStrip* pStrip = 
@@ -493,8 +497,15 @@ void TkrSimpleDigiAlg::createSiHits(const Event::McPositionHitVector& hits)
         HepPoint3D
             entry(hit.entryPoint()+offset),
             exit( hit.exitPoint()+offset);
+
+        //HepVector3D before = entry;
+
         // move hit by alignment constants
         if( m_asv && m_asv->alignSim()) m_asv->moveMCHit(id, entry, exit);
+
+        //HepVector3D delta = entry - before;
+        //std::cout << "Digi Shift: " << id.name() << " " 
+        //    << delta.x() << " " << delta.y() << std::endl;
         
         //now truncate the id to the plane.
         idents::VolumeIdentifier planeId;
