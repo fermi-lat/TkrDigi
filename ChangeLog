@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: lsrea  Tue Oct 12 12:02:27 PDT 2004
+TkrDigi/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+convert to m_tkrGeom throughout
+
+    *
+------------------------------------------------------------
 User: lsrea  Tue Sep  7 14:26:52 PDT 2004
 TkrDigi/src/Simple
 
