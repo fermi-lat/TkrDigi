@@ -1,5 +1,15 @@
 ------------------------------------------------------------
 User: lsrea  Wed Aug 25 08:08:57 PDT 2004
+TkrDigi/src/test
+
+Modified Files:
+	jobOptions.txt 
+Log Message:
+prepare for tag v2r0p12; fix jobOptions for test program
+
+    *
+------------------------------------------------------------
+User: lsrea  Wed Aug 25 08:08:57 PDT 2004
 TkrDigi/doc
 
 Modified Files:
