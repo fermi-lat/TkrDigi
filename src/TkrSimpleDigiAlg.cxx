@@ -1,5 +1,5 @@
 // File and Version Information:
-//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.17 2002/10/11 18:02:52 lsrea Exp $
+//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.18 2002/12/06 23:58:45 lsrea Exp $
 //
 // Description:
 //      TkrSimpleDigiAlg provides an example of a Gaudi algorithm.  
@@ -29,6 +29,7 @@
 #include "GaudiKernel/Algorithm.h"
 
 #include "TkrUtil/ITkrFailureModeSvc.h"
+#include "TkrUtil/ITkrBadStripsSvc.h"
 
 #include "idents/VolumeIdentifier.h"
 #include "idents/TowerId.h"
@@ -60,7 +61,7 @@
 *
 * @author T. Burnett
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.17 2002/10/11 18:02:52 lsrea Exp $  
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.18 2002/12/06 23:58:45 lsrea Exp $  
 */
 
 class TkrSimpleDigiAlg : public Algorithm {
@@ -95,6 +96,7 @@ private:
     IGlastDetSvc * m_gsv;
 
     ITkrFailureModeSvc * m_fsv;
+    ITkrBadStripsSvc   * m_bsv;
     
     SiLayerList m_layers;
     
@@ -154,6 +156,12 @@ StatusCode TkrSimpleDigiAlg::initialize(){
     m_fsv=0;
     if( service( "TkrFailureModeSvc", m_fsv).isFailure() ) {
         log << MSG::INFO << "Couldn't set up TkrFailureModeSvc" << endreq;
+        log << MSG::INFO << "Will assume it is not required"    << endreq;
+    }
+
+    m_bsv=0;
+    if( service( "TkrBadStripsSvc", m_bsv).isFailure() ) {
+        log << MSG::INFO << "Couldn't set up TkrBadStripsSvc" << endreq;
         log << MSG::INFO << "Will assume it is not required"    << endreq;
     }
 
@@ -280,17 +288,23 @@ StatusCode TkrSimpleDigiAlg::execute()
         
         idents::TowerId tower = idents::TowerId(towerx, towery);
         idents::GlastAxis::axis iview = (view==0 ? idents::GlastAxis::X : idents::GlastAxis::Y);
+        int theTower = tower.id();
 
-        if (m_fsv->isFailed(tower.id(), layer, view)) continue;
+        if (m_fsv && m_fsv->isFailed(theTower, layer, view)) continue;
         
         TkrDigi* pDigi  = new TkrDigi(layer, iview, tower, ToT);
         
-        pTkrDigi->push_back(pDigi);
+        //pTkrDigi->push_back(pDigi); // don't add to TDS until we know there are good hits
+
+        int nStrips = 0;
         
         // now loop over contained list of strips
         for(SiStripList::const_iterator i=sidet.begin(); i!=sidet.end(); ++i) {
             const SiStripList::Strip & strip = *i;
             int stripId = strip.index();
+            // kill bad strips
+            if(m_bsv && m_bsv->isBadStrip(theTower, layer, iview, stripId)) continue;
+            nStrips++;
             float e = strip.energy();
             bool noise  = strip.noise();
             const SiStripList::hitList& hits = strip.getHits();
@@ -325,6 +339,11 @@ StatusCode TkrSimpleDigiAlg::execute()
                 // namely, appends the info to the existing info
                 digiHit.addRelation(rel);
             }
+        }
+        if (nStrips>0) {
+            pTkrDigi->push_back(pDigi);
+        } else {
+            delete pDigi;
         }
     }
     // sort by tower, layer, view

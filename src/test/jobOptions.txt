@@ -4,7 +4,7 @@
 
 // primary DLLs
 
-ApplicationMgr.DLLs+= {"RootIo","TkrDigi"};
+ApplicationMgr.DLLs+= {"RootIo","TkrDigi", "TkrUtil"};
 
 // ----------------------------
 // setup basic event loop stuff
@@ -24,6 +24,16 @@ ApplicationMgr.TopAlg = {
     "TkrSimpleDigiAlg",
     "test_TkrDigi" 
     };
+
+// ----------------------------
+// Just to see that the following services don't start misbehaving
+//
+ApplicationMgr.ExtSvc += {"TkrFailureModeSvc"};
+TkrFailureModeSvc.towerList= {"14"};  
+TkrFailureModeSvc.layerList= {"14_3_0", "14_4_1"};
+
+ApplicationMgr.ExtSvc += {"TkrBadStripsSvc"};
+TkrBadStripsSvc.badStripsFile = "$(TKRUTILROOT)/src/test/badStrips.txt";
 
 // ----------------------------
 //  Geometry definition
