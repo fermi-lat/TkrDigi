@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: burnett  Mon Jul 22 05:24:47 PDT 2002
+TkrDigi/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+Fix so that planes without hits will have noise; put strips with signals onto McTkrStripCol
+tag v1r4
+    *
+------------------------------------------------------------
 User: burnett  Fri Jul 19 09:01:05 PDT 2002
 TkrDigi/src/test
 
