@@ -1,6 +1,7 @@
 /** @file release.notes
 @verbatim
  Package TkrDigi
+ v2r3       26-Dec-2004  LSR Mods to keep up with ToTSvc
  v2r2       16-Dec-2004  TU  Modify requirements to pick up new TkrUtil
  v2r1       13-Dec-2004  LSR modify for TkrUtil changes
  v2r0p15    23-Nov-2004  LSR switch to facilities::Util::expandEnvVar() 
