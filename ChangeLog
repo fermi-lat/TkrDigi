@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: lsrea  Wed Jan 29 15:19:00 PST 2003
+TkrDigi/src
+
+Modified Files:
+	TkrSimpleDigiAlg.cxx 
+Log Message:
+more MSG::DEBUG fixes
+    *
+------------------------------------------------------------
 User: lsrea  Mon Jan 27 11:46:36 PST 2003
 TkrDigi/src
 
