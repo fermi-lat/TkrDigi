@@ -1,5 +1,16 @@
 ------------------------------------------------------------
 User: lsrea  Tue Mar  9 12:06:30 PST 2004
+TkrDigi/src/GaudiAlg
+
+Modified Files:
+	TkrDigiAlg.cxx TkrDigiHitToDigiAlg.cxx TkrDigiMcToHitAlg.cxx 
+	TkrDigiNoiseAlg.cxx 
+Log Message:
+prepare for tag v2r0p1, cleanup before adding to head of GlastRelease
+
+    *
+------------------------------------------------------------
+User: lsrea  Tue Mar  9 12:06:30 PST 2004
 TkrDigi/src/Bari
 
 Modified Files:
