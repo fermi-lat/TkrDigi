@@ -1,6 +1,6 @@
 package TkrDigi
 
-version v2r0p3
+version v2r0p4
 
 author Monica Brigida <monica.brigida@ba.infn.it>
 author Leon Rochester <lsrea@slac.stanford.edu>
@@ -8,11 +8,11 @@ author Michael Kuss   <michael.kuss@pi.infn.it>
 
 branches src cmt doc
 
-use GlastPolicy v5r*
+use GlastPolicy v*
 use GlastSvc v9r*
 use Event v9r*
 
-use GuiSvc v3r*
+use GuiSvc v*
 use TkrUtil v1r*
 use facilities v2r*
 
