@@ -2,16 +2,7 @@
 @verbatim
  Package TkrDigi
 
- v2r0p3     13-mar-2004  LSR Interface to new TkrToTSvc (simpleAlg only) 
- v2r0p2     10-mar-2004  LSR Interface to new TkrSplitsSvc 
- v2r0p1     03-mar-2004  LSR Cleanup for debug output before move to head of GlastRelease
- v2r0       27-feb-2004  MK  Port of sandbox to TkrDigi
- v1r11p11   10-feb-2004  LSR remake muon_mc input file for new format
- v1r11p10   10-feb-2004  LSR Various fixes, mostly for special cases
- v1r11p9    19-jan-2004  LSR Fix call to DataObject for new Root converters
- v1r11p8    06-nov-2003  LSR limit number of hitw per side to m_maxHits (default = 63)
- v1r11p7    22-oct-2003  LSR Fix ToT threshold
- v1r11p6    16-oct-2003  LSR Truncate ToT to saturation value
+ 
  v1r11p5    08-may-2003  LSR fixed *big* mistake in alignment 
  v1r11p4    02-May-2003? LSR restored noise levels to pdr values
  v1r11p3    08-apr-2003  LSR don't move displayed hit
