@@ -1,6 +1,7 @@
 /** @file release.notes
  * Package TkrDigi
  *
+ * v1r7p2     06-jan-2002  LSR point to new TkrUtil
  * v1r7p1     11-oct-2002  LSR move sort out of loop
  * v1r7       09-oct-2002  LSR Randoms, RelTable, simple ToT, sort digis
  * v1r6       08-sep-2002  LSR update for new Event, GlastSvc
