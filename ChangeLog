@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: lsrea  Sun Sep  8 08:36:06 PDT 2002
+TkrDigi/src
+
+Modified Files:
+	SiStripList.cxx SiStripList.h TkrSimpleDigiAlg.cxx 
+Log Message:
+update for new Event, GlastSvc
+    *
+------------------------------------------------------------
 User: lsrea  Sun Sep  8 08:36:05 PDT 2002
 TkrDigi/cmt
 
