@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: kuss  Tue Jul 20 07:14:05 PDT 2004
+TkrDigi/src
+
+Modified Files:
+	SiPlaneMapContainer.h 
+Log Message:
+SiPlaneMapContainer didn't have a destructor.  Though, I'm not sure this fixes
+Julie's memory problem.
+
+    *
+------------------------------------------------------------
 User: heather  Sat Jun 19 00:11:48 PDT 2004
 TkrDigi/doc
 
