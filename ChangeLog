@@ -1,5 +1,20 @@
 ------------------------------------------------------------
 User: kuss  Fri Feb 27 02:14:15 PST 2004
+TkrDigi/src/GaudiAlg
+
+Added Files:
+	TkrDigiAlg.cxx TkrDigiAlg.h TkrDigiHitToDigiAlg.cxx 
+	TkrDigiHitToDigiAlg.h TkrDigiMcToHitAlg.cxx 
+	TkrDigiMcToHitAlg.h TkrDigiNoiseAlg.cxx TkrDigiNoiseAlg.h 
+Log Message:
+Commit of the sand box.  Bari specific files are in src/Bari, old-TkrDigi
+specific ones in src/Simple (left-overs of src/TkrSimpleDigiAlg.cxx), and
+common ones in src/General.  src/GaudiAlg contains the steering alg TkrDigiAlg,
+and the sub algorithms.  It should work!
+
+    *
+------------------------------------------------------------
+User: kuss  Fri Feb 27 02:14:15 PST 2004
 TkrDigi/src/Dll
 
 Modified Files:
