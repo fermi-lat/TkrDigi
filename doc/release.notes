@@ -2,6 +2,7 @@
 @verbatim
  Package TkrDigi
 
+ v2r0p9     21-jul-2004  LSR Fix req. file according to Traudl's suggestion
  v2r0p8     20-jul-2004  LSR Michael's fixes for new/delete pairs, no leaks now!
  v2r0p7     18-jun-2004  HMK Use latest RootPolicy version
  v2r0p6     16-jun-2004  LSR fix bug in alignment code in Simple alg, and

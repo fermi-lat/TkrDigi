@@ -1,6 +1,6 @@
 package TkrDigi
 
-version v2r0p8
+version v2r0p9
 
 author Monica Brigida <monica.brigida@ba.infn.it>
 author Leon Rochester <lsrea@slac.stanford.edu>
@@ -47,6 +47,8 @@ library TkrDigi \
         -s=GaudiAlg   ${TKRDIGI_source}
 
 apply_pattern package_Cshlibflags
+
+private # Traudl says do this
 
 # build this for testing, console only. Load all objects directly.
 
