@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: lsrea  Sun Jan 26 16:39:26 PST 2003
+TkrDigi/src
+
+Modified Files:
+	TkrSimpleDigiAlg.cxx 
+Log Message:
+added call to alignment service
+    *
+------------------------------------------------------------
 User: lsrea  Fri Jan 10 10:56:08 PST 2003
 TkrDigi/doc
 
