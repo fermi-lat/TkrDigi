@@ -21,6 +21,8 @@ private
 use RootPolicy v2r*
 use RootIo v6*
 
+use G4Propagator v*
+
 apply_pattern package_headers
 
 macro_append TkrDigi_headers "" WIN32 " *.h"

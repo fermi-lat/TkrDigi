@@ -1,5 +1,5 @@
 // File and Version Information:
-//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.26 2003/03/01 02:16:06 lsrea Exp $
+//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.27 2003/03/01 17:03:05 lsrea Exp $
 //
 // Description:
 //      TkrSimpleDigiAlg provides an example of a Gaudi algorithm.  
@@ -63,7 +63,7 @@
 *
 * @author T. Burnett
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.26 2003/03/01 02:16:06 lsrea Exp $  
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.27 2003/03/01 17:03:05 lsrea Exp $  
 */
 
 class TkrSimpleDigiAlg : public Algorithm {
@@ -162,29 +162,30 @@ StatusCode TkrSimpleDigiAlg::initialize(){
         return StatusCode::FAILURE;
     }
 
-    // Get the Glast detector service 
+    // Get the Tkr Geometry service 
     m_tgsv=0;
-    if( service( "TkrGeometrySvc", m_tgsv).isFailure() ) {
+    if( service( "TkrGeometrySvc", m_tgsv, true).isFailure() ) {
         log << MSG::ERROR << "Couldn't set up TkrGeometrySvc!" << endreq;
         return StatusCode::FAILURE;
     }
 
    // Get the failure mode service 
-    m_fsv=0;
-    if( service( "TkrFailureModeSvc", m_fsv).isFailure() ) {
+    m_fsv = m_tgsv->getTkrFailureModeSvc();
+   
+    if(!m_fsv) {
         log << MSG::INFO << "Couldn't set up TkrFailureModeSvc" << endreq;
         log << MSG::INFO << "Will assume it is not required"    << endreq;
     }
 
     // Get the alignment service 
-    m_asv=0;
-    if( service( "TkrAlignmentSvc", m_asv).isFailure() ) {
+    m_asv = m_tgsv->getTkrAlignmentSvc();
+    if(!m_asv) {
         log << MSG::INFO << "Couldn't set up TkrAlignmentSvc" << endreq;
         log << MSG::INFO << "Will assume it is not required"    << endreq;
     }
 
-    m_bsv=0;
-    if( service( "TkrBadStripsSvc", m_bsv).isFailure() ) {
+    m_bsv = m_tgsv->getTkrBadStripsSvc();
+    if(!m_bsv) {
         log << MSG::INFO << "Couldn't set up TkrBadStripsSvc" << endreq;
         log << MSG::INFO << "Will assume it is not required"    << endreq;
     }
