@@ -1,5 +1,5 @@
 // File and Version Information:
-//      $Header: /nfs/slac/g/glast/ground/cvs/GlastDigi/src/Tkr/TkrSimpleDigiAlg.cxx,v 1.8 2002/05/21 17:57:41 burnett Exp $
+//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.1.1.1 2002/05/26 17:17:19 burnett Exp $
 //
 // Description:
 //      TkrSimpleDigiAlg provides an example of a Gaudi algorithm.  
@@ -49,7 +49,7 @@
 *
 * @author T. Burnett
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/GlastDigi/src/Tkr/TkrSimpleDigiAlg.cxx,v 1.8 2002/05/21 17:57:41 burnett Exp $  
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.1.1.1 2002/05/26 17:17:19 burnett Exp $  
 */
 
 class TkrSimpleDigiAlg : public Algorithm {
@@ -133,6 +133,11 @@ StatusCode TkrSimpleDigiAlg::execute()
     // Restrictions and Caveats:  None
     
     using namespace Event;
+
+    // wired in for now
+    static double threshold = 0.030,  //MeV
+                  noise_sigma = 0.010, // MeV
+                  noise_occupancy = 1e-4;
     
     StatusCode  sc = StatusCode::SUCCESS;
     MsgStream   log( msgSvc(), name() );
@@ -147,6 +152,7 @@ StatusCode TkrSimpleDigiAlg::execute()
     
     // now create the Si hits
     createSiHits(mcHits);
+    
     
     
     //Take care of insuring that data area has been created
@@ -174,9 +180,11 @@ StatusCode TkrSimpleDigiAlg::execute()
     }
     
     // finally make digis from the hits
-    for(SiPlaneMap::const_iterator si = m_SiMap.begin(); si != m_SiMap.end(); ++si){
-        const SiStripList& sidet = *si->second;
+    for(SiPlaneMap::iterator si = m_SiMap.begin(); si != m_SiMap.end(); ++si){
+        SiStripList& sidet = *si->second;
         idents::VolumeIdentifier id = si->first;  
+
+        sidet.addNoise(noise_sigma,noise_occupancy, threshold); 
         
         // unpack the id: the order is correct!
 #if 0 //  old way
