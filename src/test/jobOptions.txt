@@ -1,0 +1,28 @@
+//##############################################################
+//
+// Job options file for ReadDigi
+//
+// List of required services
+ApplicationMgr.ExtSvc   = { "GlastDetSvc", "GlastEventSelector/EventSelector" , "EventCnvSvc" };
+
+// List of Dlls
+ApplicationMgr.DLLs   = { "GlastSvc", "RootHistCnv", "GlastDigi" };
+
+
+ApplicationMgr.TopAlg = { "ReadDigi" };
+
+// Set output level threshold (2=DEBUG, 3=INFO, 4=WARNING, 5=ERROR, 6=FATAL )
+MessageSvc.OutputLevel      = 2;
+
+//=========================================================================
+// Persistency service setup:
+EventPersistencySvc.CnvServices = {"EventCnvSvc"};
+
+ApplicationMgr.EvtMax = 11;
+
+//==============================================================
+//
+// End of job options file
+//
+//##############################################################
+
