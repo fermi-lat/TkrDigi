@@ -1,5 +1,15 @@
 ------------------------------------------------------------
 User: lsrea  Wed Mar 10 10:37:04 PST 2004
+TkrDigi/src
+
+Modified Files:
+	SiStripList.cxx SiStripList.h 
+Log Message:
+Prepare for tag v0r2p2, interface to TkrSplitsSvc
+
+    *
+------------------------------------------------------------
+User: lsrea  Wed Mar 10 10:37:04 PST 2004
 TkrDigi/doc
 
 Modified Files:
