@@ -1,5 +1,5 @@
 // File and Version Information:
-//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.10 2002/08/16 20:08:05 burnett Exp $
+//      $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.11 2002/09/08 15:36:06 lsrea Exp $
 //
 // Description:
 //      TkrSimpleDigiAlg provides an example of a Gaudi algorithm.  
@@ -36,6 +36,10 @@
 #include "Event/TopLevel/Event.h"
 #include "Event/Digi/TkrDigi.h"
 #include "Event/MonteCarlo/McTkrStrip.h"
+#include "Event/RelTable/RelTable.h"
+#include "Event/RelTable/Relation.h"
+
+#include "facilities/Util.h"
 
 
 #include "SiStripList.h"
@@ -52,7 +56,7 @@
 *
 * @author T. Burnett
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.10 2002/08/16 20:08:05 burnett Exp $  
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/TkrSimpleDigiAlg.cxx,v 1.11 2002/09/08 15:36:06 lsrea Exp $  
 */
 
 class TkrSimpleDigiAlg : public Algorithm {
@@ -73,16 +77,16 @@ public:
     StatusCode finalize();
     
 private: 
-    /**
-    *  This map assoicates the SiPlane volume Id with a list of hit strips.
+/**
+*  This map assoicates the SiPlane volume Id with a list of hit strips.
     */ 
     typedef std::map<idents::VolumeIdentifier, SiStripList*> SiPlaneMap;
     
     SiPlaneMap m_SiMap;
-
+    
     void createSiHits(const Event::McPositionHitVector& hits);
     void addNoise();
-
+    
     void clear();
     IGlastDetSvc * m_gsv;
     
@@ -136,7 +140,7 @@ StatusCode TkrSimpleDigiAlg::initialize(){
         log << MSG::ERROR << "Couldn't initialize SIStripList" << endreq;
         return StatusCode::FAILURE;
     }
-
+    
     log << MSG::INFO << "ssdgap " << SiStripList::ssd_gap() 
         << " laddergap " << SiStripList::ladder_gap()
         << " strips/wafer " << SiStripList::strips_per_die() 
@@ -147,7 +151,7 @@ StatusCode TkrSimpleDigiAlg::initialize(){
     
     // get the list of layers, to be used to add noise to otherwise empty layers
     m_layers.setPrefix(m_gsv->getIDPrefix());
-
+    
     m_gsv->accept(m_layers);
     log << MSG::INFO << "will add noise to "<< m_layers.size() << " Si layers, ids from "
         << m_layers.front().name() << " to " << m_layers.back().name() << endreq;
@@ -156,7 +160,7 @@ StatusCode TkrSimpleDigiAlg::initialize(){
         std::cout << it->name() << std::endl;
     }
 #endif
-
+    
     return sc;
 }
 
@@ -182,14 +186,14 @@ StatusCode TkrSimpleDigiAlg::execute()
         log << MSG::DEBUG << "could not find \""<< "EventModel::MC::McPositionHitCol" <<"\"" << endreq;
         return  sc;
     }
-
+    
     // create full map
     
     // now create the Si hits
     createSiHits(mcHits);
     
     addNoise();
-
+    
     //Take care of insuring that data area has been created
     DataObject* pNode = 0;
     sc = eventSvc()->retrieveObject( EventModel::Digi::Event, pNode);
@@ -209,9 +213,9 @@ StatusCode TkrSimpleDigiAlg::execute()
         log << MSG::INFO << "Failed to register TkrStrip vector" << endreq;
         return sc;
     }
-
-
-
+    
+    
+    
     //Create the collection of digi objects - will be empty at this point
     TkrDigiCol*  pTkrDigi   = new TkrDigiCol;
     
@@ -224,14 +228,29 @@ StatusCode TkrSimpleDigiAlg::execute()
         return sc;
     }
     
+    // Create the relational table
+    typedef Event::Relation<Event::TkrDigi,Event::McPositionHit> relType;
+    typedef ObjectList<relType> tabType;
+    
+    Event::RelTable<Event::TkrDigi, Event::McPositionHit> digiHit;
+    digiHit.init();
+    tabType* pRelTab = digiHit.getAllRelations();
+    
+    //std::cout << "pointer to table: " << pRelTab << std::endl;
+    sc = eventSvc()->registerObject(EventModel::Digi::TkrDigiHitTab, pRelTab);
+    if (sc.isFailure()) {
+        log << MSG::ERROR << "Registration of digiHit Failed!" << endreq; 
+        return sc;
+    }
+    
     // finally make digis from the hits
     for(SiPlaneMap::iterator si = m_SiMap.begin(); si != m_SiMap.end(); ++si){
         SiStripList& sidet = *si->second;
         idents::VolumeIdentifier id = si->first;  
         
-       
+        
         // unpack the id: the order is correct!
-
+        
         unsigned int towery=id[1], towerx= id[2],  tray=id[4], view=id[5],
             botTop=id[6], layer = tray+botTop-1;
         int ToT[2]={0,0};
@@ -248,16 +267,68 @@ StatusCode TkrSimpleDigiAlg::execute()
             const SiStripList::Strip & strip = *i;
             int stripId = strip.index();
             float e = strip.energy();
+            bool noise  = strip.noise();
+            const SiStripList::hitList& hits = strip.getHits();
             
             //TODO: apply threshold, add strip to TkrDigi
             pDigi->addC0Hit(stripId);
-
+            
             // save the hit here
-            strips->push_back(new Event::McTkrStrip(id, stripId, e));
+            Event::McTkrStrip* pStrip = 
+                new Event::McTkrStrip(id, stripId, e, noise, hits);
+            strips->push_back(pStrip);
+            
+            // and add the relation
+            std::string stripString;
+            facilities::Util::itoa(stripId, stripString);
+            // right adjust... is there a better way?
+            while (stripString.length()<4) {
+                stripString = " "+stripString;
+            }
+            
+            Event::McTkrStrip::hitList::const_iterator ihit;
+            Event::McPositionHit* pHit= 0;
+            int nHits = pStrip->getHits().size();
+            
+            bool found1 = false;
+            if (nHits>0) {
+                for (ihit = pStrip->begin(); ihit!=pStrip->end(); ihit++) {
+                    Event::McPositionHit* pHit = *ihit;
 
+                    // now check to see if we have it already
+                    if(digiHit.size()>0){
+                        std::vector<relType*> byFirst;
+                        byFirst = digiHit.getRelByFirst(pDigi);
+                        int vSize = byFirst.size();
+                        for (int ir = 0; ir<vSize; ir++) {
+                            relType* rel = byFirst[ir];
+                            if ( rel->getSecond()==pHit) {
+                                found1 = true;
+                                rel->addInfo(stripString);
+                                //std::cout << "Info added to existing relation: " 
+                                //    << pDigi << " " << pHit << std::endl;
+                                break;
+                            }
+                        }
+                    }
+                    // if not, add it
+                    if (!found1) {                          
+                        relType *rel = new relType(pDigi, pHit);
+                        rel->addInfo(stripString);
+                        digiHit.addRelation(rel);
+                        
+                        //std::cout << "Regular relation added: " 
+                        //    << pDigi << " " << pHit << std::endl;
+                    }
+                }
+            }
         }
+
+        // sort by tower, layer, view
+        std::sort(pTkrDigi->begin(), pTkrDigi->end(), Event::TkrDigi::digiLess());
+              
+        
     }
-    
     return sc;
 }
 
@@ -269,34 +340,34 @@ void TkrSimpleDigiAlg::addNoise(){
     // TDS Outputs:  None
     // Dependencies: None
     // Restrictions and Caveats:  None
-
+    
     int noiseCount=0;
-
+    
     // loop over list of possible layer ids
     for(SiLayerList::const_iterator it=m_layers.begin(); it!=m_layers.end(); ++it){
         idents::VolumeIdentifier id = *it;
         if( m_SiMap.find(id) == m_SiMap.end()){
-
-           SiStripList* sidet = new SiStripList;
+            
+            SiStripList* sidet = new SiStripList;
             sidet->addNoise(m_noiseSigma, m_noiseOccupancy, m_threshold);
             if(sidet->size()>0){
                 m_SiMap[id]= sidet;
                 noiseCount += sidet->size();
             }
             else delete sidet;
-
+            
         }else{
             noiseCount -= m_SiMap[id]->size();
             m_SiMap[id]->addNoise(m_noiseSigma, m_noiseOccupancy, m_threshold);
             noiseCount += m_SiMap[id]->size();
         }
-
+        
     }
-
+    
     MsgStream log(msgSvc(), name());
     log << MSG::DEBUG << "added " << noiseCount <<" noise hits" << endreq;
-
-
+    
+    
 }
 StatusCode TkrSimpleDigiAlg::finalize(){
     // Purpose and Method:  clear accumulated data at the end of the run
@@ -332,29 +403,29 @@ void TkrSimpleDigiAlg::createSiHits(const Event::McPositionHitVector& hits)
         const Event::McPositionHit & hit = **ihit;
         
         idents::VolumeIdentifier id = hit.volumeID();
-
+        
         // check for correct length
         if (id.size()!=9) continue;
         // check that it's really a TKR hit (probably overkill)
         if (!(id[0]==0 && id[3]==1)) continue; // !(LAT && TKR)
-                      
+        
         // this assumes that the number of ladders equals the number of wafers/ladder
         // not true for the BFEM/BTEM!
         static double ladder_pitch = SiStripList::die_width()+SiStripList::ladder_gap();
         static double ssd_pitch    = SiStripList::die_width()+SiStripList::ssd_gap();
         static double waferOffset = 0.5*(SiStripList::n_si_dies() - 1);
-
+        
         int ladder = id[7], wafer=id[8];
         Hep3Vector 
             offset( (ladder-waferOffset)*ladder_pitch, (wafer-waferOffset)*ssd_pitch, 0),
             entry(hit.entryPoint()+offset),
             exit( hit.exitPoint()+offset);       
-            
+        
         //now truncate the id to the plane.
         idents::VolumeIdentifier planeId;
         for( int j=0; j<7; ++j) planeId.append(id[j]);
-         if( m_SiMap.find(planeId) == m_SiMap.end()) m_SiMap[planeId]= new SiStripList;
-        m_SiMap[planeId]->score(entry, exit, hit.depositedEnergy());
+        if( m_SiMap.find(planeId) == m_SiMap.end()) m_SiMap[planeId]= new SiStripList;
+        m_SiMap[planeId]->score(entry, exit, *ihit);
     }
 }
 
