@@ -35,6 +35,7 @@ class TkrDigitizer {
     void setDigit(InitCurrent*);
     /// set cluster parameter
     void clusterize(CurrOr*);
+    void Clean();
     /// digitization
     TotOr* digitize(const CurrOr&);
 

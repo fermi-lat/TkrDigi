@@ -132,6 +132,8 @@ void ClusterNewton::Preamp()
 //########################################################################
 void ClusterNewton::Shaper(double Qtot)
 {
+    double t = 10.e-9; 
+    double t2 = t*t;
 
 /* CCCCCCCCCCCCCCC       PARAMETRI DELLO SHAPER   CCCCCCCCCCCCCCCCCCCCCCCCCCCCC */
     cis = (float)1.5e-12;
@@ -157,10 +159,7 @@ void ClusterNewton::Shaper(double Qtot)
 	     (avs + (double)1.);
     a1s = taus * rfs * (cfs + cis) / (avs + (double)1.);
 /* CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC */
-  double Vouts[10000]; // ndim
-  double Vapp[10000];
-  double t = 10.e-9; 
-  double t2 = t*t;
+ 
 //
   for(int k=0;k<10000;k++){Vapp[k] = Vout[k];}
   for(int nt = 0; nt < 1000; nt++)
@@ -193,14 +192,17 @@ void ClusterNewton::Shaper(double Qtot)
   for (m=0; m<ndim; m++){
     Vout[m] = Vouts[m];
   }
+ 
 }
 
 void ClusterNewton::Clean()
 {
   for (int i=0;i<ndim;i++)
     {
-	  Vout[i] = 0.;
-	  Iout[i] = 0;
+      Vouts[i] = 0.;
+      Vapp[i] = 0.;
+      Vout[i] = 0.;
+      Iout[i] = 0;
     }
 }
 

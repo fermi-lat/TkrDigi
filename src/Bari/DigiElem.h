@@ -5,7 +5,7 @@
  *
  * authors: M. Brigida, N. Giglietto, M. Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigiSandBox/src/Bari/DigiElem.h,v 1.1 2004/02/24 13:57:33 kuss Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Bari/DigiElem.h,v 1.1 2004/02/27 10:14:14 kuss Exp $
  */
 
 #ifndef DIGIELEM_H
@@ -22,7 +22,7 @@ class DigiElem {
 
  public:
 
-    DigiElem(){}
+  DigiElem();
     /**
      * Constructor for a DigiElem
      * @param 1  volume identifier
