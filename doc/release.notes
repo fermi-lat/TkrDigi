@@ -1,7 +1,7 @@
 /** @file release.notes
 @verbatim
  Package TkrDigi
-
+ v2r0p14    10-Nov-2004  jrb eliminate unnecessary (I think) use of xml 
             12-Oct-2004  LSR change tkrgeom pointer to m_tkrGeom throughout
  v2r0p13    13-Sep-2004  LSR small changes for alignment
  v2r0p12    25-aug-2004  LSR Fix test program jobOptions
