@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: lsrea  Mon Jan 27 11:46:36 PST 2003
+TkrDigi/src
+
+Modified Files:
+	TkrSimpleDigiAlg.cxx 
+Log Message:
+put alignment info into McTkrStrip
+    *
+------------------------------------------------------------
 User: lsrea  Sun Jan 26 16:39:26 PST 2003
 TkrDigi/src
 
