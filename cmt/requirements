@@ -7,21 +7,29 @@ use GaudiSvc
 use GlastSvc v8*
 use Event v8*
 
+use GuiSvc
+
 use facilities
 
 use xml          
 
 apply_pattern packageShr
 
+set JOBOPTIONS ${TKRDIGIROOT}/src/test/jobOptions.txt
 
 #=============================================================
 private
 
+use RootIo v4*
+
 apply_pattern package_headers
 
+macro_append TkrDigi_headers "" WIN32 " *.h"
 
-library TkrDigi   *.cxx   Dll/*.cxx   ${GlastDigi_headers}               
+library TkrDigi   *.cxx   Dll/*.cxx   ${TkrDigi_headers}               
 
 apply_pattern package_Cshlibflags
-public
-apply_pattern package_test
+
+# build this for testing, console only. Load all objects directly. 
+
+application test_TkrDigi ${GuiMain} test/*.cxx ${Win32Resource}
