@@ -1,6 +1,7 @@
 /** @file release.notes
 @verbatim
  Package TkrDigi
+ v2r4p2     11-Apr-2005  LSR SiStripList: call ToTSvc to do ToT calculation 
  v2r4p1     17-Jan-2005  LSR Rearrange storage for (Bari) InitCurrent::CURR, 
                                at Tracy's request
  v2r3p1     17-Jan-2005  THB remove obsolete RootPolicy

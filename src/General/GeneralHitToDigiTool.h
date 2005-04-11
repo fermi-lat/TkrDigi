@@ -7,7 +7,7 @@
  *
  * @authors Toby Burnett, Leon Rochester, Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitToDigiTool.h,v 1.4 2004/10/12 19:02:28 lsrea Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitToDigiTool.h,v 1.5 2004/12/14 03:07:34 lsrea Exp $
  */
 
 #ifndef __GENERALHITTODIGITOOL_H__
@@ -43,6 +43,9 @@ class GeneralHitToDigiTool : public AlgTool, virtual public IHitToDigiTool {
     static const int    maxHits()      { return s_maxHits;}
 
 private:
+
+    int truncateGTRC(Event::TkrDigi* pDigi);
+    int truncateGTCC(Event::TkrDigiCol* pDigiCol);
 
     /// Pointer to the event data service (aka "eventSvc")
     IDataProviderSvc*   m_edSvc;

@@ -6,7 +6,7 @@
 * @author Toby Burnett, Leon Rochester (original authors)
 * @author Michael Kuss
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.cxx,v 1.17 2004/12/14 03:07:33 lsrea Exp $
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.cxx,v 1.18 2004/12/26 23:28:19 lsrea Exp $
 */
 
 #include "SiStripList.h"
@@ -422,12 +422,7 @@ void SiStripList::getToT(int* ToT, const int tower, const int layer, const int v
         else { // strip without times ("Simple")
             float e = strip.energy();
             if ( e>0 ) { // "Simple" or noise
-                double ToTGain   = pToTSvc->getGain(tower, layer, view, index);
-                double ToTGain2  = pToTSvc->getGain2(tower, layer, view, index);
-                double ToTThresh = pToTSvc->getThreshold(tower, layer, view, index);
-                double charge    = e/mevPerMip*fCPerMip; // in fCs
-                double dToT =  countsPerMicrosecond*(ToTThresh + charge*(ToTGain + charge*ToTGain2)) ;
-                int iToT = static_cast<int> ( std::max( 0., dToT));
+                int iToT = pToTSvc->getRawToT(e, tower, layer, view, index);
                 if ( iToT > simpleToT[controller] )
                     simpleToT[controller] = iToT;
             }
