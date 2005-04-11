@@ -1,5 +1,15 @@
 ------------------------------------------------------------
 User: lsrea  Mon Apr 11 15:49:50 PDT 2005
+TkrDigi/src/General
+
+Modified Files:
+	GeneralHitToDigiTool.cxx GeneralHitToDigiTool.h 
+Log Message:
+Call TkrToTSvc to do ToT conversion
+
+    *
+------------------------------------------------------------
+User: lsrea  Mon Apr 11 15:49:50 PDT 2005
 TkrDigi/src
 
 Modified Files:
