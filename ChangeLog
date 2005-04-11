@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: lsrea  Mon Apr 11 15:49:50 PDT 2005
+TkrDigi/src
+
+Modified Files:
+	SiStripList.cxx 
+Log Message:
+Call TkrToTSvc to do ToT conversion
+
+    *
+------------------------------------------------------------
 User: lsrea  Mon Apr 11 15:49:49 PDT 2005
 TkrDigi/doc
 
