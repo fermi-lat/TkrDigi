@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: lsrea  Sat Aug 13 10:57:34 PDT 2005
+TkrDigi/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+Prepare for tag v4r4p3... check if both coordinates are inside active area
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: v2r4p2, operation: add
 Package: TkrDigi
