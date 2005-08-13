@@ -1,17 +1,17 @@
 /**
- * @class SiStripList
- *
- * @brief Provides means of filling and retrieving a list of strips.
- *
- * SiStripList is used in SiPlaneMap, where it is mapped with an unique volume
- * identifier of a silicon layer.  It contains a list of silicon strip which
- * have fired.  Functions are provided to fill this list, and retrieve from it,
- * as well as methods to manipulate the strip information.
- *
- * @author Toby Burnett, Leon Rochester (original authors)
- * @author Michael Kuss
- *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.h,v 1.9 2004/03/13 19:43:56 lsrea Exp $
+* @class SiStripList
+*
+* @brief Provides means of filling and retrieving a list of strips.
+*
+* SiStripList is used in SiPlaneMap, where it is mapped with an unique volume
+* identifier of a silicon layer.  It contains a list of silicon strip which
+* have fired.  Functions are provided to fill this list, and retrieve from it,
+* as well as methods to manipulate the strip information.
+*
+* @author Toby Burnett, Leon Rochester (original authors)
+* @author Michael Kuss
+*
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.h,v 1.10 2004/12/14 03:07:33 lsrea Exp $
 */
 
 #ifndef SISTRIPLIST_H
@@ -28,7 +28,7 @@
 
 class SiStripList {
 
- public:
+public:
 
     SiStripList(){}
 
@@ -42,78 +42,78 @@ class SiStripList {
     public:
 
         /**
-         * Constructor.  The strip list should contain only valid strips.  Thus,
-         * the first parameter (index) should never get a default value
-         * assigned.
-         * @param index      strip id
-         * @param energy     deposited energy
-         * @param noise      flag to label if this strip was created by noise
-         * @param hits       either a pointer to a McPositionHit or a hitList
-         * @param elecNoise  flag to label if electronic noise was added
-         * @param t1         ToT start time
-         * @param t2         ToT stop time
-         */
+        * Constructor.  The strip list should contain only valid strips.  Thus,
+        * the first parameter (index) should never get a default value
+        * assigned.
+        * @param index      strip id
+        * @param energy     deposited energy
+        * @param noise      flag to label if this strip was created by noise
+        * @param hits       either a pointer to a McPositionHit or a hitList
+        * @param elecNoise  flag to label if electronic noise was added
+        * @param t1         ToT start time
+        * @param t2         ToT stop time
+        */
         template<class T> Strip(const int index, const double energy=0,
-                                const bool noise=false,
-                                const T* hits=0, const bool elecNoise=false,
-                                const int t1=-1, const int t2=-1)
+            const bool noise=false,
+            const T* hits=0, const bool elecNoise=false,
+            const int t1=-1, const int t2=-1)
             : m_index(index), m_energy(energy), m_noise(noise),
             m_elecNoise(elecNoise), m_time1(t1), m_time2(t2) {
-            m_badStrip = false;
-            addHit(hits);
-        }
-
-        void energy(const double e)        { m_energy = e; }
-        void electronicNoise(const bool b) { m_elecNoise = b; }
-        void setBadStrip()                 { m_badStrip = true; }
-        double energy()          const { return m_energy; }
-        int index()              const { return m_index; }
-        bool noise()             const { return m_noise; }
-        bool badStrip()          const { return m_badStrip; }
-        bool electronicNoise()   const { return m_elecNoise; }
-        int time1()              const { return m_time1; }
-        int time2()              const { return m_time2; }
-        const hitList& getHits() const { return m_hits; }
-
-        /// add energy
-        void addEnergy(const double e) { m_energy += e; }
-
-        /**
-         * modifies the ToT start and stop times, but only if both t1 and t2 are
-         * != -1 (undefined).
-         * @param t1 ToT start time
-         * @param t2 ToT stop time
-         */
-        void addTime(const int t1, const int t2) {
-            if( ( t1 != -1 ) && ( t2 != -1 ) ) {
-                if ( t1 < m_time1 || m_time1 < 0 )
-                    m_time1 = t1;
-                if ( t2 > m_time2 )
-                    m_time2 = t2;
+                m_badStrip = false;
+                addHit(hits);
             }
-        }
 
-        /// adding a hit to the list of hits
-        void addHit(const Event::McPositionHit* hit) {
-            hitList::iterator it=std::find(m_hits.begin(),m_hits.end(),hit);
-            if ( it == m_hits.end() )
-                m_hits.push_back(const_cast<Event::McPositionHit*>(hit));
-        }
+            void energy(const double e)        { m_energy = e; }
+            void electronicNoise(const bool b) { m_elecNoise = b; }
+            void setBadStrip()                 { m_badStrip = true; }
+            double energy()          const { return m_energy; }
+            int index()              const { return m_index; }
+            bool noise()             const { return m_noise; }
+            bool badStrip()          const { return m_badStrip; }
+            bool electronicNoise()   const { return m_elecNoise; }
+            int time1()              const { return m_time1; }
+            int time2()              const { return m_time2; }
+            const hitList& getHits() const { return m_hits; }
 
-        /// adding a list of hits to the list of hits
-        void addHit(const hitList* hits) {
-            for ( hitList::const_iterator it=hits->begin(); it!=hits->end(); ++it )
-                addHit(*it);
-        }
+            /// add energy
+            void addEnergy(const double e) { m_energy += e; }
 
-        hitList::const_iterator begin() const { return m_hits.begin(); } 
-        hitList::const_iterator end()   const { return m_hits.end(); }
-        int size() const { return m_hits.size(); }
+            /**
+            * modifies the ToT start and stop times, but only if both t1 and t2 are
+            * != -1 (undefined).
+            * @param t1 ToT start time
+            * @param t2 ToT stop time
+            */
+            void addTime(const int t1, const int t2) {
+                if( ( t1 != -1 ) && ( t2 != -1 ) ) {
+                    if ( t1 < m_time1 || m_time1 < 0 )
+                        m_time1 = t1;
+                    if ( t2 > m_time2 )
+                        m_time2 = t2;
+                }
+            }
 
-        // static functions
+            /// adding a hit to the list of hits
+            void addHit(const Event::McPositionHit* hit) {
+                hitList::iterator it=std::find(m_hits.begin(),m_hits.end(),hit);
+                if ( it == m_hits.end() )
+                    m_hits.push_back(const_cast<Event::McPositionHit*>(hit));
+            }
 
-        /// unphysical strip id for an undefined (non-existent) strip
-        static const int undef_strip() { return 65535; } 
+            /// adding a list of hits to the list of hits
+            void addHit(const hitList* hits) {
+                for ( hitList::const_iterator it=hits->begin(); it!=hits->end(); ++it )
+                    addHit(*it);
+            }
+
+            hitList::const_iterator begin() const { return m_hits.begin(); } 
+            hitList::const_iterator end()   const { return m_hits.end(); }
+            int size() const { return m_hits.size(); }
+
+            // static functions
+
+            /// unphysical strip id for an undefined (non-existent) strip
+            static const int undef_strip() { return 65535; } 
 
     private:
 
@@ -137,63 +137,63 @@ class SiStripList {
     // end definition of class Strip
 
     /**
-     * Distribute energy among the various strips as the particle passes through
-     * the detector.
-     * @param 1   entrance point in local coordinates
-     * @param 2   exit point in local coordinates
-     * @param 3   pointer to a McPositionHit
-     */
+    * Distribute energy among the various strips as the particle passes through
+    * the detector.
+    * @param 1   entrance point in local coordinates
+    * @param 2   exit point in local coordinates
+    * @param 3   pointer to a McPositionHit
+    */
     void score(const HepPoint3D&,const HepPoint3D&,const Event::McPositionHit*, bool test);
 
     //#define TEMPLATE
 #ifdef TEMPLATE
     /**
-     * Adds a strip to the list of strips.
-     * @param 1  strip id
-     * @param 2  energy deposit in MeV
-     * @param 3  T* is either a pointer to a McPositionHit or a hitList
-     * @param 4  ToT start time
-     * @param 5  ToT stop time
-     */
+    * Adds a strip to the list of strips.
+    * @param 1  strip id
+    * @param 2  energy deposit in MeV
+    * @param 3  T* is either a pointer to a McPositionHit or a hitList
+    * @param 4  ToT start time
+    * @param 5  ToT stop time
+    */
     template<class T> void addStrip(const int, const double, const T*,
-                                    const int =-1, const int =-1);
+        const int =-1, const int =-1);
 #else
     void addStrip(const int, const double, const hitList*, const int =-1,
-                  const int =-1);
+        const int =-1);
 
     /**
-     * Adds a strip to the list of strips.
-     * @param 1   strip id
-     * @param 2   energy deposit in MeV
-     * @param 3   pointer to a McPositionHit
-     * @param 4   ToT start time
-     * @param 5   ToT stop time
-     */
+    * Adds a strip to the list of strips.
+    * @param 1   strip id
+    * @param 2   energy deposit in MeV
+    * @param 3   pointer to a McPositionHit
+    * @param 4   ToT start time
+    * @param 5   ToT stop time
+    */
     void addStrip(const int, const double, const Event::McPositionHit*,
-                  const int =-1, const int =-1);
+        const int =-1, const int =-1);
 #endif
 
     void clear() { m_strips.clear(); }
 
     /**
-     * ToT functions.  For all functions:
-     * @param sep         strip id of separation (sep belongs to controller 1)
-     * @param controller  controller
-     * @return            ToT in units of 200ns
-     */
- public:
+    * ToT functions.  For all functions:
+    * @param sep         strip id of separation (sep belongs to controller 1)
+    * @param controller  controller
+    * @return            ToT in units of 200ns
+    */
+public:
     ///
     static const int sepSentinel=100000;
     void getToT(int* ToT, const int tower, const int layer, const int view,
         const ITkrToTSvc* pToTSvc, const int sep=sepSentinel) const;
 
     /**
-     * noise member functions.  The parameters denote:
-     *  @param s  noise rms in MeV
-     *  @param o  fraction of time a cell is occupied
-     *  @param t  minimium energy deposit (MeV) that results in a latch
-     *  @return   number of strips added/removed
-     */
+    * noise member functions.  The parameters denote:
+    *  @param s  noise rms in MeV
+    *  @param o  fraction of time a cell is occupied
+    *  @param t  minimium energy deposit (MeV) that results in a latch
+    *  @return   number of strips added/removed
+    */
     /// uses the following functions to manipulate the strip list
     int  addNoise(const double s, const double o, const double t);
     /// add electronic noise to already triggered strips
@@ -227,7 +227,7 @@ class SiStripList {
     iterator insert(iterator it, const Strip& x){return m_strips.insert(it, x);}
     iterator erase(iterator it) { return m_strips.erase(it); }
     void push_back(const Strip& x) { m_strips.push_back(x); }
-    
+
     // static functions
 
     static const int    n_si_dies()      { return s_n_si_dies; }
@@ -238,9 +238,9 @@ class SiStripList {
     static const double ladder_gap()     { return s_ladder_gap; }
 
     /**
-     * access to the detector service, and initialization of the static
-     * variables.
-     */
+    * access to the detector service, and initialization of the static
+    * variables.
+    */
     static StatusCode initialize(IGlastDetSvc*);
 
     /// number of Si strips in a single layer
@@ -255,15 +255,16 @@ class SiStripList {
     static const double panel_width() {
         return n_si_dies() * die_width() + ( n_si_dies() - 1 ) * ladder_gap();
     }
-    
+
     /// compute local coordinate from strip id
     static const double calculateBin(int x) { return s_detSvc->stripLocalX(x); }
 
     /// calculate the strip ID from the plane coordinate
     static const int stripId(double x) { return s_detSvc->stripId(x); }
 
- private:
-
+private:
+    /// method to confine hit to active area
+    bool isActiveHit(HepVector3D& inVec, HepVector3D& outVec, double& eLoss, bool& trimmed);
     /// pointer to the detector service
     static IGlastDetSvc* s_detSvc;
     /// vector of strips

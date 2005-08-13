@@ -6,7 +6,7 @@
 * @author Toby Burnett, Leon Rochester (original authors)
 * @author Michael Kuss
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.cxx,v 1.18 2004/12/26 23:28:19 lsrea Exp $
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.cxx,v 1.19 2005/04/11 22:49:49 lsrea Exp $
 */
 
 #include "SiStripList.h"
@@ -163,16 +163,22 @@ void SiStripList::score(const HepPoint3D& o, const HepPoint3D& p,
 
 
     double eLoss = ( test ? 0.155 : hit->depositedEnergy());
-    if( eLoss == 0 )
-        return;
+    if( eLoss == 0 ) return;
 
-    HepVector3D dir = p - o;
+    HepVector3D inVec  = o;
+    HepVector3D outVec = p;
+
+    // the method can modify all the arguments
+    bool trimmed;
+    if(!isActiveHit(inVec, outVec, eLoss, trimmed)) return;
+
+    HepVector3D dir = outVec - inVec;
     float dTot = dir.mag();
 
     float xDir = dir.x();
 
-    float in = o.x();     // entry point -- x
-    float ex = p.x();     // exit point -- x
+    float in = inVec.x();     // entry point -- x
+    float ex = outVec.x();     // exit point -- x
     int ins = stripId(in), exs = stripId(ex); // enter/exit strips (if valid)
     float len = dTot;  // path length through a strip
     if ( fabs(xDir) > si_strip_pitch() )
@@ -444,4 +450,70 @@ void SiStripList::getToT(int* ToT, const int tower, const int layer, const int v
         }
     if (sep==sepSentinel) break;
     }
+}
+
+bool SiStripList::isActiveHit(HepVector3D& inVec, HepVector3D& outVec, 
+                          double& eLoss, bool& trimmed) 
+{
+    trimmed = false;
+    bool active  = true;
+    HepVector3D dir = outVec - inVec;
+    // check if the *other* projection is in the wafer
+    // if partway in, we want to trim the original hit.
+    double activeYin  = s_detSvc->insideActiveLocalY(inVec);
+    double activeYout = s_detSvc->insideActiveLocalY(outVec);
+
+    // here's the easy one
+    if (activeYin<=0 && activeYout<=0) {
+        trimmed = true;
+        return false;
+    }
+
+    double fractionIn = 1.0;
+    double delta;
+    if (activeYin<=0) {
+        //this is more work, only one is out
+        // get the fraction in
+        delta = activeYout - activeYin; // delta is guaranteed non-zero
+        fractionIn = activeYout/delta;
+        inVec = outVec - fractionIn*dir;
+    } else if (activeYout<=0) {
+        delta = activeYin - activeYout;
+        fractionIn = activeYin/delta;
+        outVec = inVec + fractionIn*dir;
+    }
+    if (fractionIn<1.0) trimmed = true;
+    if (fractionIn<=0.0) active = false;
+    dir = outVec - inVec;
+    eLoss *= fractionIn;
+
+    // now for the measured projection
+    double activeXin  = s_detSvc->insideActiveLocalX(inVec);
+    double activeXout = s_detSvc->insideActiveLocalX(outVec);
+
+    // here's the easy one
+    if (activeXin<=0 && activeXout<=0) {
+        trimmed = true;
+        return false;
+    }
+
+    fractionIn = 1.0;
+    // little fudge to make sure the point ends up inside
+    double eps  = 0.005*si_strip_pitch(); 
+    if (activeXin<=0) {
+        //this is more work, only one is out
+        // get the fraction in
+        delta = activeXout - activeXin; // delta is guaranteed nonzero!
+        fractionIn  = std::max(0.0, (activeXout - eps)/delta);
+        inVec = outVec - fractionIn*dir; 
+    } else if (activeXout<=0) {
+        delta  = activeXin - activeXout;
+        fractionIn   = std::max(0.0, (activeXin - eps)/delta);
+        outVec = inVec + fractionIn*dir;
+    }
+    if (fractionIn<1.0) trimmed = true;
+    if (fractionIn<=0.0) active = false;
+    eLoss *= fractionIn;
+    
+    return active;
 }
