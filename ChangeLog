@@ -1,5 +1,15 @@
 ------------------------------------------------------------
 User: lsrea  Sat Aug 13 10:57:34 PDT 2005
+TkrDigi/src
+
+Modified Files:
+	SiStripList.cxx SiStripList.h 
+Log Message:
+Prepare for tag v4r4p3... check if both coordinates are inside active area
+
+    *
+------------------------------------------------------------
+User: lsrea  Sat Aug 13 10:57:34 PDT 2005
 TkrDigi/doc
 
 Modified Files:
