@@ -1,4 +1,16 @@
 ------------------------------------------------------------
+User: lsrea  Tue Aug 16 15:00:27 PDT 2005
+TkrDigi/src/General
+
+Modified Files:
+	GeneralHitToDigiTool.cxx GeneralHitToDigiTool.h 
+Added Files:
+	GeneralHitRemovalTool.cxx GeneralHitRemovalTool.h 
+Log Message:
+Add integrated hit removal (including hit truncation due to read and cable controller buffers)
+
+    *
+------------------------------------------------------------
 User: lsrea  Tue Aug 16 15:00:26 PDT 2005
 TkrDigi/src/GaudiAlg
 
