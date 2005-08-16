@@ -5,6 +5,7 @@
  * TkrDigiAlg is the master algorithm of TkrDigi.  It calls several
  * sub-algorithms sequentially, currently:
  *     TkrDigiMcToHitAlg
+ *     TkrDigiHitRemovalAlg
  *     TkrDigiNoiseAlg
  *     TkrDigiHitToDigiAlg
  * Each sub-algorithm can choose among different tools.  At the end, MC hits are
@@ -12,7 +13,7 @@
  *
  * @author Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/GaudiAlg/TkrDigiAlg.cxx,v 1.1 2004/02/27 10:14:15 kuss Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/GaudiAlg/TkrDigiAlg.cxx,v 1.2 2004/03/09 20:06:30 lsrea Exp $
  */
 
 #include "TkrDigiAlg.h"
@@ -63,6 +64,12 @@ StatusCode TkrDigiAlg::initialize() {
         return StatusCode::FAILURE;
     }
 
+    if ( createSubAlgorithm("TkrDigiHitRemovalAlg", "TkrDigiHitRemovalAlg",
+                            m_hitRemovalAlg).isFailure() ) {
+        log << MSG::ERROR << "could not open TkrDigiHitRemovalAlg" << endreq;
+        return StatusCode::FAILURE;
+    }
+
     if ( createSubAlgorithm("TkrDigiHitToDigiAlg", "TkrDigiHitToDigiAlg",
                             m_hitToDigiAlg).isFailure() ) {
         log << MSG::ERROR << "could not open TkrDigiHitToDigiAlg" << endreq;
@@ -73,6 +80,8 @@ StatusCode TkrDigiAlg::initialize() {
     m_mcToHitAlg->setProperty(  "Type", m_type);
     // Currently only one choice, "General".
     m_noiseAlg->setProperty(    "Type", "General");
+    // Currently only one choice, "General"
+    m_hitRemovalAlg->setProperty( "Type", "General");
     // Currently only one choice, "General".
     m_hitToDigiAlg->setProperty("Type", "General");
 
@@ -104,6 +113,13 @@ StatusCode TkrDigiAlg::execute() {
             << endreq;
         return StatusCode::FAILURE;
     }
+
+    if( m_hitRemovalAlg->execute().isFailure() ) {
+        log << MSG::ERROR << m_hitRemovalAlg->name() << " FAILED to execute!"
+            << endreq;
+        return StatusCode::FAILURE;
+    }
+
 
     if( m_hitToDigiAlg->execute().isFailure() ) {
         log << MSG::ERROR << m_hitToDigiAlg->name() << " FAILED to execute!"
