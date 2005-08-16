@@ -1,5 +1,15 @@
 ------------------------------------------------------------
 User: lsrea  Tue Aug 16 15:00:26 PDT 2005
+TkrDigi/doc
+
+Modified Files:
+	release.notes 
+Log Message:
+Add integrated hit removal (including hit truncation due to read and cable controller buffers)
+
+    *
+------------------------------------------------------------
+User: lsrea  Tue Aug 16 15:00:26 PDT 2005
 TkrDigi/cmt
 
 Modified Files:
