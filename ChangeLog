@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: lsrea  Tue Aug 16 15:00:26 PDT 2005
+TkrDigi/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+Add integrated hit removal (including hit truncation due to read and cable controller buffers)
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: v2r4p3, operation: add
 Package: TkrDigi
