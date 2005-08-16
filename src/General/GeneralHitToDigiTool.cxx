@@ -6,7 +6,7 @@
 *
 * @author Michael Kuss
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitToDigiTool.cxx,v 1.7 2004/12/14 03:07:34 lsrea Exp $
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitToDigiTool.cxx,v 1.8 2005/04/11 22:49:50 lsrea Exp $
 */
 
 #include "GeneralHitToDigiTool.h"
@@ -50,9 +50,8 @@ AlgTool(type, name, parent) {
     declareInterface<IHitToDigiTool>(this);
 
     declareProperty("killBadStrips", m_killBadStrips = true );
-    declareProperty("killFailed",    m_killFailed    = true  );
+    declareProperty("killFailed",    m_killFailed    = true );
     declareProperty("totThreshold",  s_totThreshold);
-    //declareProperty("maxHits",       s_maxHits);
 }
 
 
@@ -67,6 +66,15 @@ StatusCode GeneralHitToDigiTool::initialize()
     StatusCode sc = StatusCode::SUCCESS;
     MsgStream log(msgSvc(), name());
     log << MSG::INFO << "initialize " << endreq;
+
+    setProperties();
+
+    if(!m_killFailed || !m_killBadStrips) {
+        log << MSG::ERROR 
+            << "killFailed and killBadStrips now set in GeneralTruncationTool" 
+            << endreq;
+        return StatusCode::FAILURE;
+    }
 
     if ( s_totThreshold != GeneralNoiseTool::noiseThreshold() )
         log << MSG::WARNING
@@ -237,25 +245,13 @@ StatusCode GeneralHitToDigiTool::execute()
         const TkrVolumeIdentifier volId = itMap->first;  
         const idents::TowerId tower = volId.getTower();
         const int theTower = tower.id();
+        //const int tray  = volId.getTray();
+        //const int face  = volId.getBotTop();
         const int bilayer = volId.getLayer();
         const int view  = volId.getView();
         const idents::GlastAxis::axis axis = volId.getAxis();
 
-        if ( m_killFailed && m_tfmSvc && !m_tfmSvc->empty() 
-            && m_tfmSvc->isFailed(theTower, bilayer, view) )
-            continue;
-
-        // Loop over contained list of strips to remove the bad strips.
-        // If the TDS SiPlaneMapContainer will become PDS one day, and also bad
-        // strips should be kept, this code would have to be modified.
-        SiStripList::iterator itStrip=sList->begin();
-        for ( ;itStrip!=sList->end(); ++itStrip ) {
-            const int stripId = itStrip->index();
-            // kill bad strips
-            if ( m_killBadStrips && m_tbsSvc && !m_tbsSvc->empty() 
-                && m_tbsSvc->isBadStrip(theTower, bilayer, axis, stripId) )
-                itStrip->setBadStrip();
-        }
+        // Failed planes and bad strips now handled in TkrDigiTruncationTool
 
         //  breakPoint is defined as the highest C0 strip, 
         //       ordinarily 767 for the flight instrument
@@ -278,6 +274,7 @@ StatusCode GeneralHitToDigiTool::execute()
         log << endreq;
 
         // now loop over contained list of strips
+        SiStripList::iterator itStrip=sList->begin();
         for (itStrip=sList->begin(); itStrip!=sList->end(); ++itStrip ) {
             if (itStrip->badStrip()) continue;
             const int stripId = itStrip->index();
@@ -319,23 +316,15 @@ StatusCode GeneralHitToDigiTool::execute()
                 digiHit.addRelation(rel);
                 if (size==digiHit.size()) delete rel;
             }
-        }
-
-        if ( truncateGTRC(pDigi) > 0 ) {
-            // strips remain
-            pTkrDigi->push_back(pDigi);
-            nDigi[view]++;
-        } else {
-            delete pDigi;
-        }
+        }     
+        pTkrDigi->push_back(pDigi);
+        nDigi[view]++;
     }
 
     // sort by volume id
     std::sort(pTkrDigi->begin(), pTkrDigi->end(), Event::TkrDigi::digiLess());
 
-    // here we do the truncation by cable (no more than 128 hits on each cable!)
-    // returns number of truncated cables
-    int nTrunc = truncateGTCC(pTkrDigi);
+    // Cable truncation now handled in TkrDigiTruncationTool
 
     log << MSG::DEBUG;
     if (log.isActive()) {
@@ -345,103 +334,4 @@ StatusCode GeneralHitToDigiTool::execute()
     log << endreq;
 
     return sc;
-}
-
-int GeneralHitToDigiTool::truncateGTRC( Event::TkrDigi* pDigi) 
-{
-    // keep only the "first" (maxLow/maxHigh) hits on the corresponding side
-    // "first" means first to arrive at the controller, so lowest number strips
-    // on the low side, highest number on the high side.
-    // only need to check this if there are more than s_maxHits hits
-
-    int nStrips = pDigi->getNumHits();
-    int nLow  = nStrips;
-    int nHigh = 0;
-    int tower = (pDigi->getTower()).id();
-    int layer = pDigi->getBilayer();
-    int view  = pDigi->getView();
-    int maxLow  = m_tspSvc->getMaxStrips(tower, layer, view, 0);
-    int maxHigh = m_tspSvc->getMaxStrips(tower, layer, view, 1);
-    int lastC0Strip = pDigi->getLastController0Strip();
-
-    //int nTrunc0;
-    if (nStrips>std::min(maxLow, maxHigh)) {
-        int ind;
-        for (ind = 0; ind<nStrips; ++ind) {
-            if (pDigi->getHit(ind)>lastC0Strip) {
-                nLow = ind;
-                break;
-            }
-        }
-        //nLow  = pDigi->getNumberAtEnd(0);
-        nHigh = nStrips - nLow;
-        // max number allowed on each end
-        nLow  = std::min(nLow,  maxLow);
-        nHigh = std::min(nHigh, maxHigh);
-
-        // hit number of first and last to remove
-        int hit1 = nLow;  
-        int hit2 = nStrips - nHigh - 1; 
-        int nTrunc = hit2 - hit1 + 1;
-        int iTrunc = 0;
-        while (nTrunc--) {
-            int strip = pDigi->getHit(hit1);
-            pDigi->removeHit(strip);
-        }
-
-        //if(nTrunc>0) pDigi->removeHitRange(hit1, hit2);
-    }
-    return nLow + nHigh;
-}
-
-int GeneralHitToDigiTool::truncateGTCC( Event::TkrDigiCol* pTkrDigi) 
-{
-    // count hits in each tower, mostly less than 128
-    int nTrunc = 0;
-    /*
-    // lame start of some code to handle cable truncation
-    int m_trunc = 128;
-    int nTowers = m_tkrGeom->numXTowers()*m_tkrGeom->numYTowers();
-    int nLayers = m_tkrGeom->numLayers();
-    std::vector<int> hitCountX(nTowers,0);
-    std::vector<int> hitCountY(nTowers,0);
-    std::vector<Event::TkrDigi*> firstDigi(nTowers);
-    std::vector<Event::TkrDigi*> lastDigi(nTowers);
-    Event::TkrDigiCol::iterator pDigi = pTkrDigi->begin();
-    int tower;
-    int tower0 = -1;
-    for (; pDigi!=pTkrDigi->end(); ++pDigi) {
-        Event::TkrDigi* digi = *pDigi;
-        tower = (digi->getTower()).id();
-        int view = digi->getView();
-        if (tower!=tower0) firstDigi[tower] = digi;
-        if (view==0) {
-            hitCountX[tower] += digi->getNumHits();
-        } else {
-            hitCountY[tower] += digi->getNumHits();
-        }
-        
-        lastDigi[tower] = digi;
-        tower0 = tower;
-    }
-
-    //Now we have a list of the number of hits in each tower
-    for (tower=0; tower<nTowers; ++tower) {
-        if(hitCountX[tower]<m_trunc && hitCountY[tower]<m_trunc) continue;
-        // Here's where all the real work happens
-        // Eight cables per tower
-        typedef std::map<int, int> layerVec;
-        layerVec xVec[4];
-        layerVec yVec[4];
-        for (pDigi=pTkrDigi->begin(); pDigi!=pTkrDigi->end(); ++pDigi) {
-        }
-        Event::TkrDigi* digi = *pDigi;
-        tower = (digi->getTower()).id();
-        int view = digi->getView();
-        int layer = digi->getBilayer();
-        int ind = layer%2;
-    }
-    */
-    
-    return nTrunc;
 }

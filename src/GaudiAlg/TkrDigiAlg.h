@@ -12,7 +12,7 @@
  *
  * @author Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigiSandBox/src/GaudiAlg/TkrDigiAlg.h,v 1.1 2004/02/24 13:57:34 kuss Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/GaudiAlg/TkrDigiAlg.h,v 1.1 2004/02/27 10:14:15 kuss Exp $
  */
 
 #ifndef __TKRDIGIALG_H__
@@ -41,6 +41,7 @@ class TkrDigiAlg : public Algorithm {
     std::string m_type;
     /// Pointers to the sub algorithms
     Algorithm* m_mcToHitAlg;
+    Algorithm* m_hitRemovalAlg;
     Algorithm* m_noiseAlg;
     Algorithm* m_hitToDigiAlg;
 
