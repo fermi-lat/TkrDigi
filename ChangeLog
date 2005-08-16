@@ -1,5 +1,17 @@
 ------------------------------------------------------------
 User: lsrea  Tue Aug 16 15:00:26 PDT 2005
+TkrDigi/src/GaudiAlg
+
+Modified Files:
+	TkrDigiAlg.cxx TkrDigiAlg.h 
+Added Files:
+	TkrDigiHitRemovalAlg.cxx 
+Log Message:
+Add integrated hit removal (including hit truncation due to read and cable controller buffers)
+
+    *
+------------------------------------------------------------
+User: lsrea  Tue Aug 16 15:00:26 PDT 2005
 TkrDigi/src/Dll
 
 Modified Files:
