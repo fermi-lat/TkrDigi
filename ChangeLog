@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: lsrea  Tue Aug 16 18:01:51 PDT 2005
+TkrDigi/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+clean up warnings
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: v2r4p4, operation: add
 Package: TkrDigi
