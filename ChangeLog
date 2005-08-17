@@ -1,5 +1,15 @@
 ------------------------------------------------------------
 User: lsrea  Tue Aug 16 18:01:52 PDT 2005
+TkrDigi/src
+
+Modified Files:
+	SiStripList.cxx 
+Log Message:
+clean up warnings
+
+    *
+------------------------------------------------------------
+User: lsrea  Tue Aug 16 18:01:52 PDT 2005
 TkrDigi/doc
 
 Modified Files:
