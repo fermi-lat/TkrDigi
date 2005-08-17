@@ -9,7 +9,7 @@
 *
 * @author Leon Rochester
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitRemovalTool.cxx,v 1.2 2004/03/09 20:06:30 lsrea Exp $
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitRemovalTool.cxx,v 1.1 2005/08/16 22:00:27 lsrea Exp $
 */
 
 #include "GeneralHitRemovalTool.h"
@@ -130,7 +130,6 @@ StatusCode GeneralHitRemovalTool::execute() {
             if ( m_killFailed && failSvc && !failSvc->empty()) { 
                 if( failSvc->isFailed(tower, bilayer, view) ) {
                     for (itStrip=sList->begin() ;itStrip!=sList->end(); ++itStrip ) {
-                        const int stripId = itStrip->index();
                         itStrip->setStripStatus(SiStripList::FAILEDPLANE);
                     }
                     continue;

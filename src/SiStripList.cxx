@@ -6,7 +6,7 @@
 * @author Toby Burnett, Leon Rochester (original authors)
 * @author Michael Kuss
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.cxx,v 1.19 2005/04/11 22:49:49 lsrea Exp $
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.cxx,v 1.20 2005/08/13 17:57:34 lsrea Exp $
 */
 
 #include "SiStripList.h"
@@ -402,9 +402,6 @@ void SiStripList::getToT(int* ToT, const int tower, const int layer, const int v
     int t2[2]     = {INT_MIN, INT_MIN};
     int simpleToT[2] = {INT_MIN, INT_MIN};
 
-    double mevPerMip = pToTSvc->getMevPerMip();    
-    double fCPerMip  = pToTSvc->getFCPerMip();
-    double countsPerMicrosecond = pToTSvc->getCountsPerMicrosecond();
     int    totMax    = pToTSvc->getMaxToT();
 
     int size = m_strips.size();

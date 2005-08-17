@@ -1,7 +1,7 @@
 /** @file release.notes
 @verbatim
  Package TkrDigi
- v2r4p4     16-Aug-2005  LSR Add GeneralHitRemovalTool, and associated changes
+ v2r4p5     16-Aug-2005  LSR Add GeneralHitRemovalTool, and associated changes
                              Does all hit removal (except for noise) including hit truncation
  v2r4p3     13-Aug-2005  LSR SiStripList: check if both coordinates are inside active area
  v2r4p2     11-Apr-2005  LSR SiStripList: call ToTSvc to do ToT calculation 
