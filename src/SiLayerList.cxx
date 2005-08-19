@@ -7,7 +7,7 @@
  * @author ??? ... has written this class.
  * @author Michael Kuss ... has only made this header and some formatting.
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigiSandBox/src/SiLayerList.cxx,v 1.4 2004/02/24 13:57:32 kuss Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiLayerList.cxx,v 1.6 2004/02/27 10:14:13 kuss Exp $
  */
 
 #include "SiLayerList.h"
@@ -21,7 +21,8 @@ IGeometry::VisitorRet SiLayerList::pushShape(ShapeType /* s */,
                                              std::string name,
                                              std::string /* material */, 
                                              const DoubleVector& /* params */, 
-                                             VolumeType /* type */) {
+                                             VolumeType /* type */,
+                                             SenseType /* sense */) {
     // concatenate the id for this node to current id.
     m_idcount.push_back(idvec.size());
     for ( UintVector::const_iterator u=idvec.begin(); u!=idvec.end(); ++u )
