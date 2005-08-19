@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: jrb  Fri Aug 19 12:19:32 PDT 2005
+TkrDigi/src
+
+Modified Files:
+	SiLayerList.cxx SiLayerList.h 
+Log Message:
+Changes for modified IGeometry interface
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: v2r4p5, operation: add
 Package: TkrDigi
