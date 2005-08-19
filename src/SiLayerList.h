@@ -7,7 +7,7 @@
  * @author ??? ... has written this class.
  * @author Michael Kuss ... has only made this header and some formatting.
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigiSandBox/src/SiLayerList.h,v 1.4 2004/02/24 13:57:32 kuss Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiLayerList.h,v 1.3 2004/02/27 10:14:13 kuss Exp $
  */
 
 #ifndef SiLayerList_h
@@ -43,7 +43,8 @@ class SiLayerList : public IGeometry,
      */
     virtual VisitorRet pushShape(ShapeType s, const UintVector& id,
                                  std::string name, std::string material,
-                                 const DoubleVector& params, VolumeType type);
+                                 const DoubleVector& params, VolumeType type,
+                                 SenseType sense);
 
     /// called to signal end of nesting
     virtual void popShape();
