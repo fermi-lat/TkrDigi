@@ -9,7 +9,7 @@
 *
 * @author Leon Rochester
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitRemovalTool.cxx,v 1.1 2005/08/16 22:00:27 lsrea Exp $
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitRemovalTool.cxx,v 1.2 2005/08/17 01:01:52 lsrea Exp $
 */
 
 #include "GeneralHitRemovalTool.h"
@@ -95,7 +95,6 @@ StatusCode GeneralHitRemovalTool::execute() {
     StatusCode sc = StatusCode::SUCCESS;
     MsgStream log(msgSvc(), name());
 
-    int HitRemovalCount = 0;
 
     // retrieve the pointer to the SiPlaneMapContainer from TDS
     SmartDataPtr<SiPlaneMapContainer> pObject(m_edSvc,
@@ -169,13 +168,14 @@ StatusCode GeneralHitRemovalTool::execute() {
             }
             // same for the high end, but going backwards
             liveCount = 0;
-            for (itStrip=sList->end();itStrip!=sList->begin(); --itStrip ) {
-                const int stripId = itStrip->index();
+            SiStripList::reverse_iterator itRev;
+            for (itRev=sList->rbegin();itRev!=sList->rend(); ++itRev ) {
+                const int stripId = itRev->index();
                 if (stripId<=breakpoint) break;
-                if(itStrip->badStrip()) continue;
+                if(itRev->badStrip()) continue;
                 liveCount++;
                 if (liveCount>maxHigh) {
-                    itStrip->setStripStatus(SiStripList::RCBUFFER);
+                    itRev->setStripStatus(SiStripList::RCBUFFER);
                 }
             }
         }
