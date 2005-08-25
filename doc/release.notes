@@ -1,6 +1,7 @@
 /** @file release.notes
 @verbatim
  Package TkrDigi
+ v2r4p7     25-Aug-2005  LSR Bug-fix in GeneralHitRemovalTool
  v2r4p6     19-Aug-2005  jrb Changes for compatibility with modified IGeometry interface
  v2r4p5     16-Aug-2005  LSR Add GeneralHitRemovalTool, and associated changes
                              Does all hit removal (except for noise) including hit truncation
