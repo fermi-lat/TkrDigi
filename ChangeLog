@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: lsrea  Thu Aug 25 10:23:55 PDT 2005
+TkrDigi/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+Fix logic for stepping backwards from high end for controller 1
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: v2r4p6, operation: add
 Package: TkrDigi
