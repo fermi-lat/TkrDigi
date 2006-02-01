@@ -12,6 +12,7 @@
 
 #include "CLHEP/Random/RandFlat.h"
 #include "CLHEP/Random/RandExponential.h"
+#include "CLHEP/config/CLHEP.h"
 #include "CLHEP/config/iostream.h"
 #include "ClusterNewton.h"
 
@@ -76,10 +77,10 @@ void ClusterNewton::AddNoise()
   double tt=0.;
   while ( tt< tmax) {
     double ratep2=1./ratep;
-    dt2=RandExponential::shoot(ratep2); //ratep2
+    dt2=CLHEP::RandExponential::shoot(ratep2); //ratep2
     tt += dt2;
     if(tt>=tmax) break;
-    HepDouble ran = RandFlat::shoot();
+    HepDouble ran = CLHEP::RandFlat::shoot();
     double sign = -1.;
     if(ran >= 0.5) {sign=+1.;}
     int it = int(tt*1.e9);  // -1?

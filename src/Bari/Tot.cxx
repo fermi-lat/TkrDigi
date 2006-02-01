@@ -16,7 +16,7 @@ void Tot::Put(double* varray){
   // the input array must be 10000 bins voltage signal in mV
   // Author N.Giglietto
   int ndim = 10000;
-  double treshold = RandGauss::shoot(160.,7.); // one for each strip    <==== microV 
+  double treshold = CLHEP::RandGauss::shoot(160.,7.); // one for each strip    <==== microV 
   //std::cout<<"threshold = "<<treshold<<std::endl;
   // reset all variables
   int lcount = 0;
