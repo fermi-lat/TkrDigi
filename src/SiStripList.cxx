@@ -6,7 +6,7 @@
 * @author Toby Burnett, Leon Rochester (original authors)
 * @author Michael Kuss
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.cxx,v 1.20 2005/08/13 17:57:34 lsrea Exp $
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.cxx,v 1.21 2005/08/17 01:01:52 lsrea Exp $
 */
 
 #include "SiStripList.h"
@@ -293,7 +293,7 @@ void SiStripList::addElectronicNoise(const double sigma)
     while ( iter != end() ) {
         // check for the electronic noise flag
         if ( !iter->electronicNoise() ) {
-            iter->addEnergy(RandGauss::shoot(0.0, sigma));  // in MeV
+            iter->addEnergy(CLHEP::RandGauss::shoot(0.0, sigma));  // in MeV
             iter->electronicNoise(true);
         }
         ++iter;
@@ -314,12 +314,12 @@ int SiStripList::addNoiseStrips(const double occupancy,
     if(occupancy>0.0) {
         static const int N = s_stripPerWafer * s_n_si_dies;  // number of all strips
         // (random) number of strips to add
-        const int n = static_cast<int>(RandBinomial::shoot(N, occupancy));
+        const int n = static_cast<int>(CLHEP::RandBinomial::shoot(N, occupancy));
 
         for ( int i=0; i!=n; ++i ) {
             //int strip = stripId(RandFlat::shoot()*panel_width()
             //    - panel_width()/2.0);
-            int strip = static_cast<int>(RandFlat::shoot()*N);
+            int strip = static_cast<int>(CLHEP::RandFlat::shoot()*N);
             const_iterator iter = begin();
             for ( iter=begin(); iter!=end() && iter->index()!=strip; iter++ );
             // discard if the strip id is already in the list
@@ -328,7 +328,7 @@ int SiStripList::addNoiseStrips(const double occupancy,
                 //            addStrip<Event::McPositionHit>(strip, threshold*(1.0-log(RandFlat::shoot())));
                 Event::McPositionHit* dummy;
                 dummy = 0;
-                addStrip(strip, threshold*(1.0-log(RandFlat::shoot())), dummy);
+                addStrip(strip, threshold*(1.0-log(CLHEP::RandFlat::shoot())), dummy);
                 ++newStrips;
             }
         }
