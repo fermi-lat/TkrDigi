@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: lsrea  Tue Feb 14 11:29:48 PST 2006
+TkrDigi/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+Fixed problem in ToT calculation: hits removed by CC or RC buffer truncation were not being added
+to the tot; in fact they should be.
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: v2r4cl0, operation: add
 Package: TkrDigi
