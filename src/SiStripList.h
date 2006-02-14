@@ -11,7 +11,7 @@
 * @author Toby Burnett, Leon Rochester (original authors)
 * @author Michael Kuss
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.h,v 1.11 2005/08/13 17:57:34 lsrea Exp $
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.h,v 1.12 2005/08/16 22:00:26 lsrea Exp $
 */
 
 #ifndef SISTRIPLIST_H
@@ -34,7 +34,14 @@ public:
 
     ~SiStripList() { clear(); }
 
-    enum badType {GOOD=0, UNSPECIFIED=1, FAILEDPLANE=2, BADSTRIP=4, RCBUFFER=8, CCBUFFER=16 };
+    enum badType {
+        GOOD=0, BELOWTRIGTHRESH=1, BELOWDATATHRESH=2, FAILEDPLANE=4, BADSTRIP=8, 
+        RCBUFFER=16, CCBUFFER=32, UNSPECIFIED=128,
+        TRUNCATED = RCBUFFER+CCBUFFER, 
+        KILLED    = FAILEDPLANE+BADSTRIP+UNSPECIFIED,
+        NOTRIG    = KILLED+BELOWTRIGTHRESH,
+        NODATA    = KILLED+BELOWDATATHRESH+TRUNCATED
+    };
 
     typedef std::vector<Event::McPositionHit*> hitList;
 

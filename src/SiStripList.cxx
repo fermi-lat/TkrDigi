@@ -6,7 +6,7 @@
 * @author Toby Burnett, Leon Rochester (original authors)
 * @author Michael Kuss
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.cxx,v 1.20 2005/08/13 17:57:34 lsrea Exp $
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.cxx,v 1.21 2005/08/17 01:01:52 lsrea Exp $
 */
 
 #include "SiStripList.h"
@@ -27,6 +27,9 @@
 inline double copysign(double a, double b){return _copysign(a,b);}
 #endif
 
+namespace {
+    bool debug = false;
+}
 
 // static variable implementations--now initialized with detsvc.
 
@@ -340,33 +343,42 @@ int SiStripList::addNoiseStrips(const double occupancy,
 
 int SiStripList::removeStripsBelowThreshold(const double threshold) 
 {
-    // Purpose and Method: Removes strips which an energy deposit below
-    //                     "threshold".  Strips can have a low energy as low as
-    //                     if:
+    // Purpose and Method: Flags strips which an energy deposit below
+    //                     "threshold".  Strips can have a low energy if:
     //                     1) the strip energy falls below threshold when the
     //                        electronic noise is added
     //                     2) the strip is generated with an energy below
     //                        threshold.  As of Aug 19, 2003, this can happen.
     //                        Why (MWK)?
     // Inputs: energy threshold
-    // Outputs: number of strips removed
+    // Outputs: number of strips flagged as removed
     // Dependencies: none
 
     int removedStrips = 0;  // counter for removed strips
 
     iterator iter = begin();
+    bool first = true;
     while ( iter != end() ) {
         if ( iter->energy() < threshold ) {
             /*
             std::cout << "removing strip with energy " << iter->energy()
             << " below threshold " << threshold << std::endl;
             */
-            iter = erase(iter);
+            //For now, trigger and data thresholds are the *same*!
+            iter->setStripStatus(BELOWTRIGTHRESH);
+            iter->setStripStatus(BELOWDATATHRESH);
+            if(debug) {
+                if (first) {
+                    std::cout << "Strips flagged for removal ";
+                    first = false;
+                }
+                std::cout << iter->index() << " " ;
+            }
             ++removedStrips;
         }
-        else
-            ++iter;
+        ++iter;
     }
+    if (!first) std::cout << std::endl;
 
     return removedStrips;
 }
@@ -402,16 +414,21 @@ void SiStripList::getToT(int* ToT, const int tower, const int layer, const int v
     int t2[2]     = {INT_MIN, INT_MIN};
     int simpleToT[2] = {INT_MIN, INT_MIN};
 
-    int    totMax    = pToTSvc->getMaxToT();
+    int totMax    = pToTSvc->getMaxToT();
 
     int size = m_strips.size();
     int controller = 0;
     int i;
     for (i=0; i<size; ++i ) { // loop over strips
         const SiStripList::Strip strip = m_strips[i];
-        // don't use bad strips
-        if ( strip.badStrip() )
-            continue;
+        // don't use certain kinds of bad strips
+        // RC and CC overflows do contribute to the ToT
+        //   but failed layers and dead strips don't (depends on how they fail??)
+        //   neither do hits below the trigger threshold (tho for now, trigger and 
+        //   data thresholds are the same)
+
+        int status = strip.stripStatus();
+        if ((status&NOTRIG)!=0) continue;
         int index = strip.index();
         if (index>sep) controller = 1;
         int time1 = strip.time1();
@@ -426,8 +443,7 @@ void SiStripList::getToT(int* ToT, const int tower, const int layer, const int v
             float e = strip.energy();
             if ( e>0 ) { // "Simple" or noise
                 int iToT = pToTSvc->getRawToT(e, tower, layer, view, index);
-                if ( iToT > simpleToT[controller] )
-                    simpleToT[controller] = iToT;
+                simpleToT[controller] = std::max(simpleToT[controller], iToT);
             }
         }
     }
