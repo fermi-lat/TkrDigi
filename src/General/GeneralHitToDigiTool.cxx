@@ -6,7 +6,7 @@
 *
 * @author Michael Kuss
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitToDigiTool.cxx,v 1.8 2005/04/11 22:49:50 lsrea Exp $
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitToDigiTool.cxx,v 1.9 2005/08/16 22:00:27 lsrea Exp $
 */
 
 #include "GeneralHitToDigiTool.h"
@@ -34,9 +34,12 @@
 
 #include <sstream>
 
-
 static const ToolFactory<GeneralHitToDigiTool>    s_factory;
 const IToolFactory& GeneralHitToDigiToolFactory = s_factory;
+
+namespace {
+    bool debug = false;
+}
 
 double GeneralHitToDigiTool::s_totThreshold =GeneralNoiseTool::noiseThreshold();
 //int    GeneralHitToDigiTool::s_maxHits      = 64;
@@ -273,10 +276,19 @@ StatusCode GeneralHitToDigiTool::execute()
         }
         log << endreq;
 
+        bool first = true;
         // now loop over contained list of strips
         SiStripList::iterator itStrip=sList->begin();
         for (itStrip=sList->begin(); itStrip!=sList->end(); ++itStrip ) {
-            if (itStrip->badStrip()) continue;
+            int status = itStrip->stripStatus();
+            if ((status&SiStripList::NODATA)!=0) {
+                if(debug) {
+                   if (first) std::cout << "Strips actually removed: " ;
+                   first = false;
+                    std::cout << itStrip->index() << " ";
+                }
+                continue;
+            }
             const int stripId = itStrip->index();
             nStrip[view]++;
             nStrips++;
@@ -319,6 +331,7 @@ StatusCode GeneralHitToDigiTool::execute()
         }     
         pTkrDigi->push_back(pDigi);
         nDigi[view]++;
+        if(!first) std::cout << std::endl;
     }
 
     // sort by volume id

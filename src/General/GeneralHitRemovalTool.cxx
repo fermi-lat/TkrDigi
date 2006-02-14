@@ -9,7 +9,7 @@
 *
 * @author Leon Rochester
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitRemovalTool.cxx,v 1.2 2005/08/17 01:01:52 lsrea Exp $
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitRemovalTool.cxx,v 1.3 2005/08/25 17:23:55 lsrea Exp $
 */
 
 #include "GeneralHitRemovalTool.h"
@@ -43,6 +43,9 @@ AlgTool(type, name, parent) {
     declareProperty("killBadStrips", m_killBadStrips = true);
 }
 
+namespace {
+    bool debug = false;
+}
 
 StatusCode GeneralHitRemovalTool::initialize() {
     // Purpose and Method: initializes the tool
@@ -157,6 +160,7 @@ StatusCode GeneralHitRemovalTool::execute() {
         if (sList->size()>test) {
             int liveCount  = 0;
             // for the low end, we pass maxLow strips, and kill the rest
+            bool first = true;
             for (itStrip=sList->begin();itStrip!=sList->end(); ++itStrip ) {
                 const int stripId = itStrip->index();
                 if (stripId>breakpoint) break;
@@ -164,6 +168,11 @@ StatusCode GeneralHitRemovalTool::execute() {
                 liveCount++;
                 if (liveCount>maxLow) {
                     itStrip->setStripStatus(SiStripList::RCBUFFER);
+                    if(debug) {
+                        if (first) std::cout << "RCBuffer overflow: " ;
+                        first = false;
+                        std::cout << itStrip->index() << " " ;
+                    }
                 }
             }
             // same for the high end, but going backwards
@@ -176,8 +185,13 @@ StatusCode GeneralHitRemovalTool::execute() {
                 liveCount++;
                 if (liveCount>maxHigh) {
                     itRev->setStripStatus(SiStripList::RCBUFFER);
+                    if(debug) {
+                        if (first) std::cout << "RCBuffer: " ;
+                        std::cout << itStrip->index() << " " ;
+                    }
                 }
             }
+            if (!first) std::cout << std::endl;
         }
     }
 
@@ -208,6 +222,7 @@ StatusCode GeneralHitRemovalTool::execute() {
         int breakpoint = splitsSvc->getSplitPoint(tower, bilayer, view);
         SiStripList::iterator itStrip=sList->begin();
         int strip0 = -1;
+        bool first = true;
         for ( ;itStrip!=sList->end(); ++itStrip ) {
             const int stripId = itStrip->index();
             if(stripId< strip0) planesOutOfOrder = true;
@@ -217,8 +232,14 @@ StatusCode GeneralHitRemovalTool::execute() {
             if(!itStrip->badStrip()) cableCount[index]++;
             if(cableCount[index]>cableBufferSize) {
                 itStrip->setStripStatus(SiStripList::CCBUFFER);
+                if (debug) {
+                    if (first) std::cout << "CCBuffer overflow :";
+                    first = false;
+                    std::cout << itStrip->index() << " ";
+                }
             }
         }
+        if (!first) std::cout << std::endl;
     }
     if(towersOutOfOrder || planesOutOfOrder) {
         log << MSG::INFO << "There is a problem with the ordering of the SiStrips... " 
