@@ -6,7 +6,7 @@
 *
 * @author Michael Kuss
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitToDigiTool.cxx,v 1.9 2005/08/16 22:00:27 lsrea Exp $
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitToDigiTool.cxx,v 1.10 2006/02/14 19:29:50 lsrea Exp $
 */
 
 #include "GeneralHitToDigiTool.h"
@@ -36,10 +36,6 @@
 
 static const ToolFactory<GeneralHitToDigiTool>    s_factory;
 const IToolFactory& GeneralHitToDigiToolFactory = s_factory;
-
-namespace {
-    bool debug = false;
-}
 
 double GeneralHitToDigiTool::s_totThreshold =GeneralNoiseTool::noiseThreshold();
 //int    GeneralHitToDigiTool::s_maxHits      = 64;
@@ -177,7 +173,13 @@ StatusCode GeneralHitToDigiTool::execute()
 
     StatusCode sc = StatusCode::SUCCESS;
     MsgStream log(msgSvc(), name());
-    log << MSG::DEBUG << "execute " << endreq;
+
+    bool debug;
+    log << MSG::DEBUG;
+    debug = (log.isActive());
+    log << endreq;
+
+    if (debug) log << MSG::DEBUG << "execute " << endreq;
 
     // Take care of insuring that the data area has been created
     DataObject* pDummy;
@@ -210,7 +212,7 @@ StatusCode GeneralHitToDigiTool::execute()
             << EventModel::Digi::TkrDigiCol << endreq;
         return sc;
     }
-
+        
     int nDigi[2] = { 0, 0 };
     int nStrip[2] = { 0, 0 };
     int nStrips = 0;
@@ -268,24 +270,21 @@ StatusCode GeneralHitToDigiTool::execute()
         Event::TkrDigi* pDigi = new Event::TkrDigi(bilayer, axis, tower, ToT);
         nStrips = 0;
 
-        log << MSG::DEBUG;
-        if (log.isActive()) {
+        if (debug) {
             log << "tower " << tower.id() << " bilayer " << bilayer
                 << " view " << axis << " ToT " << ToT[0] << " " << ToT[1]
-                << " ( " << ToTLayer << " )" ;
+                << " ( " << ToTLayer << " )" << endreq;
         }
-        log << endreq;
 
-        bool first = true;
         // now loop over contained list of strips
         SiStripList::iterator itStrip=sList->begin();
         for (itStrip=sList->begin(); itStrip!=sList->end(); ++itStrip ) {
             int status = itStrip->stripStatus();
+            // delete hit if relevant bits are set
             if ((status&SiStripList::NODATA)!=0) {
                 if(debug) {
-                   if (first) std::cout << "Strips actually removed: " ;
-                   first = false;
-                    std::cout << itStrip->index() << " ";
+                   log << MSG::DEBUG << "Removed strip " << itStrip->index() 
+                       << " status " << std::hex << status << std::dec << endreq;
                 }
                 continue;
             }
@@ -298,12 +297,12 @@ StatusCode GeneralHitToDigiTool::execute()
                 pDigi->addC0Hit(stripId);
             else
                 pDigi->addC1Hit(stripId);
-            log << MSG::DEBUG;
-            if (log.isActive()) 
-                log << "    strip " << itStrip->index()
+            if(debug) {
+            log << MSG::DEBUG << "Added strip " << itStrip->index()
                 << " energy " << itStrip->energy()
-                << " noise " << itStrip->noise();
-            log << endreq;
+                << " noise " << itStrip->noise()
+                << endreq;
+            }
 
             const SiStripList::hitList& hits = itStrip->getHits();
 
@@ -328,10 +327,15 @@ StatusCode GeneralHitToDigiTool::execute()
                 digiHit.addRelation(rel);
                 if (size==digiHit.size()) delete rel;
             }
-        }     
-        pTkrDigi->push_back(pDigi);
-        nDigi[view]++;
-        if(!first) std::cout << std::endl;
+        }    
+        // add the digi if it has some hits
+        if (pDigi->getNumHits()>0) {
+            pTkrDigi->push_back(pDigi);
+            nDigi[view]++;
+        }
+        else {
+            delete pDigi;
+        }
     }
 
     // sort by volume id
@@ -339,12 +343,10 @@ StatusCode GeneralHitToDigiTool::execute()
 
     // Cable truncation now handled in TkrDigiTruncationTool
 
-    log << MSG::DEBUG;
-    if (log.isActive()) {
-        log << " X digis/strips: " << nDigi[0] << " " << nStrip[0]
-        << " Y digis/strips: " << nDigi[1] << " " << nStrip[1];
+    if (debug) {
+        log << MSG::DEBUG << " X digis/strips: " << nDigi[0] << " " << nStrip[0]
+        << " Y digis/strips: " << nDigi[1] << " " << nStrip[1] << endreq;
     }
-    log << endreq;
 
     return sc;
 }
