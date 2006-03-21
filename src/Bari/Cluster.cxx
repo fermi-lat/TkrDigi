@@ -44,10 +44,10 @@ void Cluster::Clean()
 // Xi e Xf in mm
 void Cluster::SetCluster(HepPoint3D Xi, HepPoint3D Xf, double edepos) 
 {
-    int PairNumber = static_cast<int>((edepos/eV)/3.6); //# e-h (energy from keV --> eV)
+    int PairNumber = static_cast<int>((edepos/CLHEP::eV)/3.6); //# e-h (energy from keV --> eV)
     
     // random numbers  
-    double cr = RandGauss::shoot(0.,1.)*44. + 1664.; // mean and sigma from full simulation 
+    double cr = CLHEP::RandGauss::shoot(0.,1.)*44. + 1664.; // mean and sigma from full simulation 
     // mean hit number in 400 micron
 
     HepVector3D segment = Xf-Xi;
@@ -76,7 +76,7 @@ void Cluster::SetCluster(HepPoint3D Xi, HepPoint3D Xf, double edepos)
     {	
         if (i >= nhitmax) break; 
         ierr = 0;
-  		rr=RandFlat::shoot()*Len;    // positions uniformely distributed along the track
+  		rr=CLHEP::RandFlat::shoot()*Len;    // positions uniformely distributed along the track
         t = rr;
 
         HepPoint3D XClust = Xi + t*dir;
