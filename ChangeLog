@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: cohen  Tue Mar 28 13:47:44 PST 2006
+TkrDigi/src/test
+
+Modified Files:
+	jobOptions.txt 
+Log Message:
+remove EventSelector
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: v2r5, operation: add
 Package: TkrDigi
