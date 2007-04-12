@@ -1,4 +1,19 @@
 ------------------------------------------------------------
+User: lsrea  Thu Apr 12 09:04:43 PDT 2007
+TkrDigi/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+Prepare for tag v2r6
+1) minor re-org of code
+2) default data threshold from 35% of mini to 31% of mini
+3) Don't call GeneralNoiseTool for BariAlg
+4) first implementation of charge-spreading (not called for BariAlg)
+       invoked for heavy ions and normal particles
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: v2r5p1, operation: add
 Package: TkrDigi
