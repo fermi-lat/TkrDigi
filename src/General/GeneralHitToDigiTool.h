@@ -7,7 +7,7 @@
  *
  * @authors Toby Burnett, Leon Rochester, Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitToDigiTool.h,v 1.6 2005/04/11 22:49:50 lsrea Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitToDigiTool.h,v 1.7 2005/08/16 22:00:27 lsrea Exp $
  */
 
 #ifndef __GENERALHITTODIGITOOL_H__
@@ -39,7 +39,7 @@ class GeneralHitToDigiTool : public AlgTool, virtual public IHitToDigiTool {
     /// Runs the tool
     StatusCode execute();
 
-    static const double totThreshold() { return s_totThreshold; }
+    //static const double totThreshold() { return s_totThreshold; }
     static const int    maxHits()      { return s_maxHits;}
 
 private:
@@ -67,7 +67,7 @@ private:
     bool   m_killFailed;
 
     /// threshold for ToT (in Mips)
-    static double s_totThreshold;
+    double m_totThreshold;
     /// maximum number of hits per side
     static int    s_maxHits;
 

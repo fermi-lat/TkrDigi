@@ -6,19 +6,20 @@
  *
  * @authors Toby Burnett, Leon Rochester, Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigiSandBox/src/General/GeneralNoiseTool.h,v 1.1 2004/02/24 13:57:34 kuss Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralNoiseTool.h,v 1.1 2004/02/27 10:14:15 kuss Exp $
  */
 
 #ifndef __GENERALNOISETOOL_H__
 #define __GENERALNOISETOOL_H__
 
 #include "../INoiseTool.h"
+#include "TkrUtil/ITkrToTSvc.h"
 #include "../SiLayerList.h"
-
-#include "GlastSvc/GlastDetSvc/IGlastDetSvc.h"
 
 #include "GaudiKernel/AlgTool.h"
 #include "GaudiKernel/IDataProviderSvc.h"
+#include "GlastSvc/GlastDetSvc/IGlastDetSvc.h"
+
 
 #include <string>
 
@@ -34,9 +35,11 @@ class GeneralNoiseTool : public AlgTool, virtual public INoiseTool {
     /// runs the tool
     StatusCode execute();
 
-    static const double noiseThreshold() { return s_noiseThreshold; }
-    static const double noiseSigma()     { return s_noiseSigma; }
-    static const double noiseOccupancy() { return s_noiseOccupancy; }
+    double noiseThreshold() const { return m_noiseThreshold; }
+    double dataThreshold()  const { return m_noiseThreshold; }
+    double triggerThreshold() const { return m_trigThreshold; }
+    double noiseSigma()     const { return m_noiseSigma; }
+    double noiseOccupancy() const { return m_noiseOccupancy; }
 
  private:
 
@@ -44,15 +47,21 @@ class GeneralNoiseTool : public AlgTool, virtual public INoiseTool {
     IDataProviderSvc* m_edSvc;
     /// Pointer to the Glast detector service
     IGlastDetSvc*     m_gdSvc;
+    /// Pointer to the ToT service
+    ITkrToTSvc*       m_totSvc;
 
     /// list of all SiLayers found in the detector model
     SiLayerList m_layers;
     /// energy deposit above which hit is recorded (MeV)
-    static double s_noiseThreshold;
+    double m_noiseThreshold;
+    /// energy deposit above which the hit triggers (MeV);
+    double m_trigThreshold;
     /// amount to fluctuate hit strips (MeV)
-    static double s_noiseSigma;
+    double m_noiseSigma;
     /// frequency of noise hits
-    static double s_noiseOccupancy;  
+    double m_noiseOccupancy; 
+    /// do full threshold analysis
+    bool   m_fullThreshold;
 
 };
 
