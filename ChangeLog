@@ -1,5 +1,22 @@
 ------------------------------------------------------------
 User: lsrea  Thu Apr 12 09:04:43 PDT 2007
+TkrDigi/src/GaudiAlg
+
+Modified Files:
+	TkrDigiAlg.cxx TkrDigiAlg.h 
+Added Files:
+	TkrDigiChargeAlg.cxx TkrDigiChargeAlg.h 
+Log Message:
+Prepare for tag v2r6
+1) minor re-org of code
+2) default data threshold from 35% of mini to 31% of mini
+3) Don't call GeneralNoiseTool for BariAlg
+4) first implementation of charge-spreading (not called for BariAlg)
+       invoked for heavy ions and normal particles
+
+    *
+------------------------------------------------------------
+User: lsrea  Thu Apr 12 09:04:43 PDT 2007
 TkrDigi/src/Dll
 
 Modified Files:
