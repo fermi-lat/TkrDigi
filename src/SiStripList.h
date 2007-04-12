@@ -11,7 +11,7 @@
 * @author Toby Burnett, Leon Rochester (original authors)
 * @author Michael Kuss
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.h,v 1.12 2005/08/16 22:00:26 lsrea Exp $
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.h,v 1.13 2006/02/14 19:29:49 lsrea Exp $
 */
 
 #ifndef SISTRIPLIST_H
@@ -21,6 +21,7 @@
 
 #include "CLHEP/Geometry/Vector3D.h"
 #include "GlastSvc/GlastDetSvc/IGlastDetSvc.h"
+#include "TkrUtil/ITkrToTSvc.h"
 #include "Event/MonteCarlo/McPositionHit.h"
 
 #include <algorithm>
@@ -108,9 +109,11 @@ public:
 
         /// adding a hit to the list of hits
         void addHit(const Event::McPositionHit* hit) {
-            hitList::iterator it=std::find(m_hits.begin(),m_hits.end(),hit);
-            if ( it == m_hits.end() )
-                m_hits.push_back(const_cast<Event::McPositionHit*>(hit));
+            if (hit!=0) {
+                hitList::iterator it=std::find(m_hits.begin(),m_hits.end(),hit);
+                if ( it == m_hits.end() )
+                    m_hits.push_back(const_cast<Event::McPositionHit*>(hit));
+            }
         }
 
         /// adding a list of hits to the list of hits
@@ -209,13 +212,13 @@ public:
         *  @return   number of strips added/removed
         */
         /// uses the following functions to manipulate the strip list
-        int  addNoise(const double s, const double o, const double t);
+        int  addNoise(const double s, const double o, const double t, const double trigt);
         /// add electronic noise to already triggered strips
         void addElectronicNoise(const double s);
         /// add noisy strips
-        int  addNoiseStrips(const double o, const double t);
+        int  addNoiseStrips(const double o, const double t, const double datat);
         /// remove strips with energy deposit below threshold
-        int  removeStripsBelowThreshold(const double t);
+        int  removeStripsBelowThreshold(const double t, const double datat);
 
         // typedefs to shorten typing
 
@@ -255,7 +258,7 @@ public:
         * access to the detector service, and initialization of the static
         * variables.
         */
-        static StatusCode initialize(IGlastDetSvc*);
+        static StatusCode initialize(IGlastDetSvc* ds /*, ITkrToTSvc* pToT=0*/);
 
         /// number of Si strips in a single layer
         static const int n_si_strips() { return n_si_dies() * strips_per_die(); }
@@ -281,6 +284,8 @@ public:
         bool isActiveHit(HepVector3D& inVec, HepVector3D& outVec, double& eLoss, bool& trimmed);
         /// pointer to the detector service
         static IGlastDetSvc* s_detSvc;
+        // / pointer to ToT service
+        //static ITkrToTSvc* s_totSvc;
         /// vector of strips
         StripList m_strips;        
         /// number of silicon dies across a single layer

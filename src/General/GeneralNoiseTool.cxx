@@ -6,7 +6,7 @@
  *
  * @author Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralNoiseTool.cxx,v 1.1 2004/02/27 10:14:15 kuss Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralNoiseTool.cxx,v 1.2 2004/03/09 20:06:30 lsrea Exp $
  */
 
 #include "GeneralNoiseTool.h"
@@ -25,11 +25,11 @@ static const ToolFactory<GeneralNoiseTool>    s_factory;
 const IToolFactory& GeneralNoiseToolFactory = s_factory;
 
 // 1/4 mip, was .03
-double GeneralNoiseTool::s_noiseThreshold = 0.03875;
+//double GeneralNoiseTool::s_noiseThreshold = 0.03875;
 // to match pdr number, was .01
-double GeneralNoiseTool::s_noiseSigma     = 0.00698;
+//double GeneralNoiseTool::s_noiseSigma     = 0.00698;
 // to match pdr number, was 1.e-5
-double GeneralNoiseTool::s_noiseOccupancy = 5.e-5;
+//double GeneralNoiseTool::s_noiseOccupancy = 5.e-5;
 
 
 GeneralNoiseTool::GeneralNoiseTool(const std::string& type,
@@ -40,9 +40,11 @@ GeneralNoiseTool::GeneralNoiseTool(const std::string& type,
     declareInterface<INoiseTool>(this);
 
     // Declaring the properties.  Attention: the variables are static!
-    declareProperty("threshold", s_noiseThreshold);
-    declareProperty("sigma",     s_noiseSigma);
-    declareProperty("occupancy", s_noiseOccupancy);
+    declareProperty("dataThreshold",    m_noiseThreshold = 0.03875);
+    declareProperty("triggerThreshold", m_trigThreshold = 0.03875);
+    declareProperty("sigma",            m_noiseSigma = 0.00698);
+    declareProperty("occupancy",        m_noiseOccupancy = 5.e-5);
+    declareProperty("fullThreshold",    m_fullThreshold = false);
 }
 
 
@@ -63,6 +65,13 @@ StatusCode GeneralNoiseTool::initialize() {
         log << MSG::ERROR << "Couldn't set up GlastDetSvc!" << endreq;
         return sc;
     }
+
+    // Get the tracker ToT service 
+    //sc = service("TkrToTSvc", m_gdSvc);
+    //if ( sc.isFailure() ) {
+    //    log << MSG::ERROR << "Couldn't set up the ToT service" << endreq;
+    //   return sc;
+    //}
 
     // get the list of layers, to be used to add noise to otherwise empty layers
     m_layers.setPrefix(m_gdSvc->getIDPrefix());
@@ -115,17 +124,18 @@ StatusCode GeneralNoiseTool::execute() {
         idents::VolumeIdentifier id = *it;
         if ( siPlaneMap.find(id) == siPlaneMap.end() ) {
             SiStripList* siPlane = new SiStripList;
-            noiseCount += siPlane->addNoise(s_noiseSigma, s_noiseOccupancy,
-                                            s_noiseThreshold);
+            noiseCount += siPlane->addNoise(m_noiseSigma, m_noiseOccupancy,
+                                            m_noiseThreshold, m_trigThreshold);
             if ( siPlane->size() > 0 )
                 siPlaneMap[id] = siPlane;
             else
                 delete siPlane;
         }
         else
-            noiseCount += siPlaneMap[id]->addNoise(s_noiseSigma,
-                                                   s_noiseOccupancy,
-                                                   s_noiseThreshold);
+            noiseCount += siPlaneMap[id]->addNoise(m_noiseSigma,
+                                                   m_noiseOccupancy,
+                                                   m_noiseThreshold,
+                                                   m_trigThreshold);
     }
 
     log << MSG::DEBUG << "added " << noiseCount <<" noise hits" << endreq;

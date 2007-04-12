@@ -6,7 +6,7 @@
 *
 * @author Michael Kuss
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitToDigiTool.cxx,v 1.10 2006/02/14 19:29:50 lsrea Exp $
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitToDigiTool.cxx,v 1.11 2006/03/13 19:30:33 lsrea Exp $
 */
 
 #include "GeneralHitToDigiTool.h"
@@ -33,12 +33,17 @@
 #include "GaudiKernel/DataObject.h"
 
 #include <sstream>
+#include <vector>
 
 static const ToolFactory<GeneralHitToDigiTool>    s_factory;
 const IToolFactory& GeneralHitToDigiToolFactory = s_factory;
 
-double GeneralHitToDigiTool::s_totThreshold =GeneralNoiseTool::noiseThreshold();
+//double GeneralHitToDigiTool::m_totThreshold =GeneralNoiseTool::noiseThreshold();
 //int    GeneralHitToDigiTool::s_maxHits      = 64;
+
+namespace {
+    bool makeStripList = false;
+}
 
 
 GeneralHitToDigiTool::GeneralHitToDigiTool(const std::string& type,
@@ -50,7 +55,7 @@ AlgTool(type, name, parent) {
 
     declareProperty("killBadStrips", m_killBadStrips = true );
     declareProperty("killFailed",    m_killFailed    = true );
-    declareProperty("totThreshold",  s_totThreshold);
+    declareProperty("totThreshold",  m_totThreshold);
 }
 
 
@@ -75,12 +80,14 @@ StatusCode GeneralHitToDigiTool::initialize()
         return StatusCode::FAILURE;
     }
 
-    if ( s_totThreshold != GeneralNoiseTool::noiseThreshold() )
+    /*
+    if ( m_totThreshold != GeneralNoiseTool::noiseThreshold() )
         log << MSG::WARNING
         << "You are declaring a different threshold for the ToT ("
         << totThreshold() << ") than for the noise ("
         << GeneralNoiseTool::noiseThreshold() << ")!" << endreq;
     //    std::exit(42);
+    */
 
     IService* iService = 0;
     sc = serviceLocator()->service("EventDataSvc", iService, true );
@@ -180,6 +187,108 @@ StatusCode GeneralHitToDigiTool::execute()
     log << endreq;
 
     if (debug) log << MSG::DEBUG << "execute " << endreq;
+
+    // add code to make tot threshold plots here: <===
+    /*
+    double chipArray[16][18][2][24];
+    int    chipCount[16][18][2][24];
+    double chipMed[16][18][2][24];
+    double chipHi[16][18][2][24];
+    std::vector<double> chipThresh(64);
+    int twr, lyr, view, strip, chip, channel, ch;
+
+    for (twr=0; twr<16; ++twr) {
+        for (lyr=0; lyr<18; ++lyr) {
+            for (view=0; view<2; ++view) {
+                for (chip=0; chip<24; ++chip) {
+                    chipArray[twr][lyr][view][chip] = 0.0;
+                    chipCount[twr][lyr][view][chip] = 0;
+                }
+            }
+        }
+    }
+
+    for (twr=0; twr<16; ++twr) {
+        for (lyr=0; lyr<18; ++lyr) {
+            for (view=0; view<2; ++view) {
+                for (strip=0; strip<1536; ++strip) {
+                    double scale;
+                    channel = strip%64;
+                    if(channel==0) { 
+                        scale  = m_ttotSvc->getMuonScale(twr, lyr, view, strip);
+                        for (ch=0; ch<64; ++ch) {chipThresh[ch] = -1.0;}
+                    }
+
+                    double thresh = m_ttotSvc->getThreshold(twr, lyr, view, strip);
+                    //totArray[twr][lyr][view][strip] = thresh*scale;
+                    //if (strip%50==0) {
+                    //    std::cout << thresh << " " << scale << " " << thresh*scale << " ";                   
+                    //    std::cout << twr << " " << lyr << " " << view << " " << strip << std::endl;
+                    //}
+                    //std::cout << thresh*scale << " " ;
+                    //if((strip+1)==20) std::cout << std::endl;
+                    if(thresh*scale>0) {
+                        chipArray[twr][lyr][view][strip/64] += thresh*scale;
+                        chipCount[twr][lyr][view][strip/64]++;
+                        chipThresh[strip%64] = thresh*scale;
+                    }
+                    if(channel==63) {
+                        std::sort(chipThresh.begin(), chipThresh.end());
+                        double chipMedian = 0.5*(chipThresh[31]+chipThresh[32]);
+                        double chipHigh   = chipThresh[60];
+                        chipMed[twr][lyr][view][strip/64] = chipMedian;
+                        chipHi[twr][lyr][view][strip/64] = chipHigh;
+                    }
+                }
+            }
+        }
+    }
+    //std::cout << std::endl;
+        
+    
+    for (twr=0; twr<16; ++twr) {
+        for (lyr=0; lyr<18; ++lyr) {
+            for (view=0; view<2; ++view) {
+                for (chip=0; chip<24; ++chip) {
+                    int chipCt = chipCount[twr][lyr][view][chip];
+                    if(chipCt>1) {
+                        chipArray[twr][lyr][view][chip] /= chipCt;
+
+                        //std::cout << chipArray[twr][lyr][view][chip] << " " ;
+                        //if(chipCt>59) std::cout << chipMed[twr][lyr][view][chip] << " " ;
+                        if(chipCt>59) std::cout << chipHi[twr][lyr][view][chip] << " " ;
+                    }
+                }
+                std::cout << std::endl;
+            }
+        }
+    }*/
+    
+   /*
+   for (twr=0; twr<16; ++twr) {
+        for (lyr=0; lyr<18; ++lyr) {
+            for (view=0; view<2; ++view) {
+                for (strip=0; strip<1536; ++strip) {
+                    double scale, chipAve;
+                    if(strip%64==0) {
+                        scale  = m_ttotSvc->getMuonScale(twr, lyr, view, strip);
+                        chip = strip/64;
+                        chipAve = chipArray[twr][lyr][view][chip];
+                    }
+
+                    double thresh = m_ttotSvc->getThreshold(twr, lyr, view, strip);
+                    if(thresh*scale>0&&chipAve>0) {
+                        std::cout << thresh*scale - chipAve << " " ;
+                        if(strip+1%20==0) std::cout << std::endl;
+                    }
+                }
+            }
+        }
+    }
+    //std::cout << std::endl;
+    */
+
+    // <===
 
     // Take care of insuring that the data area has been created
     DataObject* pDummy;
@@ -281,6 +390,9 @@ StatusCode GeneralHitToDigiTool::execute()
         for (itStrip=sList->begin(); itStrip!=sList->end(); ++itStrip ) {
             int status = itStrip->stripStatus();
             // delete hit if relevant bits are set
+            if(makeStripList) {
+                std::cout << itStrip->energy() << std::endl;  /* <==== */
+            }
             if ((status&SiStripList::NODATA)!=0) {
                 if(debug) {
                    log << MSG::DEBUG << "Removed strip " << itStrip->index() 
@@ -288,6 +400,10 @@ StatusCode GeneralHitToDigiTool::execute()
                 }
                 continue;
             }
+            if(makeStripList) {
+                std::cout << itStrip->energy() << std::endl;  /* <==== */
+            } 
+
             const int stripId = itStrip->index();
             nStrip[view]++;
             nStrips++;

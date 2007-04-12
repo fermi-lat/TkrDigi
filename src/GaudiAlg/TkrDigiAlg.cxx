@@ -13,7 +13,7 @@
  *
  * @author Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/GaudiAlg/TkrDigiAlg.cxx,v 1.2 2004/03/09 20:06:30 lsrea Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/GaudiAlg/TkrDigiAlg.cxx,v 1.3 2005/08/16 22:00:26 lsrea Exp $
  */
 
 #include "TkrDigiAlg.h"
@@ -64,6 +64,12 @@ StatusCode TkrDigiAlg::initialize() {
         return StatusCode::FAILURE;
     }
 
+    if ( createSubAlgorithm("TkrDigiChargeAlg", "TkrDigiChargeAlg",
+                            m_chargeAlg).isFailure() ) {
+        log << MSG::ERROR << "could not open TkrDigiChargeAlg" << endreq;
+        return StatusCode::FAILURE;
+    }
+
     if ( createSubAlgorithm("TkrDigiHitRemovalAlg", "TkrDigiHitRemovalAlg",
                             m_hitRemovalAlg).isFailure() ) {
         log << MSG::ERROR << "could not open TkrDigiHitRemovalAlg" << endreq;
@@ -78,8 +84,10 @@ StatusCode TkrDigiAlg::initialize() {
 
     // Sets the property controlling the type of Tool to be used.
     m_mcToHitAlg->setProperty(  "Type", m_type);
-    // Currently only one choice, "General".
-    m_noiseAlg->setProperty(    "Type", "General");
+    // "General", or skip for Bari.
+    m_noiseAlg->setProperty(    "Type", (m_type=="Simple"? "General": "none"));
+    // "General", or skip for Bari.
+    m_chargeAlg->setProperty(    "Type", (m_type=="Simple"? "General": "none"));
     // Currently only one choice, "General"
     m_hitRemovalAlg->setProperty( "Type", "General");
     // Currently only one choice, "General".
@@ -104,6 +112,12 @@ StatusCode TkrDigiAlg::execute() {
 
     if( m_mcToHitAlg->execute().isFailure() ) {
         log << MSG::ERROR << m_mcToHitAlg->name() << " FAILED to execute!"
+            << endreq;
+        return StatusCode::FAILURE;
+    }
+
+    if( m_chargeAlg->execute().isFailure() ) {
+        log << MSG::ERROR << m_chargeAlg->name() << " FAILED to execute!"
             << endreq;
         return StatusCode::FAILURE;
     }

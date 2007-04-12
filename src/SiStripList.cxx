@@ -6,12 +6,11 @@
 * @author Toby Burnett, Leon Rochester (original authors)
 * @author Michael Kuss
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.cxx,v 1.22 2006/02/14 19:29:48 lsrea Exp $
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.cxx,v 1.23 2006/03/21 01:16:40 usher Exp $
 */
 
 #include "SiStripList.h"
 #include "General/GeneralNoiseTool.h"
-#include "TkrUtil/ITkrToTSvc.h"
 
 #include "CLHEP/Random/RandFlat.h"
 #include "CLHEP/Random/RandGauss.h"
@@ -29,6 +28,7 @@ inline double copysign(double a, double b){return _copysign(a,b);}
 
 namespace {
     bool debug = false;
+    bool printEdep = true;
 }
 
 // static variable implementations--now initialized with detsvc.
@@ -42,7 +42,7 @@ double  SiStripList::s_ssd_gap       = 0.0; // 0.025;
 double  SiStripList::s_ladder_gap    = 0.0; // 0.200;
 
 
-StatusCode SiStripList::initialize(IGlastDetSvc* ds) 
+StatusCode SiStripList::initialize(IGlastDetSvc* ds/*, ITkrToTSvc* ts*/) 
 {
     // Purpose and Method: initializes the static members from the detector svc
     // Inputs: pointer to the detector service
@@ -50,6 +50,7 @@ StatusCode SiStripList::initialize(IGlastDetSvc* ds)
     // Dependencies: the detector service has to be initialized first
 
     s_detSvc = ds;
+    //s_totSvc = ts;
     double temp;
 
     if ( s_detSvc->getNumericConstByName("nWaferAcross",
@@ -139,7 +140,7 @@ export template<class T> void SiStripList::addStrip(const int strip,
             continue;
         if ( strip == index ) {
             s->addEnergy(dE);
-            s->addHit(hit);
+            if (hit!=0) s->addHit(hit);
             s->addTime(t1, t2);
             return;
         }
@@ -269,7 +270,7 @@ void SiStripList::score(const HepPoint3D& o, const HepPoint3D& p,
 
 
 int SiStripList::addNoise(const double sigma, const double occupancy,
-                          const double threshold)
+                          const double threshold, const double trigThreshold)
 {
     // Purpose and Method: this function call other functions to add noise
     // Inputs: noise rms in MeV, strip occupancy fraction, and energy threshold
@@ -277,8 +278,8 @@ int SiStripList::addNoise(const double sigma, const double occupancy,
     // Dependencies: none
 
     addElectronicNoise(sigma);
-    const int addedStrips   = addNoiseStrips(occupancy, threshold);
-    const int removedStrips = removeStripsBelowThreshold(threshold);
+    const int addedStrips   = addNoiseStrips(occupancy, threshold, trigThreshold);
+    const int removedStrips = removeStripsBelowThreshold(threshold, trigThreshold);
 
     return addedStrips - removedStrips;
 }
@@ -295,17 +296,23 @@ void SiStripList::addElectronicNoise(const double sigma)
     iterator iter = begin();
     while ( iter != end() ) {
         // check for the electronic noise flag
-        if ( !iter->electronicNoise() ) {
+        double eDep = iter->energy();
+        
+        //if(printEdep&&!iter->electronicNoise()) std::cout << eDep << std::endl;
+
+        if ( !(iter->electronicNoise())) {
             iter->addEnergy(CLHEP::RandGauss::shoot(0.0, sigma));  // in MeV
             iter->electronicNoise(true);
         }
         ++iter;
+        
     }
 }
 
 
 int SiStripList::addNoiseStrips(const double occupancy,
-                                const double threshold) 
+                                const double threshold,
+                                const double trigThreshold) 
 {
     // Purpose and Method: adds noise hits to the strip list
     // Inputs: strip occupancy fraction, and energy threshold
@@ -331,7 +338,10 @@ int SiStripList::addNoiseStrips(const double occupancy,
                 //            addStrip<Event::McPositionHit>(strip, threshold*(1.0-log(RandFlat::shoot())));
                 Event::McPositionHit* dummy;
                 dummy = 0;
-                addStrip(strip, threshold*(1.0-log(CLHEP::RandFlat::shoot())), dummy);
+
+                double energy = threshold*(1.0-log(CLHEP::RandFlat::shoot()));
+                addStrip(strip, energy, dummy);
+                //if(printEdep) std::cout << energy << std::endl;
                 ++newStrips;
             }
         }
@@ -341,7 +351,8 @@ int SiStripList::addNoiseStrips(const double occupancy,
 }
 
 
-int SiStripList::removeStripsBelowThreshold(const double threshold) 
+int SiStripList::removeStripsBelowThreshold(const double threshold, 
+                                            const double trigThreshold) 
 {
     // Purpose and Method: Flags strips which an energy deposit below
     //                     "threshold".  Strips can have a low energy if:
@@ -359,13 +370,18 @@ int SiStripList::removeStripsBelowThreshold(const double threshold)
     iterator iter = begin();
     bool first = true;
     while ( iter != end() ) {
-        if ( iter->energy() < threshold ) {
+        double eDep = iter->energy();
+        //if(printEdep&&!iter->electronicNoise()&&eDep>threshold) std::cout << eDep << std::endl;
+        if ( eDep < trigThreshold) {
+            iter->setStripStatus(BELOWTRIGTHRESH);
+        }
+
+        if ( eDep < threshold ) {
+
             /*
             std::cout << "removing strip with energy " << iter->energy()
             << " below threshold " << threshold << std::endl;
             */
-            //For now, trigger and data thresholds are the *same*!
-            iter->setStripStatus(BELOWTRIGTHRESH);
             iter->setStripStatus(BELOWDATATHRESH);
             if(debug) {
                 if (first) {
@@ -461,12 +477,12 @@ void SiStripList::getToT(int* ToT, const int tower, const int layer, const int v
         if(simpleToT[i]>0) { 
             ToT[i] =  std::min( simpleToT[i], totMax );
         }
-    if (sep==sepSentinel) break;
+        if (sep==sepSentinel) break;
     }
 }
 
 bool SiStripList::isActiveHit(HepVector3D& inVec, HepVector3D& outVec, 
-                          double& eLoss, bool& trimmed) 
+                              double& eLoss, bool& trimmed) 
 {
     trimmed = false;
     bool active  = true;
@@ -527,6 +543,6 @@ bool SiStripList::isActiveHit(HepVector3D& inVec, HepVector3D& outVec,
     if (fractionIn<1.0) trimmed = true;
     if (fractionIn<=0.0) active = false;
     eLoss *= fractionIn;
-    
+
     return active;
 }

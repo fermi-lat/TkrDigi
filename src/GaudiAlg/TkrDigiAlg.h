@@ -7,12 +7,15 @@
  *     TkrDigiMcToHitAlg
  *     TkrDigiNoiseAlg
  *     TkrDigiHitToDigiAlg
+ *     TkrHitRemovalAlg
+ *     TkrChargeAlg
+
  * Each sub-algorithm can choose among different tools.  At the end, MC hits are
  * converted into tkr digis.
  *
  * @author Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/GaudiAlg/TkrDigiAlg.h,v 1.1 2004/02/27 10:14:15 kuss Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/GaudiAlg/TkrDigiAlg.h,v 1.2 2005/08/16 22:00:26 lsrea Exp $
  */
 
 #ifndef __TKRDIGIALG_H__
@@ -44,6 +47,7 @@ class TkrDigiAlg : public Algorithm {
     Algorithm* m_hitRemovalAlg;
     Algorithm* m_noiseAlg;
     Algorithm* m_hitToDigiAlg;
+    Algorithm* m_chargeAlg;
 
 };
 
