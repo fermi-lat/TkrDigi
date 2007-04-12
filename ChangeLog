@@ -1,5 +1,23 @@
 ------------------------------------------------------------
 User: lsrea  Thu Apr 12 09:04:43 PDT 2007
+TkrDigi/src/General
+
+Modified Files:
+	GeneralHitToDigiTool.cxx GeneralHitToDigiTool.h 
+	GeneralNoiseTool.cxx GeneralNoiseTool.h 
+Added Files:
+	GeneralChargeTool.cxx GeneralChargeTool.h 
+Log Message:
+Prepare for tag v2r6
+1) minor re-org of code
+2) default data threshold from 35% of mini to 31% of mini
+3) Don't call GeneralNoiseTool for BariAlg
+4) first implementation of charge-spreading (not called for BariAlg)
+       invoked for heavy ions and normal particles
+
+    *
+------------------------------------------------------------
+User: lsrea  Thu Apr 12 09:04:43 PDT 2007
 TkrDigi/src/GaudiAlg
 
 Modified Files:
