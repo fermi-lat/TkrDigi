@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: ngigliet  Fri Apr 27 07:07:12 PDT 2007
+TkrDigi/src/Bari
+
+Added Files:
+	TimeOr.h 
+Log Message:
+
+ Revised Bari code with charge sharing; removed signal simulation for the strips...
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: v2r6p1, operation: add
 Package: TkrDigi
