@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: ngigliet  Fri Apr 27 03:13:30 PDT 2007
+TkrDigi/src/Bari
+
+Added Files:
+	Digi.cxx Digi.h TkrTrigger.cxx TkrTrigger.h cariche 
+Log Message:
+
+Revised Bari code with charge sharing; removed signal simulation for the strips 
+
+    *
+------------------------------------------------------------
 User: ngigliet  Fri Apr 27 03:09:11 PDT 2007
 TkrDigi/src/Bari
 
