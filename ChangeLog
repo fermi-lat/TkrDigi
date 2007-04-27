@@ -1,4 +1,16 @@
 ------------------------------------------------------------
+User: ngigliet  Fri Apr 27 03:09:11 PDT 2007
+TkrDigi/src/Bari
+
+Modified Files:
+	BariMcToHitTool.cxx BariMcToHitTool.h Cluster.cxx Cluster.h 
+	ClusterPropagator.cxx ClusterPropagator.h CurrOr.cxx CurrOr.h 
+	DigiElem.cxx DigiElem.h InitCurrent.cxx InitCurrent.h 
+	TkrDigitizer.cxx TkrDigitizer.h 
+Log Message:
+log file
+    *
+------------------------------------------------------------
 TAG
 Tag name: v2r6, operation: add
 Package: TkrDigi
