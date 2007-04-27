@@ -6,7 +6,7 @@
  *
  * @authors  M. Brigida, M. Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Bari/CurrOr.h,v 1.1 2004/02/27 10:14:14 kuss Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Bari/CurrOr.h,v 1.2 2004/03/18 11:35:08 ngigliet Exp $
  */
 
 #ifndef CURROR_H
@@ -40,8 +40,11 @@ class CurrOr {
      * @param 3  array of currents 
      * @param 4  pointer to a McPositionHit
      */
-    void add(const idents::VolumeIdentifier, const int, const double*,
-             Event::McPositionHit*);
+  void add(const idents::VolumeIdentifier, const int, const double*,
+           Event::McPositionHit*, int);
+  void add(const idents::VolumeIdentifier, const int, const double*,
+           Event::McPositionHit*);
+ 
 
     /// adds a vector of DigiElem
     void add(const DigiElemCol&);
@@ -61,6 +64,7 @@ class CurrOr {
      *           the strip, or m_list.end().
      */
     DigiElemCol::iterator getPos(const idents::VolumeIdentifier, const int);
+  int ii;
 
 };
 

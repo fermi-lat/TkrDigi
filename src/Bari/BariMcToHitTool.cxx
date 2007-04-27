@@ -6,7 +6,7 @@
 *
 * @authors Nico Giglietto, Monica Brigida, Leon Rochester, Michael Kuss
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Bari/BariMcToHitTool.cxx,v 1.11 2004/10/12 19:02:28 lsrea Exp $
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Bari/BariMcToHitTool.cxx,v 1.12 2004/11/23 23:08:22 lsrea Exp $
 */
 
 #include "BariMcToHitTool.h"
@@ -47,6 +47,9 @@ AlgTool(type, name, parent)
 {
     // Declare the additional interface
     declareInterface<IMcToHitTool>(this);
+    declareProperty("Type", m_type);
+    // std::cout << " sss " << " " << type << " " << name << std::endl;
+
 }
 
 StatusCode BariMcToHitTool::initialize()
@@ -59,19 +62,17 @@ StatusCode BariMcToHitTool::initialize()
 
     StatusCode sc = StatusCode::SUCCESS;
     MsgStream log(msgSvc(), name());
-    log << MSG::INFO << "initialize " << endreq;
+    log << MSG::INFO << " BariMcToHitTool initialize" << endreq;
 
     // Set a default current file
     // new file currents is more compact
     declareProperty("CurrentsFile",
-		    m_CurrentsFile="$(TKRDIGIROOT)/src/Bari/correnti");
-
-
+		    m_CurrentsFile="$(TKRDIGIROOT)/src/Bari/cariche");
+    //    declareProperty("Type", m_type="Bari");
     // Do the currents file (once) - LSR
-    // OpenCurrent now returns a status code - LSR    
     facilities::Util::expandEnvVar(&m_CurrentsFile);
     // trying to eliminate memory leak candidates
-    //    m_openCurr = new InitCurrent();
+ 
     sc = m_openCurr.OpenCurrent(m_CurrentsFile); 
     if ( sc.isFailure() ) {
         log <<  MSG::ERROR <<  "currents file " <<  m_CurrentsFile
@@ -79,6 +80,7 @@ StatusCode BariMcToHitTool::initialize()
         return sc;
     }
     log << MSG::INFO << "Opening currents file " << m_CurrentsFile << endreq;
+
 
     IService* iService = 0;
     sc = serviceLocator()->service("EventDataSvc", iService, true);
@@ -133,10 +135,10 @@ StatusCode BariMcToHitTool::execute()
     log << MSG::DEBUG << "execute " << endreq;
 
     int kk = 0; // to count hits
-    CurrOr CurrentOr;
+    CurrOr CurrentOr; /// no!!
     TkrDigitizer Digit;
     Digit.Clean();
-
+  
     //Look to see if the McPositionHitCol object is in the TDS
     SmartDataPtr<Event::McPositionHitCol>
         hits(m_edSvc, EventModel::MC::McPositionHitCol);
@@ -194,7 +196,7 @@ StatusCode BariMcToHitTool::execute()
             const double energy = pHit->depositedEnergy();
 
             log << MSG::DEBUG;
-            if (log.isActive() ) {
+	    if (log.isActive() ) {
                 const int tower   = volId.getTower().id();
                 const int bilayer = volId.getLayer();
                 const int view    = volId.getView();
@@ -205,12 +207,13 @@ StatusCode BariMcToHitTool::execute()
                     << " entry(" << planeEntry.x()<<", "<<planeEntry.y()<<", "<<planeEntry.z() 
                     << ") exit (" << planeExit.x()<<", "<<planeExit.y()<<", "<<planeExit.z() << ")";
                 log << endreq;
-            }
-
+	    }
+	    /// bari Digi call -- Monica
             Digit.set(energy, planeEntry, planeExit, volId.getPlaneId(), pHit);
             // analog section
-            Digit.setDigit(&m_openCurr);
-            Digit.clusterize(&CurrentOr);
+	    Digit.setDigit(&m_openCurr);
+	    //   
+	    Digit.clusterize(&CurrentOr);
         } // end of loop over hits
     }
     // digital section

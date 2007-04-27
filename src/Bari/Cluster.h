@@ -28,6 +28,8 @@ public:
     
     Cluster();
     ~Cluster();
+
+
     
     HepPoint3D* GetClusCoord() { return XCluster;} 
     double* GetClusCharge()    { return QCluster;} 
@@ -39,9 +41,14 @@ public:
     
     static double SiPitch; 
     inline double GetPitch(){return SiPitch;}
-    void SetCluster(/*int, int, int,*/ HepPoint3D, HepPoint3D, double);
+    void SetCluster(HepPoint3D, HepPoint3D, double);
     void Clean();  
-    
+    void xtoid(float, int&, int&);
+
+    double* GetStripCharge()    { return QStrip;} 
+    int* GetStripID()           { return IDStrip;}
+    int GetNumberOfStrip()  { return NumberOfStrip;}  
+
 private:
     
     inline void SetSingleClusterCoordinates(HepPoint3D XClust, int Number)
@@ -60,7 +67,49 @@ private:
     double QCluster [15000];
     int IDCluster[15000]; 
     int NumberOfCluster; // MAX 5000
+    double Frac;
+    double QStrip[5000];
+    int IDStrip[5000]; 
+
+  int NumberOfStrip; // MAX 5000
+  
+  double Etot;
+  int Id1, Id2;
+  int ID1, ID2, ID11, ID21;
+  int NumFiredStrip;
+  int PairNumber;
+  double EClus;
+  double len;
+  double L;
+  double dist;
+  double charge;
+
+  double qqq;
+
+  double t; // track length  
+  HepVector3D XPos;
+  HepPoint3D XClust;
+  double QClust;
+  int ierr;
+   
+  double rr;
+  double Qtot;
+  double xl;
+  double  cr;
+
+  inline void clear(){
+    for(int i=0; i< 10; i++){
+      QStrip[i]= 0.;
+      IDStrip[i] = 0.;
+    }
+  };
     
+  inline void SetSingleStripCharge(double QCharge, int Number)
+  { QStrip[Number] = QCharge;};
+
+  inline void SetStripID(int ID, int Number)
+  { IDStrip[Number] = ID; };
+
 };
 
 #endif
