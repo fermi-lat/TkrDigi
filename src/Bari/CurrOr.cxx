@@ -6,7 +6,7 @@
  *
  * @authors  M. Brigida, M. Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Bari/CurrOr.cxx,v 1.1 2004/02/27 10:14:14 kuss Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Bari/CurrOr.cxx,v 1.2 2004/03/18 11:35:08 ngigliet Exp $
  */
 
 #include "CurrOr.h"
@@ -15,7 +15,7 @@
 
 
 
-
+ii =-1;
 void CurrOr::print() const {
     for ( DigiElemCol::const_iterator it=m_list.begin(); it!=m_list.end(); ++it)
 	std::cout << " Tower " << it->getTower()
@@ -54,11 +54,10 @@ void CurrOr::add(const DigiElem* d) {
     // Outputs: none
     // Dependencies: none
     // Restrictions and Caveats: none
-
     DigiElemCol::iterator it = getPos(d->getVolId(), d->getStrip());
-    if ( it == m_list.end() )            // new plane to add
+    if ( it == m_list.end() ) {           // new plane to add
     	m_list.push_back(*d);
-    else { // add to existing plane
+    } else { // add to existing plane
       it->add(d->getCurrent());
       it->add(d->getHits());
     }
@@ -70,14 +69,14 @@ void CurrOr::addnew(const DigiElem* d) {
     // Outputs: none
     // Dependencies: none
     // Restrictions and Caveats: none
-
       DigiElemCol::iterator it = getPos(d->getVolId(), d->getStrip());
       if ( it != m_list.end() ){
-       it->add(d->getCurrent());
-       it->add(d->getHits());
+        it->add(d->getCurrent());
+	it->add(d->getHits());
       } 
-      m_list.push_back(*d); //add in every case
+      m_list.push_back(*d); //add in every case  **
 }
+
 
 void CurrOr::add(const idents::VolumeIdentifier volId, const int strip,
                  const double* I, Event::McPositionHit* pHit) {
@@ -87,10 +86,12 @@ void CurrOr::add(const idents::VolumeIdentifier volId, const int strip,
     // Outputs: none
     // Dependencies: none
     // Restrictions and Caveats: none
-
     DigiElem temp(volId, strip, I, pHit);
     add(&temp);
 }
+
+
+
 
 
 void CurrOr::add(const DigiElemCol& l) {
@@ -100,6 +101,6 @@ void CurrOr::add(const DigiElemCol& l) {
     // Outputs: none
     // Dependencies: none
     // Restrictions and Caveats: none
-  for ( DigiElemCol::const_iterator it=l.begin(); it!=l.end(); ++it )
+  for ( DigiElemCol::const_iterator it=l.begin(); it != l.end(); ++it )
     addnew(&*it);
 }
