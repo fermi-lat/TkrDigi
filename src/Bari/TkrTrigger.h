@@ -27,9 +27,9 @@ public:
 
 private:
 
-  static const int Nlayer = 18;
+  static const unsigned int Nlayer = 18;
   int i;
-  int l;
+  unsigned int l;
   int t, t1, t0;
   int pp;
   int Tower, Layer, View;

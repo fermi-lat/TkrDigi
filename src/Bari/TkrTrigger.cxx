@@ -1,17 +1,11 @@
 //////////////////////////////////
 //  class TkrTrigger
-//  author: M.Brigids
+//  author: M.Brigida
 //
-//  Timng study   (April 2007)
+//  Timing study   (April 2007)
 //////////////////////////////////
 
-#include <iostream.h> 
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>  
-#include <fstream.h>
 #include <string>
-#include <stdio.h>
 #include <fstream>
 #include <iostream>
 

@@ -1,6 +1,9 @@
 /** @file release.notes
 @verbatim
  Package TkrDigi
+ v2r6p3     20-Apr-2007  MK  fix linux warning, windows errors (hopefully)
+ v2r6p2
+ v2r6p1
  v2r6       14-Apr-2007  LSR 1) minor re-org of code
                              2) Lower data threshold from 35% mini to 31% mini
                              3) Stop calling GeneralNoiseTool for BariAlg 
