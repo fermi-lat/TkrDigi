@@ -15,7 +15,7 @@
 
 
 
-ii =-1;
+//ii =-1;
 void CurrOr::print() const {
     for ( DigiElemCol::const_iterator it=m_list.begin(); it!=m_list.end(); ++it)
 	std::cout << " Tower " << it->getTower()

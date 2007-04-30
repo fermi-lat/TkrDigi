@@ -39,9 +39,7 @@ class TkrDigitizer {
     void Clean();
     /// digitization
     TotOr* digitize(const CurrOr&);
-
- private:
-  
+  //NG to compile in VC8
   static const double Tack0    = 1000.; // ns
   static const double TriReq   = 1000.; //ns
   static const double Gain0    = 100.; // mV/fC
@@ -50,6 +48,8 @@ class TkrDigitizer {
   static const double Vsat     = 1100.; // mV, Saturation voltage output   
   static const int Tmax        = 5000;
   static const int NTw         = 16;
+
+ private:
 
   double T1[Tmax];
   double T2[Tmax];
