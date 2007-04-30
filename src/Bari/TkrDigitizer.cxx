@@ -18,6 +18,12 @@
 #include "TkrUtil/ITkrToTSvc.h"
 #include <string>
 
+const double TkrDigitizer::Tack0    = 1000.; // ns
+const double TkrDigitizer::TriReq   = 1000.; //ns
+const double TkrDigitizer::Gain0    = 100.; // mV/fC
+const double TkrDigitizer::RmsGain0 = 6.; // mV/fC
+const double TkrDigitizer::Vth      = 125.; // mV = 1/4 MIP, 1 MIP => 5 fC => 500 mV
+const double TkrDigitizer::Vsat     = 1100.; // mV, Saturation voltage output   
 
 TkrDigitizer::TkrDigitizer() {
     m_clusterPar  = new Cluster();
@@ -80,7 +86,7 @@ void TkrDigitizer::clusterize(CurrOr* CurrentOr) {
 // Digitize --> Digital section
 TotOr* TkrDigitizer::digitize(const CurrOr& CurrentOr) {
     const CurrOr::DigiElemCol& l = CurrentOr.getList();
-    const ITkrToTSvc* pToTSvc;
+    //    const ITkrToTSvc* pToTSvc;
     energy = 0.;
     charge = 0;
     tim1   = 0;
@@ -89,7 +95,7 @@ TotOr* TkrDigitizer::digitize(const CurrOr& CurrentOr) {
     iit = 0;
     T1Trig = 99999999.;
     for ( CurrOr::DigiElemCol::const_iterator it=l.begin(); it!=l.end(); ++it ){// loop
-      double* PNum = it->getCurrent();     
+      const double* PNum = it->getCurrent();     
       PP          = 0;   
       ToT         = 0;
       DeltaT      = 0;
@@ -160,8 +166,8 @@ TotOr* TkrDigitizer::digitize(const CurrOr& CurrentOr) {
       if (T1Trig > 0 && T2[iit] > Tack ) {
 	energy = CURRENT_TO_ENERGY * (fabs(QQ[iit]));
 	energy = energy *1000.;     // keV
-	tim1   = Tack/10.;          // time1, in 10 ns step
-	tim2   =(T2[iit]-Tack)/10.; //  time2, in 10 ns step
+	tim1   = static_cast<int>(Tack) / 10;          // time1, in 10 ns step
+	tim2   = static_cast<int>(T2[iit]-Tack) / 10; //  time2, in 10 ns step
 	//	std::cout << " Bari DIGI STORE " << energy  << "- charge= " << QQ[iit]
 	//  << " times " << tim1 << " " << tim2 << " strip ID " << it->getStrip()<< std::endl;
 	m_totLayer->add(it->getVolId(), it->getStrip(), it->getHits(),tim1, tim2, energy);
@@ -170,5 +176,3 @@ TotOr* TkrDigitizer::digitize(const CurrOr& CurrentOr) {
     }// end for
     return m_totLayer;
 }
-
-

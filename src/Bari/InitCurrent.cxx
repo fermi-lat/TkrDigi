@@ -15,6 +15,11 @@
 
 #include "InitCurrent.h"
 
+const double InitCurrent::Xmin = -0.114;
+const double InitCurrent::Xmax = 0.114;
+const double InitCurrent::Zmin = 0.;
+const double InitCurrent::Zmax = 0.4;
+
 InitCurrent::InitCurrent()
 {
     // trying to eliminate prospective memory leaks.  CURR was nowhere deleted.

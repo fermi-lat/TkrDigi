@@ -42,10 +42,10 @@ private:
   double Xpos;
   double Zpos;
 
-  static const double Xmin = -(0.114);
-  static const double Xmax = 0.114;
-  static const double Zmin = 0.;
-  static const double Zmax = 0.4;
+  static const double Xmin/* = -(0.114)*/;
+  static const double Xmax/* = 0.114*/;
+  static const double Zmin/* = 0.*/;
+  static const double Zmax/* = 0.4*/;
   double DeltaX;
   double DeltaZ;
 
