@@ -21,7 +21,7 @@ class CurrOr {
 
  public:
 
-    CurrOr(){}
+    CurrOr(){ii=-1;}
     ~CurrOr(){}
 
     typedef std::vector<DigiElem> DigiElemCol;

@@ -98,9 +98,10 @@ private:
   double  cr;
 
   inline void clear(){
-    for(int i=0; i< 10; i++){
+    //NG vector dimension is 5000
+    for(int i=0; i< 5000; i++){
       QStrip[i]= 0.;
-      IDStrip[i] = 0.;
+      IDStrip[i] = 0;
     }
   };
     

@@ -160,8 +160,8 @@ TotOr* TkrDigitizer::digitize(const CurrOr& CurrentOr) {
       if (T1Trig > 0 && T2[iit] > Tack ) {
 	energy = CURRENT_TO_ENERGY * (fabs(QQ[iit]));
 	energy = energy *1000.;     // keV
-	tim1   = Tack/10;          // time1, in 10 ns step
-	tim2   =(T2[iit]-Tack)/10; //  time2, in 10 ns step
+	tim1   = Tack/10.;          // time1, in 10 ns step
+	tim2   =(T2[iit]-Tack)/10.; //  time2, in 10 ns step
 	//	std::cout << " Bari DIGI STORE " << energy  << "- charge= " << QQ[iit]
 	//  << " times " << tim1 << " " << tim2 << " strip ID " << it->getStrip()<< std::endl;
 	m_totLayer->add(it->getVolId(), it->getStrip(), it->getHits(),tim1, tim2, energy);
