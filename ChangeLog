@@ -1,5 +1,15 @@
 ------------------------------------------------------------
 User: kuss  Mon Apr 30 10:43:58 PDT 2007
+TkrDigi/doc
+
+Modified Files:
+	release.notes 
+Log Message:
+fix linux warnings, windows errors (hopefully), preparing tag v2r6p3
+
+    *
+------------------------------------------------------------
+User: kuss  Mon Apr 30 10:43:58 PDT 2007
 TkrDigi/cmt
 
 Modified Files:
