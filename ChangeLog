@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: ngigliet  Thu May  3 03:43:14 PDT 2007
+TkrDigi/src/Bari
+
+Modified Files:
+	TkrDigitizer.cxx TkrDigitizer.h 
+Log Message:
+minor changes to compile package under VC8
+    *
+------------------------------------------------------------
 TAG
 Tag name: v2r6p3, operation: add
 Package: TkrDigi
