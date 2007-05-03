@@ -8,13 +8,11 @@
 #include "Cluster.h"
 #include "CurrOr.h"
 #include "ClusterPropagator.h"
-#include "TkrTrigger.h"
 #include "TotOr.h"
-#include "TimeOr.h"
 
 #include <string>
 #include "idents/VolumeIdentifier.h"
-
+#include "TkrUtil/ITkrToTSvc.h"
 #include "Event/MonteCarlo/McPositionHit.h"
 
 #define CURRENT_TO_ENERGY 1E4/1.6 * 3.6E-6 // Sadrozinski, PDG
@@ -27,30 +25,29 @@ class TkrDigitizer {
 
  public:
 
-    TkrDigitizer();
-    ~TkrDigitizer();
-    
-    void set(double, HepPoint3D, HepPoint3D, idents::VolumeIdentifier,
-	     Event::McPositionHit*);
-    /// set digit paramter
-    void setDigit(InitCurrent*);
-    /// set cluster parameter
-    void clusterize(CurrOr*);
-    void Clean();
-    /// digitization
-    TotOr* digitize(const CurrOr&);
-
- private:
-
+  TkrDigitizer();
+  ~TkrDigitizer();
+  
+  void set(double, HepPoint3D, HepPoint3D, idents::VolumeIdentifier,
+	   Event::McPositionHit*);
+  /* set digit paramter */
+  void setDigit(InitCurrent*);
+  /* set cluster parameter */
+  void clusterize(CurrOr*);
+  void Clean();
+  /* digitization */
+  TotOr* digitize(const CurrOr&);
   //NG to compile in VC8
-  static const double Tack0/*    = 1000.*/; // ns
-  static const double TriReq/*   = 1000.*/; //ns
-  static const double Gain0/*    = 100.*/; // mV/fC
-  static const double RmsGain0/* = 6.*/; // mV/fC
-  static const double Vth/*      = 125.*/; // mV = 1/4 MIP, 1 MIP => 5 fC => 500 mV
-  static const double Vsat/*     = 1100.*/; // mV, Saturation voltage output   
+  static const double Tack0    = 1000.; // ns
+  static const double TriReq   = 1000.; //ns
+  static const double Gain0    = 100.; // mV/fC
+  static const double RmsGain0 = 6.; // mV/fC
+  static const double Vth      = 125.; // mV = 1/4 MIP, 1 MIP => 5 fC => 500 mV
+  static const double Vsat     = 1100.; // mV, Saturation voltage output   
   static const int Tmax        = 5000;
   static const int NTw         = 16;
+
+ private:
 
   double T1[Tmax];
   double T2[Tmax];
@@ -62,7 +59,8 @@ class TkrDigitizer {
   int lTower;
   int lLayer;
   int lView;
-  int lStrip;
+  int index;
+  double e;
   double CorrPairNum,CPNum;
   double PP, cr, er;
   double Gain;
@@ -81,17 +79,15 @@ class TkrDigitizer {
   Event::McPositionHit* m_hit;
   HepPoint3D m_entry;
   HepPoint3D m_exit;
-  /// cluster propagator
+  /* cluster propagator */
   ClusterPropagator* m_clusterProp;
-  /// Param of cluster
+  /* Param of cluster */
   Cluster* m_clusterPar;
-  /// set current signals from each cluster
+  /* set current signals from each cluster */
   CurrOr* m_clusterCurr;
-  /// Or of ToT in a layer
+  /* Or of ToT in a layer */
   TotOr* m_totLayer;
-  // of of time for trigger
-  TimeOr* m_totOr;
-  TkrTrigger* TRIGGER;
-
+  ITkrToTSvc* pToTSvc;
 };
+
 #endif
