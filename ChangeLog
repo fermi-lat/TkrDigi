@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: ngigliet  Fri May  4 01:35:02 PDT 2007
+TkrDigi/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+minor changes to compile package under VC8
+    *
+------------------------------------------------------------
 TAG
 Tag name: v2r6p4, operation: add
 Package: TkrDigi
