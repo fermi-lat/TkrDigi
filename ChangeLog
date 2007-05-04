@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: ngigliet  Fri May  4 01:35:02 PDT 2007
+TkrDigi/src/Bari
+
+Modified Files:
+	TkrDigitizer.cxx TkrDigitizer.h 
+Log Message:
+minor changes to compile package under VC8
+    *
+------------------------------------------------------------
+User: ngigliet  Fri May  4 01:35:02 PDT 2007
 TkrDigi/cmt
 
 Modified Files:
