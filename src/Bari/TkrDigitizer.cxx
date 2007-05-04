@@ -18,6 +18,13 @@
 
 #include <string>
 
+const double TkrDigitizer::Tack0    = 1000.; // ns
+const double TkrDigitizer::TriReq   = 1000.; //ns
+const double TkrDigitizer::Gain0    = 100.; // mV/fC
+const double TkrDigitizer::RmsGain0 = 6.; // mV/fC
+const double TkrDigitizer::Vth      = 125.; // mV = 1/4 MIP, 1 MIP => 5 fC => 500 mV
+const double TkrDigitizer::Vsat     = 1100.; // mV, Saturation voltage output   
+
 
 TkrDigitizer::TkrDigitizer() {
     m_clusterPar  = new Cluster();

@@ -33,7 +33,7 @@ ApplicationMgr.TopAlg = {
 // ----------------------------
 // TkrDigi settings
 //
-//TkrDigiAlg.Type = "Bari";  // default: "Simple"
+TkrDigiAlg.Type = "Bari";  // default: "Simple"
 //TkrDigiNoiseAlg.Type = ""; // default: "General"
  
 // ----------------------------
