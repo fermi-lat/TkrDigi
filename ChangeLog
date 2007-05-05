@@ -1,5 +1,15 @@
 ------------------------------------------------------------
 User: kuss  Sat May  5 13:13:09 PDT 2007
+TkrDigi/src/Bari
+
+Modified Files:
+	TkrDigitizer.cxx 
+Log Message:
+re-fix linux warnings, windows errors, preparing tag v2r6p6
+
+    *
+------------------------------------------------------------
+User: kuss  Sat May  5 13:13:09 PDT 2007
 TkrDigi/doc
 
 Modified Files:
