@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: kuss  Sat May  5 13:13:09 PDT 2007
+TkrDigi/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+re-fix linux warnings, windows errors, preparing tag v2r6p6
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: v2r6p5, operation: add
 Package: TkrDigi
