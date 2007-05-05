@@ -1,6 +1,9 @@
 /** @file release.notes
 @verbatim
  Package TkrDigi
+ v2r6p6     05-May-2007  MK  re-fix linux warnings, windows errors
+ v2r6p5
+ v2r6p4
  v2r6p3     20-Apr-2007  MK  fix linux warning, windows errors (hopefully)
  v2r6p2
  v2r6p1
