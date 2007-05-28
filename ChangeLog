@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: ngigliet  Mon May 28 05:21:14 PDT 2007
+TkrDigi/src/Bari
+
+Removed Files:
+	ClusterNewton.cxx ClusterNewton.h TkrTrigger.cxx TkrTrigger.h 
+Log Message:
+obsolete file
+
+    *
+------------------------------------------------------------
 User: ngigliet  Mon May 28 05:19:31 PDT 2007
 TkrDigi/src/Bari
 
