@@ -36,7 +36,7 @@ class TkrDigitizer {
   void clusterize(CurrOr*);
   void Clean();
   /* digitization */
-  TotOr* digitize(const CurrOr&);
+  TotOr* digitize(const CurrOr&, ITkrToTSvc*);
  //NG to compile in VC8
   static const double Tack0/*    = 1000.*/; // ns
   static const double TriReq/*   = 1000.*/; //ns
@@ -54,6 +54,8 @@ class TkrDigitizer {
   double QQ[Tmax];
 
   double energy, charge;
+  int iToT;
+  double gain;
   int tim1, tim2;
   int ii, iit;
   int lTower;

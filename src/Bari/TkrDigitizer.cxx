@@ -81,13 +81,14 @@ void TkrDigitizer::clusterize(CurrOr* CurrentOr) {
 
 
 // Digitize --> Digital section
-TotOr* TkrDigitizer::digitize(const CurrOr& CurrentOr) {
+TotOr* TkrDigitizer::digitize(const CurrOr& CurrentOr,ITkrToTSvc* pToTSvc) {
     const CurrOr::DigiElemCol& l = CurrentOr.getList();
     energy = 0.;
     charge = 0;
     tim1   = 0;
     tim2   = 0;
-    // Bari1
+    iToT   = 0;
+    // 
     iit = 0;
     T1Trig = 99999999.;
     for ( CurrOr::DigiElemCol::const_iterator it=l.begin(); it!=l.end(); ++it ){// loop
@@ -113,20 +114,6 @@ TotOr* TkrDigitizer::digitize(const CurrOr& CurrentOr) {
 	// T1Trig (semplified version)
 	if (DeltaT < T1Trig) T1Trig = DeltaT;
 	//
-	// load ToT from calibration 
-	/*	
-	  e       = CURRENT_TO_ENERGY * (fabs(Qstr));
-	  e       = e *1000.;
-	  lTower  = it->getTower();
-	  lLayer  = it->getLayer();
-	  lView   = it->getView();
-	  index   = it->getStrip();
-	  std::cout << " test iit " << iit << " " << e 
-	  << " " << lTower << " " << lLayer << std::endl;  
-	  int iToT    = pToTSvc->getRawToT(e, lTower, lLayer, lView, index);
-	  double gain = pToTSvc->getGain(lTower, lLayer, lView, index);
-	  int totMax    = pToTSvc->getMaxToT();
-	*/
       } 
       else {
 	DeltaT = -1.;
@@ -135,21 +122,30 @@ TotOr* TkrDigitizer::digitize(const CurrOr& CurrentOr) {
       T1[iit] = DeltaT;        // ns
       T2[iit] = ToT + DeltaT;  // ns
       QQ[iit] = Qstr;          // fC
-      
+
       iit++;
       if (iit == 5000) break;
     } // end loop
     
     iit  = 0;
-    Tack   = T1Trig  + TriReq + Tack0;
+    Tack   = T1Trig + TriReq + Tack0;
     for ( CurrOr::DigiElemCol::const_iterator it=l.begin(); it!=l.end(); ++it ){
+      // load ToT from calibration 	
+      e = CURRENT_TO_ENERGY * (fabs(QQ[iit]));
+      lTower  = it->getTower();
+      lLayer  = it->getLayer();
+      lView   = it->getView();
+      index   = it->getStrip();
+      iToT    = pToTSvc->getRawToT(e, lTower, lLayer, lView, index);      //in DAC
+      gain = pToTSvc->getGain(lTower, lLayer, lView, index);  
+      // gain in fC/usec
+      if (T2[iit] > 0. ) {T2[iit] = 1000*QQ[iit]/gain + TriReq + Tack0;}  // ns
+      
       if (T1Trig > 0 && T2[iit] > Tack ) {
 	energy = CURRENT_TO_ENERGY * (fabs(QQ[iit]));
-	energy = energy *1000.;     // keV
-	tim1   = static_cast<int>(Tack) / 10;          // time1, in 10 ns step
+	energy = energy *1000.;                       // keV
+	tim1   = static_cast<int>(Tack) / 10;         // time1, in 10 ns step
 	tim2   = static_cast<int>(T2[iit]-Tack) / 10; //  time2, in 10 ns step
-	//	std::cout << " Bari DIGI STORE " << energy  << "- charge= " << QQ[iit]
-	//  << " times " << tim1 << " " << tim2 << " strip ID " << it->getStrip()<< std::endl;
 	m_totLayer->add(it->getVolId(), it->getStrip(), it->getHits(),tim1, tim2, energy);
       }
       iit++;
