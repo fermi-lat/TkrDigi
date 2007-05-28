@@ -6,7 +6,7 @@
  *
  * @authors Nico Giglietto, Monica Brigida, Leon Rochester, Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Bari/BariMcToHitTool.h,v 1.3 2004/10/12 19:02:28 lsrea Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Bari/BariMcToHitTool.h,v 1.4 2007/04/27 10:09:11 ngigliet Exp $
  */
 
 #ifndef __BARIMCTOHITTOOL_H__
@@ -19,6 +19,7 @@
 
 #include "GaudiKernel/AlgTool.h"
 #include "GaudiKernel/IDataProviderSvc.h"
+#include "TkrUtil/ITkrToTSvc.h"
 #include "../GaudiAlg/TkrDigiAlg.h"
 #include <string>
 
@@ -45,7 +46,8 @@ private:
     InitCurrent       m_openCurr;
     /// pointer to geometry svc
     ITkrGeometrySvc* m_tkrGeom;
-
+    /// pointer to ToT svc
+    ITkrToTSvc* pToTSvc;
     std::string m_type;
     /// Pointers to the sub algorithms
     TkrDigiAlg* m_BamcToHitAlg;

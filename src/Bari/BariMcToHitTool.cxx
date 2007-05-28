@@ -6,7 +6,7 @@
 *
 * @authors Nico Giglietto, Monica Brigida, Leon Rochester, Michael Kuss
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Bari/BariMcToHitTool.cxx,v 1.12 2004/11/23 23:08:22 lsrea Exp $
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Bari/BariMcToHitTool.cxx,v 1.13 2007/04/27 10:09:11 ngigliet Exp $
 */
 
 #include "BariMcToHitTool.h"
@@ -48,8 +48,6 @@ AlgTool(type, name, parent)
     // Declare the additional interface
     declareInterface<IMcToHitTool>(this);
     declareProperty("Type", m_type);
-    // std::cout << " sss " << " " << type << " " << name << std::endl;
-
 }
 
 StatusCode BariMcToHitTool::initialize()
@@ -68,7 +66,6 @@ StatusCode BariMcToHitTool::initialize()
     // new file currents is more compact
     declareProperty("CurrentsFile",
 		    m_CurrentsFile="$(TKRDIGIROOT)/src/Bari/cariche");
-    //    declareProperty("Type", m_type="Bari");
     // Do the currents file (once) - LSR
     facilities::Util::expandEnvVar(&m_CurrentsFile);
     // trying to eliminate memory leak candidates
@@ -103,6 +100,14 @@ StatusCode BariMcToHitTool::initialize()
         log << MSG::ERROR << "Couldn't set up TkrGeometrySvc!" << endreq;
         //        log << MSG::ERROR << "could not find TkrGeometrySvc !" << endreq;
         return sc;
+    }
+
+    // ToT Svc
+    sc = service("TkrToTSvc", pToTSvc, true);
+    if( sc.isFailure() ) {
+      log << MSG::ERROR << "Couldn't set up TkrToTSvc!" << endreq;
+      //        log << MSG::ERROR << "could not find TkrToTSvc !" << endreq;
+      return sc;
     }
 
     // initialize detector interface -- Brigida
@@ -217,7 +222,7 @@ StatusCode BariMcToHitTool::execute()
         } // end of loop over hits
     }
     // digital section
-    const TotOr* const DigiOr = Digit.digitize(CurrentOr);
+    const TotOr* const DigiOr = Digit.digitize(CurrentOr, pToTSvc);
 
     log << MSG::DEBUG;
     if (log.isActive()) 
