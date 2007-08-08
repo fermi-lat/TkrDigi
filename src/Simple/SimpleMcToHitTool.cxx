@@ -6,7 +6,7 @@
  *
  * @authors Toby Burnett, Leon Rochester, Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Simple/SimpleMcToHitTool.cxx,v 1.5 2004/10/12 19:02:28 lsrea Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Simple/SimpleMcToHitTool.cxx,v 1.6 2004/12/14 03:07:34 lsrea Exp $
  */
 
 #include "SimpleMcToHitTool.h"
@@ -18,6 +18,7 @@
 #include "Event/TopLevel/EventModel.h"
 #include "Event/TopLevel/Event.h"
 #include "Event/MonteCarlo/McPositionHit.h"
+#include "Event/MonteCarlo/McParticle.h"
 
 // Gaudi system includes
 #include "GaudiKernel/MsgStream.h"
@@ -37,6 +38,7 @@ SimpleMcToHitTool::SimpleMcToHitTool(const std::string& type,
     declareInterface<IMcToHitTool>(this);
 
     declareProperty("test", m_test = false);
+    declareProperty("alignmentMode", m_alignmentMode=0);
 }
 
 StatusCode SimpleMcToHitTool::initialize() {
@@ -113,6 +115,16 @@ StatusCode SimpleMcToHitTool::execute() {
     MsgStream log(msgSvc(), name());
     log << MSG::DEBUG << "execute " << endreq;
 
+    // get the "event direction"
+    HepVector3D eventDir = HepVector3D(0., 0., -1.);
+    SmartDataPtr<Event::McParticleCol> mcParts(m_edSvc, EventModel::MC::McParticleCol);
+    if (mcParts) { 
+        Event::McParticleCol::const_iterator ipart=mcParts->begin();
+        const Event::McParticle* firstPart = *ipart;
+        const CLHEP::HepLorentzVector p = firstPart->initialFourMomentum();
+        eventDir = HepVector3D(p.x(), p.y(), p.z()).unit();
+    }
+
     // Look to see if the McPositionHitCol object is in the TDS
     SmartDataPtr<Event::McPositionHitCol>
         mcHits(m_edSvc, EventModel::MC::McPositionHitCol);
@@ -125,7 +137,7 @@ StatusCode SimpleMcToHitTool::execute() {
 	}
     
     // Fill the map
-    SiPlaneMapContainer::SiPlaneMap siPlaneMap = createSiHits(mcHits);
+    SiPlaneMapContainer::SiPlaneMap siPlaneMap = createSiHits(mcHits, eventDir);
     
     // Take care of insuring that the data area has been created
     DataObject* pNode = 0;
@@ -152,7 +164,7 @@ StatusCode SimpleMcToHitTool::execute() {
 
 
 SiPlaneMapContainer::SiPlaneMap SimpleMcToHitTool::createSiHits(
-           const Event::McPositionHitCol& hits) {
+    const Event::McPositionHitCol& hits, const HepVector3D& eventDir) {
     // Purpose and Method: reads a list of McPositionHits, and lists them in
     //                     SiStripLists according to their volume identifiers.
     // Inputs: a vector of McPositionHits
@@ -201,9 +213,17 @@ SiPlaneMapContainer::SiPlaneMap SimpleMcToHitTool::createSiHits(
 
         // move hit by alignment constants
         // the wafer constants are applied to the wafer coordinates
-        if ( m_taSvc && m_taSvc->alignSim() ) 
-            m_taSvc->moveMCHit(volId, localEntry, localExit);
-        
+        HepVector3D transformAxis(0., 0., -1.0);
+        if ( m_taSvc && m_taSvc->alignSim() ) {
+            if(m_alignmentMode==0) {
+                transformAxis = localExit-localEntry;
+            } else {
+                transformAxis = eventDir;
+            } 
+        }
+
+        m_taSvc->moveMCHit(volId, localEntry, localExit, transformAxis);
+
         const TkrVolumeIdentifier planeId = volId.getPlaneId();
         if( siPlaneMap.find(planeId) == siPlaneMap.end())
             siPlaneMap[planeId]= new SiStripList;
@@ -214,14 +234,14 @@ SiPlaneMapContainer::SiPlaneMap SimpleMcToHitTool::createSiHits(
         const int ladder = volId.getLadder();
         const int wafer  = volId.getWafer();
         const HepVector3D offset((ladder-waferOffset)*ladder_pitch,
-                           (wafer-waferOffset)*ssd_pitch, 0);
+            (wafer-waferOffset)*ssd_pitch, 0);
 
         HepPoint3D planeEntry(localEntry + offset);
         HepPoint3D planeExit (localExit  + offset);
 
         // the entry into the planeMap is in plane coordinates
         siPlaneMap[planeId]->score(planeEntry, planeExit, hit, m_test);
-    }
+          }
 
-    return siPlaneMap;
-}
+          return siPlaneMap;
+    }
