@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: heather  Mon Oct 29 20:15:33 PDT 2007
+TkrDigi/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+use gr_app
+    *
+------------------------------------------------------------
 TAG
 Tag name: v2r6p8, operation: add
 Package: TkrDigi
