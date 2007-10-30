@@ -1,6 +1,7 @@
 /** @file release.notes
 @verbatim
  Package TkrDigi
+ v2r7       30-Oct-2007  HMK use gr_app
  v2r6p8     08-Aug-2007  LSR Mod call to TkrAlignmentSvc::moveMcHit()
  v2r6p7     28-May-2007  NG  add ToT to BariAlg
  v2r6p6     05-May-2007  MK  re-fix linux warnings, windows errors
