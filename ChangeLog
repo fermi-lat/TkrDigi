@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: usher  Thu Mar 13 11:00:28 PDT 2008
+TkrDigi/src/General
+
+Modified Files:
+	GeneralHitToDigiTool.cxx 
+Log Message:
+Modify slightly the handling of duplicate relations
+    *
+------------------------------------------------------------
 TAG
 Tag name: v2r7, operation: add
 Package: TkrDigi
