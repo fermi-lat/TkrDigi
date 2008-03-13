@@ -6,7 +6,7 @@
 *
 * @author Michael Kuss
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitToDigiTool.cxx,v 1.11 2006/03/13 19:30:33 lsrea Exp $
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitToDigiTool.cxx,v 1.12 2007/04/12 16:04:43 lsrea Exp $
 */
 
 #include "GeneralHitToDigiTool.h"
@@ -439,9 +439,10 @@ StatusCode GeneralHitToDigiTool::execute()
                 rel->addInfo(ost.str());
                 //addRelation now does the right thing with duplicates
                 // namely, appends the info to the existing info
-                unsigned int size = digiHit.size();
-                digiHit.addRelation(rel);
-                if (size==digiHit.size()) delete rel;
+                if (!digiHit.addRelation(rel))
+                {
+                    delete rel;
+                }
             }
         }    
         // add the digi if it has some hits
