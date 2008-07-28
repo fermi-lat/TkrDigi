@@ -1,10 +1,10 @@
 package TkrDigi
 
-version v2r7p1
+version v2r7p2
 
+author Michael Kuss   <michael.kuss@pi.infn.it>
 author Monica Brigida <monica.brigida@ba.infn.it>
 author Leon Rochester <lsrea@slac.stanford.edu>
-author Michael Kuss   <michael.kuss@pi.infn.it>
 
 branches src cmt doc
 
