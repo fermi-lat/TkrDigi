@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: kuss  Mon Jul 28 09:24:34 PDT 2008
+TkrDigi/doc
+
+Modified Files:
+	release.notes 
+Log Message:
+new tag v2r7p2 includes CMT env var removal
+
+    *
+------------------------------------------------------------
 User: kuss  Mon Jul 28 09:24:33 PDT 2008
 TkrDigi/cmt
 
