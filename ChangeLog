@@ -1,4 +1,19 @@
 ------------------------------------------------------------
+User: ecephas  Thu Aug 28 13:21:21 PDT 2008
+GlastRelease-scons/TkrDigi
+
+Modified Files:
+	TkrDigiLib.py 
+Log Message:
+Added the following libraries:
+
+   env.Tool('facilitiesLib')
+   env.Tool('EventLib')
+   env.Tool('GuiSvcLib')
+   env.Tool('TkrUtilLib')
+
+    *
+------------------------------------------------------------
 User: ecephas  Thu Aug 28 13:19:56 PDT 2008
 GlastRelease-scons/TkrDigi
 
