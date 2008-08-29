@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: kuss  Fri Aug 29 05:51:07 PDT 2008
+TkrDigi/src
+
+Modified Files:
+	IChargeTool.h 
+Log Message:
+remove the ../ in the include of SiLayerList.h to make scons happy
+
+    *
+------------------------------------------------------------
 User: ecephas  Thu Aug 28 13:21:21 PDT 2008
 GlastRelease-scons/TkrDigi
 
