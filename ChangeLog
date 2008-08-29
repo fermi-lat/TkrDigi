@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: kuss  Fri Aug 29 05:56:39 PDT 2008
+TkrDigi/src
+
+Modified Files:
+	IChargeTool.h 
+Log Message:
+re-read Leon's email: commented the unnecessary include of SiLayerList.h
+
+    *
+------------------------------------------------------------
 User: kuss  Fri Aug 29 05:51:07 PDT 2008
 TkrDigi/src
 
