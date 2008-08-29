@@ -13,7 +13,7 @@
 #define __ICHARGETOOL_H__
 
 #include "GaudiKernel/IAlgTool.h"
-#include "../SiLayerList.h"
+#include "SiLayerList.h"
 
 
 static const InterfaceID IID_IChargeTool("IChargeTool", 1, 0);
