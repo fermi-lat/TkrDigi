@@ -1,5 +1,17 @@
 ------------------------------------------------------------
 User: lsrea  Wed Oct  1 13:31:57 PDT 2008
+TkrDigi/doc
+
+Modified Files:
+	release.notes 
+Log Message:
+Fix TkrDigiAlg to return gracefully if G4Generator didn't run
+This will be the case for a kludge that Johan/Franz are using for a high-energy
+study, but it's not a bad idea in general
+
+    *
+------------------------------------------------------------
+User: lsrea  Wed Oct  1 13:31:57 PDT 2008
 TkrDigi/cmt
 
 Modified Files:
