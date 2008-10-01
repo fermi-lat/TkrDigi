@@ -1,7 +1,8 @@
 /** @file release.notes
 @verbatim
  Package TkrDigi
- v2r7p3     01-Sep-2008  MK  small fix to make it build with SCons
+ v2r7p4     01-Oct-2008  LSR Return gracefully if G4Generator didn't run
+ v2r7p3     01-Sep-2008  MK  small fix to make it build with SCons v2r7p3     
  v2r7p2     28-Jul-2008  MK  pick up Navid's update to remove CMT env vars
  v2r7p1     13-Mar-2008  TU  Patch to better handle duplicate relations
  v2r7       30-Oct-2007  HMK use gr_app

@@ -15,7 +15,7 @@
  *
  * @author Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/GaudiAlg/TkrDigiAlg.h,v 1.2 2005/08/16 22:00:26 lsrea Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/GaudiAlg/TkrDigiAlg.h,v 1.3 2007/04/12 16:04:43 lsrea Exp $
  */
 
 #ifndef __TKRDIGIALG_H__
@@ -48,6 +48,8 @@ class TkrDigiAlg : public Algorithm {
     Algorithm* m_noiseAlg;
     Algorithm* m_hitToDigiAlg;
     Algorithm* m_chargeAlg;
+
+    IDataProviderSvc* m_edSvc;
 
 };
 
