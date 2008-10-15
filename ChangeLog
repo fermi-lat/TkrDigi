@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: usher  Wed Oct 15 08:35:06 PDT 2008
+TkrDigi/src/GaudiAlg
+
+Added Files:
+	TkrDigiMergeAlg.cxx 
+Log Message:
+Initial import of an algorithm to merge background TkrDigis with digis from the simulation (or another source).
+    *
+------------------------------------------------------------
 TAG
 Tag name: TkrDigi-02-07-04, operation: add
 Package: TkrDigi
