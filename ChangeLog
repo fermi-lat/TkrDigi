@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: usher  Wed Oct 15 08:39:23 PDT 2008
+TkrDigi/src/Dll
+
+Modified Files:
+	TkrDigi_load.cxx 
+Log Message:
+Add the new merging algorithm
+    *
+------------------------------------------------------------
 User: usher  Wed Oct 15 08:35:06 PDT 2008
 TkrDigi/src/GaudiAlg
 
