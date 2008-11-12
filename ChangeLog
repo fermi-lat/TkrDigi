@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+TAG
+Tag name: v2r8, operation: mov
+Package: TkrDigi
+User: glastrm  Wed Nov 12 12:31:08 2008
+Files:
+  TkrDigi/SConscript  1.5
+
+    *
+------------------------------------------------------------
 User: glastrm  Wed Nov 12 12:31:02 PST 2008
 TkrDigi
 
