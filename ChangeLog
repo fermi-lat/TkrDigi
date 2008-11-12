@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: lsrea  Wed Nov 12 11:10:08 PST 2008
+TkrDigi/src/GaudiAlg
+
+Modified Files:
+	TkrDigiMergeAlg.cxx 
+Log Message:
+Add code to handle merging of tkrVectors
+
+    *
+------------------------------------------------------------
 User: usher  Wed Oct 15 08:39:23 PDT 2008
 TkrDigi/src/Dll
 
