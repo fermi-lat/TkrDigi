@@ -1,6 +1,7 @@
 /** @file release.notes
 @verbatim
  Package TkrDigi
+ v2r8       12-Nov-2008  LSR Mods for Digi merging
  v2r7p4     01-Oct-2008  LSR Return gracefully if G4Generator didn't run
  v2r7p3     01-Sep-2008  MK  small fix to make it build with SCons v2r7p3     
  v2r7p2     28-Jul-2008  MK  pick up Navid's update to remove CMT env vars
