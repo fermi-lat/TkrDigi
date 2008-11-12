@@ -5,7 +5,7 @@
  *
  * @author Tracy Usher
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/GaudiAlg/TkrDigiMergeAlg.cxx,v 0.0 2004/03/09 20:06:30 lsrea Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/GaudiAlg/TkrDigiMergeAlg.cxx,v 1.1 2008/10/15 15:35:06 usher Exp $
  */
 
 
@@ -18,8 +18,11 @@
 
 #include "Event/TopLevel/EventModel.h"
 #include "Event/Digi/TkrDigi.h"
+#include "LdfEvent/Gem.h"
 
 #include "TkrUtil/ITkrGeometrySvc.h"
+#include "TkrUtil/ITkrMakeClustersTool.h"
+#include "TkrUtil/ITkrGhostTool.h"
 
 #include <map>
 
@@ -40,6 +43,10 @@ class TkrDigiMergeAlg : public Algorithm {
     ITkrGeometrySvc*    m_tkrGeom;
     /// Pointer to the tracker splits service
     ITkrSplitsSvc*      m_tspSvc;
+    /// ptr to ghost tool
+    ITkrGhostTool*      m_ghostTool;
+    /// ptr to cluster tool
+    ITkrMakeClustersTool* m_clustersTool;
 
 };
 
@@ -86,6 +93,20 @@ StatusCode TkrDigiMergeAlg::initialize() {
         return StatusCode::FAILURE;
     }
 
+    m_ghostTool = 0;
+    sc = toolSvc()->retrieveTool("TkrGhostTool",m_ghostTool) ;
+    if (sc.isFailure()) {
+        log<<MSG::WARNING << "Failed to retrieve ghost tool" << endreq ;
+        return StatusCode::FAILURE ;
+    }
+
+    m_clustersTool = 0;
+    sc = toolSvc()->retrieveTool("TkrMakeClustersTool",m_clustersTool) ;
+    if (sc.isFailure()) {
+        log<<MSG::WARNING << "Failed to retrieve ghost tool" << endreq ;
+        return StatusCode::FAILURE ;
+    }
+
     return sc;
 }
 
@@ -98,7 +119,7 @@ StatusCode TkrDigiMergeAlg::execute() {
     // Dependencies: none
     // Restrictions and Caveats: none
 
-    StatusCode sc = StatusCode::SUCCESS;
+    StatusCode sc = StatusCode::SUCCESS; 
     MsgStream log(msgSvc(), name());
     log << MSG::DEBUG << "execute" << endreq;
 
@@ -111,6 +132,39 @@ StatusCode TkrDigiMergeAlg::execute() {
 
     // Create a map of the simulation digis, indexing by identifier
     std::map<int, Event::TkrDigi*> idToDigiMap;
+
+    // do the TkrVector shenanigans
+
+    // make the tkrVector
+    unsigned short towerBits = 0;
+    m_ghostTool->calculateTkrVector(tkrDigiCol, towerBits);
+
+    // get the tkrVector of the overlay
+    bool isOverlay;
+    unsigned short tkrVector;
+    SmartDataPtr<LdfEvent::Gem> gemOverlay(eventSvc(), "Overlay/Gem");
+    if(overlayDigiCol && gemOverlay!=0) {
+        isOverlay = true;
+        tkrVector = gemOverlay->tkrVector();
+    }
+
+    // OR the two sources
+    tkrVector |= towerBits;
+
+    DataObject* pNode = 0;
+    LdfEvent::Gem* gem = new LdfEvent::Gem();
+
+    sc = eventSvc()->retrieveObject("/Event/Gem", pNode);
+    if ( sc.isFailure() ) {
+        sc = eventSvc()->registerObject("/Event/Gem", gem);
+        if( sc.isFailure() ) {
+            log << MSG::ERROR << "could not register /Event/Gem" << endreq;
+            return sc;
+        }
+    }
+
+    // store the result in the event
+    gem->setTkrVector( tkrVector );
 
     for(Event::TkrDigiCol::iterator tkrIter = tkrDigiCol->begin(); tkrIter != tkrDigiCol->end(); tkrIter++)
     {
