@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: usher  Mon Dec  1 16:04:35 PST 2008
+TkrDigi/src/Dll
+
+Modified Files:
+	TkrDigi_load.cxx 
+Log Message:
+Remove merging algorithm and move to Overlay, retagging
+    *
+------------------------------------------------------------
 User: usher  Mon Dec  1 16:03:50 PST 2008
 TkrDigi/doc
 
