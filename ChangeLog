@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: usher  Mon Dec  1 16:03:50 PST 2008
+TkrDigi/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+Remove merging algorithm and move to Overlay, retagging
+    *
+------------------------------------------------------------
 TAG
 Tag name: TkrDigi-02-08-00, operation: add
 Package: TkrDigi
