@@ -9,13 +9,16 @@
 *
 * @author Leon Rochester
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitRemovalTool.cxx,v 1.3 2005/08/25 17:23:55 lsrea Exp $
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitRemovalTool.cxx,v 1.4 2006/02/14 19:29:50 lsrea Exp $
 */
 
 #include "GeneralHitRemovalTool.h"
 #include "TkrUtil/ITkrGeometrySvc.h"
 
-#include "../SiPlaneMapContainer.h"
+#include "Event/TopLevel/EventModel.h"
+#include "Event/TopLevel/Event.h"
+#include "Event/Digi/TkrDigi.h"
+
 #include "../TkrVolumeIdentifier.h"
 #include "../SiStripList.h"
 
@@ -74,6 +77,10 @@ StatusCode GeneralHitRemovalTool::initialize() {
         return sc;
     }
 
+    m_splitsSvc    = m_tkrGeom->getTkrSplitsSvc();
+    m_failSvc      = m_tkrGeom->getTkrFailureModeSvc();
+    m_badStripsSvc = m_tkrGeom->getTkrBadStripsSvc();
+
     IService* iService = 0;
     sc = serviceLocator()->service("EventDataSvc", iService, true );
     if ( sc.isFailure() ) {
@@ -109,55 +116,179 @@ StatusCode GeneralHitRemovalTool::execute() {
     }
 
     SiPlaneMapContainer::SiPlaneMap& siPlaneMap = pObject->getSiPlaneMap();
+
+    // full treatment...
+    m_doFailed = m_doBad = m_doTrunc = true;
+    int hitsRemoved = doBadHitsLoop(siPlaneMap);
+
+    // next, the cable buffers
+    bool towersOutOfOrder, planesOutOfOrder;
+    int removedHits = doCableBufferLoop(siPlaneMap, 
+        towersOutOfOrder, planesOutOfOrder);
+
+    if(towersOutOfOrder || planesOutOfOrder) {
+        log << MSG::INFO << "There is a problem with the ordering of the SiStrips... " 
+            << " this should *not* happen!" << endreq;
+        return StatusCode::FAILURE;
+    }
+    return sc;
+}
+
+StatusCode GeneralHitRemovalTool::truncateDigis()
+{
+    // Purpose and Method:  truncate hits in merged digis
+    // Inputs: none
+    // Outputs: StatusCode
+    // TDS Inputs: None
+    // TDS Outputs: Modified TkrDigiCol
+    // Dependencies: None
+    // Restrictions and Caveats: None
+
+    StatusCode sc = StatusCode::SUCCESS;
+    MsgStream log(msgSvc(), name());
+
+    // get the digis
+    SmartDataPtr<Event::TkrDigiCol> tkrDigiCol(m_edSvc,
+        EventModel::Digi::TkrDigiCol);
+    
+
+    // make a siPlaneMap
+    SiPlaneMapContainer::SiPlaneMap siPlaneMap;
+
+    // this map connects an SiStripList to a digi,
+    //  so I don't have to hunt for it.
+    typedef std::map< SiStripList*, Event::TkrDigi*> StripDigiMap;
+    StripDigiMap stripDigiMap;
+
+    // make and fill siStripLists from the Digi
+    Event::TkrDigiCol::iterator it = tkrDigiCol->begin();
+    for (;it!=tkrDigiCol->end(); ++it) {
+        Event::TkrDigi* digi = *(it);
+
+        // make up the VolumeId
+        idents::TowerId id(digi->getTower());
+        int layer = digi->getBilayer();
+        int view  = digi->getView();
+        int tray, botTop;
+        m_tkrGeom->layerToTray(layer, view, tray, botTop);
+
+        idents::VolumeIdentifier volId;
+        volId.append(0);
+        volId.append(id.iy());
+        volId.append(id.ix());
+        volId.append(1);
+        volId.append(tray);
+        volId.append(view);
+        volId.append(botTop);
+
+        Event::McPositionHit* ptr = 0;
+        SiStripList* siList = new SiStripList();
+
+        int i;
+        for (i=0;i<digi->getNumHits(); ++i) {
+            int strip = digi->getHit(i);
+            siList->addStrip(strip, 0.0, ptr);
+        }
+        
+        siPlaneMap[volId] = siList;
+        // save the pointer to the digi for this stripList
+        stripDigiMap[siList] = digi;
+    }    
+
+    // do the truncation loops
+    //skip the steps for failed and bad, don't need them here
+    m_doFailed = m_doBad = false;
+    m_doTrunc = true;
+
+    int nRemovedRCHits = doBadHitsLoop(siPlaneMap);
+
+    bool towersOutOfOrder, planesOutOfOrder;
+    int nRemovedCCHits = doCableBufferLoop(siPlaneMap, 
+        towersOutOfOrder, planesOutOfOrder);
+
+    if(towersOutOfOrder || planesOutOfOrder) {
+        log << MSG::INFO << "There is a problem with the ordering of the SiStrips... " 
+            << " this should *not* happen!" << endreq;
+        return StatusCode::FAILURE;
+    }
+
+    // remove digis if necessary, stop when it's all done!
+    int nRemovedStrips = nRemovedRCHits+nRemovedCCHits;
+    if(nRemovedStrips>0) {
+        int stripCount = 0;
+        SiPlaneMapContainer::SiPlaneMap::iterator itMap = siPlaneMap.begin();
+        for(;itMap!=siPlaneMap.end()&&stripCount<nRemovedStrips;++itMap) {
+            SiStripList* siList = itMap->second;
+            Event::TkrDigi* thisDigi = stripDigiMap[siList];
+
+            SiStripList::iterator itList = siList->begin();
+            for(; itList!=siList->end(); ++itList) {
+                if((itList->stripStatus()&SiStripList::NODATA)!=0) {
+                    stripCount++;
+                    int strip = itList->index();
+
+                    //Here we remove the strip from the Digi
+                    thisDigi->removeHit(strip);                    
+                }
+            }
+            // if the HitList is empty, delete the digi
+            // this can happen after hit truncation along a cable
+            // for maxHit==14, this won't happen, because by construction
+            // the cable buffer never fills
+            if(thisDigi->getNumHits()==0) delete thisDigi;
+        }
+    }
+    return sc;
+}
+
+int GeneralHitRemovalTool::doBadHitsLoop(
+    SiPlaneMapContainer::SiPlaneMap& siPlaneMap)
+{
+
+    int removed = 0;
     SiPlaneMapContainer::SiPlaneMap::iterator itMap=siPlaneMap.begin();
-
-    //Start with the failure modes and bad strips
-    ITkrFailureModeSvc* failSvc      = m_tkrGeom->getTkrFailureModeSvc();
-    ITkrBadStripsSvc*   badStripsSvc = m_tkrGeom->getTkrBadStripsSvc();
-    ITkrSplitsSvc*      splitsSvc    = m_tkrGeom->getTkrSplitsSvc();
-
     for ( ; itMap!=siPlaneMap.end(); ++itMap ) {
         SiStripList* sList = itMap->second;
         const TkrVolumeIdentifier volId = itMap->first;  
         const idents::TowerId towerId     = volId.getTower();
         const int tower = towerId.id();
-        //const int tray  = volId.getTray();
-        //const int face  = volId.getBotTop();
         const int bilayer  = volId.getLayer();
         const int view     = volId.getView();
         const idents::GlastAxis::axis axis = volId.getAxis();
 
         SiStripList::iterator itStrip; 
-        if(m_killFailed) {
-            if ( m_killFailed && failSvc && !failSvc->empty()) { 
-                if( failSvc->isFailed(tower, bilayer, view) ) {
+        if(m_killFailed&&m_doFailed) {
+            if ( m_killFailed && m_failSvc && !m_failSvc->empty()) { 
+                if( m_failSvc->isFailed(tower, bilayer, view) ) {
                     for (itStrip=sList->begin() ;itStrip!=sList->end(); ++itStrip ) {
                         itStrip->setStripStatus(SiStripList::FAILEDPLANE);
+                        removed++;
                     }
                     continue;
                 }
             }
         }
         // Loop over contained list of strips to remove the bad strips.
-        if(m_killBadStrips) {
+        if(m_killBadStrips&&m_doBad) {
             for (itStrip=sList->begin();itStrip!=sList->end(); ++itStrip ) {
                 const int stripId = itStrip->index();
-                if ( m_killBadStrips && badStripsSvc && !badStripsSvc->empty()) {
-                    if ( badStripsSvc->isBadStrip(tower, bilayer, axis, stripId) ) {
+                if ( m_killBadStrips && m_badStripsSvc && !m_badStripsSvc->empty()) {
+                    if ( m_badStripsSvc->isBadStrip(tower, bilayer, axis, stripId) ) {
                         itStrip->setStripStatus(SiStripList::BADSTRIP);
+                        removed++;
                     }
                 }
             }
         }
         // Truncate the controller buffers
         // The lost strips are the ones furthest away from the controller 
-        int maxLow  = splitsSvc->getMaxStrips(tower, bilayer, view, 0);
-        int maxHigh = splitsSvc->getMaxStrips(tower, bilayer, view, 1);
-        int breakpoint = splitsSvc->getSplitPoint(tower, bilayer, view);
+        int maxLow  = m_splitsSvc->getMaxStrips(tower, bilayer, view, 0);
+        int maxHigh = m_splitsSvc->getMaxStrips(tower, bilayer, view, 1);
+        int breakpoint = m_splitsSvc->getSplitPoint(tower, bilayer, view);
 
         // quick test
         int test    = std::min(maxLow, maxHigh);
-        if (sList->size()>test) {
+        if (sList->size()>test&&m_doTrunc) {
             int liveCount  = 0;
             // for the low end, we pass maxLow strips, and kill the rest
             bool first = true;
@@ -168,6 +299,7 @@ StatusCode GeneralHitRemovalTool::execute() {
                 liveCount++;
                 if (liveCount>maxLow) {
                     itStrip->setStripStatus(SiStripList::RCBUFFER);
+                    removed++;
                     if(debug) {
                         if (first) std::cout << "RCBuffer overflow: " ;
                         first = false;
@@ -185,6 +317,7 @@ StatusCode GeneralHitRemovalTool::execute() {
                 liveCount++;
                 if (liveCount>maxHigh) {
                     itRev->setStripStatus(SiStripList::RCBUFFER);
+                    removed++;
                     if(debug) {
                         if (first) std::cout << "RCBuffer: " ;
                         std::cout << itStrip->index() << " " ;
@@ -194,13 +327,19 @@ StatusCode GeneralHitRemovalTool::execute() {
             if (!first) std::cout << std::endl;
         }
     }
+    return removed;
+}
 
-    // now, after everything else, the cable buffers
-
-    bool towersOutOfOrder = false;
-    bool planesOutOfOrder = false;
+int GeneralHitRemovalTool::doCableBufferLoop(
+    SiPlaneMapContainer::SiPlaneMap& siPlaneMap, 
+    bool& towersOutOfOrder, bool& planesOutOfOrder)
+{
+    towersOutOfOrder = false;
+    planesOutOfOrder = false;
+    int removed = 0;
     int tower0 = -1;
-    int cableBufferSize = splitsSvc->getCableBufferSize();
+    int cableBufferSize = m_splitsSvc->getCableBufferSize();
+    SiPlaneMapContainer::SiPlaneMap::iterator itMap=siPlaneMap.begin();
     for (itMap=siPlaneMap.begin() ; itMap!=siPlaneMap.end(); ++itMap ) {
         SiStripList* sList = itMap->second;
         const TkrVolumeIdentifier volId = itMap->first;  
@@ -209,29 +348,32 @@ StatusCode GeneralHitRemovalTool::execute() {
         int cableCount[8];  
         if(tower!=tower0) {
             // clear the counters for a new tower
-            if(tower<tower0) towersOutOfOrder = true;
+            if(tower<tower0) {
+                towersOutOfOrder = true;
+            }
             tower0 = tower;
             int i;
             for(i=0;i<8;++i) { cableCount[i] = 0;}
         }
         const int bilayer = volId.getLayer();
         const int view    = volId.getView();
-        //const int tray    = volId.getTray();
-        //const int face    = volId.getBotTop();
 
-        int breakpoint = splitsSvc->getSplitPoint(tower, bilayer, view);
+        int breakpoint = m_splitsSvc->getSplitPoint(tower, bilayer, view);
         SiStripList::iterator itStrip=sList->begin();
         int strip0 = -1;
         bool first = true;
         for ( ;itStrip!=sList->end(); ++itStrip ) {
             const int stripId = itStrip->index();
-            if(stripId< strip0) planesOutOfOrder = true;
+            if(stripId< strip0) {
+                planesOutOfOrder = true;
+            }
             strip0 = stripId;
             int end = (stripId>breakpoint ? 1 : 0);
-            int index = splitsSvc->getCableIndex(bilayer, view, end);
+            int index = m_splitsSvc->getCableIndex(bilayer, view, end);
             if(!itStrip->badStrip()) cableCount[index]++;
             if(cableCount[index]>cableBufferSize) {
                 itStrip->setStripStatus(SiStripList::CCBUFFER);
+                removed++;
                 if (debug) {
                     if (first) std::cout << "CCBuffer overflow :";
                     first = false;
@@ -241,10 +383,5 @@ StatusCode GeneralHitRemovalTool::execute() {
         }
         if (!first) std::cout << std::endl;
     }
-    if(towersOutOfOrder || planesOutOfOrder) {
-        log << MSG::INFO << "There is a problem with the ordering of the SiStrips... " 
-            << " this should *not* happen!" << endreq;
-        return StatusCode::FAILURE;
-    }
-    return sc;
+    return removed;
 }
