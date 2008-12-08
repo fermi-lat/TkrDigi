@@ -1,7 +1,7 @@
 /** @file release.notes
 @verbatim
  Package TkrDigi
- v2r10      07-Dec-2008  LSR Add GeneralHitsRemovalTool::truncateDigis()
+ v2r10      07-Dec-2008  LSR Add GeneralHitRemovalTool::truncateDigis()
                              (GeneralHitRemovalTool refactored)
  v2r9        1-Dec-2008   TU Move merging code to Overlay, remove from here and re-tag
  v2r8       12-Nov-2008  LSR Mods for Digi merging
