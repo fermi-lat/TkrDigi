@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: ecephas  Mon Dec  8 14:34:02 PST 2008
+GlastRelease-scons/TkrDigi
+
+Modified Files:
+	SConscript 
+Log Message:
+Check in TkrDigi/SConscript for TkrDigi v2r7p4 (branch tag, GlastReleasev15r49).
+    *
+------------------------------------------------------------
 TAG
 Tag name: TkrDigi-02-10-00, operation: add
 Package: TkrDigi
