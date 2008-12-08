@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: lsrea  Sun Dec  7 17:55:04 PST 2008
+TkrDigi/doc
+
+Modified Files:
+	release.notes 
+Log Message:
+Refactor GeneralHitRemovalTool to allow truncation of digis
+new method: truncateDigis()
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: TkrDigi-02-09-00, operation: add
 Package: TkrDigi
