@@ -1,5 +1,16 @@
 ------------------------------------------------------------
 User: lsrea  Sun Dec  7 17:55:04 PST 2008
+TkrDigi/src/GaudiAlg
+
+Added Files:
+	TkrDigiMergeTruncationAlg.cxx 
+Log Message:
+Refactor GeneralHitRemovalTool to allow truncation of digis
+new method: truncateDigis()
+
+    *
+------------------------------------------------------------
+User: lsrea  Sun Dec  7 17:55:04 PST 2008
 TkrDigi/src/Dll
 
 Modified Files:
