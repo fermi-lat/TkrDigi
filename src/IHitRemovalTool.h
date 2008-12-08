@@ -6,13 +6,14 @@
  *
  * @author Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/INoiseTool.h,v 1.1 2004/02/27 10:14:13 kuss Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/IHitRemovalTool.h,v 1.1 2005/08/16 22:00:26 lsrea Exp $
  */
 
 #ifndef __IHitRemovalTOOL_H__
 #define __IHitRemovalTOOL_H__
 
 #include "GaudiKernel/IAlgTool.h"
+#include "Event/Digi/TkrDigi.h"
 
 
 static const InterfaceID IID_IHitRemovalTool("IHitRemovalTool", 1, 0);
@@ -31,6 +32,7 @@ class IHitRemovalTool : virtual public IAlgTool {
      * Returns a status code upon completion.
      */
     virtual StatusCode execute() = 0;
+    virtual StatusCode truncateDigis() = 0;
 
 };
 
