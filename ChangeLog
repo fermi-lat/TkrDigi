@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 TAG
+Tag name: v2r7p4, operation: mov
+Package: TkrDigi
+User: glast  Mon Dec  8 14:41:26 2008
+Files:
+  TkrDigi/SConscript  1.7
+
+    *
+------------------------------------------------------------
+TAG
 Tag name: v2r7p4, operation: add
 Package: TkrDigi
 User: ecephas  Mon Dec  8 14:36:11 2008
