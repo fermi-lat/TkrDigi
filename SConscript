@@ -1,7 +1,7 @@
 # -*- python -*-
-# $Header: /nfs/slac/g/glast/ground/cvs/GlastRelease-scons/TkrDigi/SConscript,v 1.7 2008/12/08 02:30:14 glastrm Exp $ 
+# $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/SConscript,v 1.8 2008/12/08 22:34:02 ecephas Exp $ 
 # Authors: Monica Brigida <monica.brigida@ba.infn.it>, Leon Rochester <lsrea@slac.stanford.edu>, Michael Kuss <michael.kuss@pi.infn.it>
-# Version: TkrDigi-02-07-04
+# Version: TkrDigi-02-10-01
 Import('baseEnv')
 Import('listFiles')
 Import('packages')
