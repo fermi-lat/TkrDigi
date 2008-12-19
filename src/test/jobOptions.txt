@@ -31,6 +31,10 @@ ApplicationMgr.TopAlg = {
     };
 
 // ----------------------------
+// Explicitly reference the GlastDetSvc
+ApplicationMgr.ExtSvc += {"GlastDetSvc"};
+
+// ----------------------------
 // TkrDigi settings
 //
 TkrDigiAlg.Type = "Bari";  // default: "Simple"
