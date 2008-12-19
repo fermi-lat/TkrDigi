@@ -1,5 +1,15 @@
 ------------------------------------------------------------
 User: lsrea  Thu Dec 18 22:11:09 PST 2008
+TkrDigi/src/General
+
+Modified Files:
+	GeneralNoiseTool.cxx 
+Log Message:
+Set default occupancy to 5e-6
+
+    *
+------------------------------------------------------------
+User: lsrea  Thu Dec 18 22:11:09 PST 2008
 TkrDigi/doc
 
 Modified Files:
