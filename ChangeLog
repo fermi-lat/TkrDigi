@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+TAG
+Tag name: TkrDigi-02-07-04, operation: mov
+Package: TkrDigi
+User: glastrm  Thu Jan 22 16:31:37 2009
+Files:
+  TkrDigi/SConscript  1.11
+  TkrDigi/SConscript  1.11
+  TkrDigi/SConscript  1.11
+
+    *
+------------------------------------------------------------
 User: ecephas  Thu Jan 22 16:07:18 PST 2009
 GlastRelease-scons/TkrDigi
 
