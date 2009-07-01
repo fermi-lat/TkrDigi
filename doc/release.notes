@@ -1,6 +1,8 @@
 /** @file release.notes
 @verbatim
  Package TkrDigi
+ * EOH *
+
  v2r10p2    19-Dec-2008   TU Add explicit reference to GlastDetSvc in test program JO file
  v2r10p1    18-Dec-2008  LSR Set default occupancy to 5e-6 (finally!)
  v2r10      07-Dec-2008  LSR Add GeneralHitRemovalTool::truncateDigis()
