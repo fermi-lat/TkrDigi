@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: lsrea  Wed Sep  9 15:18:37 PDT 2009
+TkrDigi/src
+
+Modified Files:
+	SiStripList.cxx 
+Log Message:
+fix unix warnings
+
+    *
+------------------------------------------------------------
 User: heather  Wed Jul  1 09:31:18 PDT 2009
 TkrDigi/doc
 
