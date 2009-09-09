@@ -6,7 +6,7 @@
 *
 * @author Michael Kuss
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralChargeTool.cxx,v 1.2 2004/03/09 20:06:30 lsrea Exp $
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralChargeTool.cxx,v 1.1 2007/04/12 16:04:43 lsrea Exp $
 */
 
 #include "GeneralChargeTool.h"
@@ -124,14 +124,14 @@ StatusCode GeneralChargeTool::execute() {
 
     SiPlaneMapContainer::SiPlaneMap::iterator itMap=siPlaneMap.begin();
     for ( ; itMap!=siPlaneMap.end(); ++itMap ) { 
-        idents::VolumeIdentifier id = itMap->first;
+        //idents::VolumeIdentifier id = itMap->first;
         SiStripList* sList = itMap->second;
         SiStripList::iterator itStrip=sList->begin();
         eStrip.assign(nStrips, 0.0);
         iStrip.assign(nStrips, false);
         //std::cout << "Setting strips: " ;
         for (itStrip=sList->begin(); itStrip!=sList->end(); ++itStrip ) {
-            int status = itStrip->stripStatus();
+            //int status = itStrip->stripStatus();
             double energy = itStrip->energy();
             int stripNum = itStrip->index();
             iStrip[stripNum] = true;

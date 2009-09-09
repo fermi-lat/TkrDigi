@@ -9,7 +9,7 @@
 *
 * @author Leon Rochester
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitRemovalTool.cxx,v 1.4 2006/02/14 19:29:50 lsrea Exp $
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitRemovalTool.cxx,v 1.5 2008/12/08 01:55:04 lsrea Exp $
 */
 
 #include "GeneralHitRemovalTool.h"
@@ -119,11 +119,11 @@ StatusCode GeneralHitRemovalTool::execute() {
 
     // full treatment...
     m_doFailed = m_doBad = m_doTrunc = true;
-    int hitsRemoved = doBadHitsLoop(siPlaneMap);
+    /* int hitsRemoved = */ doBadHitsLoop(siPlaneMap);
 
     // next, the cable buffers
-    bool towersOutOfOrder, planesOutOfOrder;
-    int removedHits = doCableBufferLoop(siPlaneMap, 
+    bool towersOutOfOrder=false, planesOutOfOrder=false;
+    /* int removedHits  = */ doCableBufferLoop(siPlaneMap, 
         towersOutOfOrder, planesOutOfOrder);
 
     if(towersOutOfOrder || planesOutOfOrder) {

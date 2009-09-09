@@ -6,7 +6,7 @@
 * @author Toby Burnett, Leon Rochester (original authors)
 * @author Michael Kuss
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.cxx,v 1.23 2006/03/21 01:16:40 usher Exp $
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.cxx,v 1.24 2007/04/12 16:04:43 lsrea Exp $
 */
 
 #include "SiStripList.h"
@@ -296,7 +296,7 @@ void SiStripList::addElectronicNoise(const double sigma)
     iterator iter = begin();
     while ( iter != end() ) {
         // check for the electronic noise flag
-        double eDep = iter->energy();
+        //double eDep = iter->energy();
         
         //if(printEdep&&!iter->electronicNoise()) std::cout << eDep << std::endl;
 
@@ -312,7 +312,7 @@ void SiStripList::addElectronicNoise(const double sigma)
 
 int SiStripList::addNoiseStrips(const double occupancy,
                                 const double threshold,
-                                const double trigThreshold) 
+                                const double /* trigThreshold */) 
 {
     // Purpose and Method: adds noise hits to the strip list
     // Inputs: strip occupancy fraction, and energy threshold
