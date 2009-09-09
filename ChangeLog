@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: lsrea  Wed Sep  9 15:18:50 PDT 2009
+TkrDigi/src/General
+
+Modified Files:
+	GeneralChargeTool.cxx GeneralHitRemovalTool.cxx 
+Log Message:
+fix unix warnings
+
+    *
+------------------------------------------------------------
 User: lsrea  Wed Sep  9 15:18:37 PDT 2009
 TkrDigi/src
 
