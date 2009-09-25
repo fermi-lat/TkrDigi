@@ -4,14 +4,14 @@
 
 // primary DLLs
 
-ApplicationMgr.DLLs+= {"RootIo","TkrDigi", "TkrUtil"};
+ApplicationMgr.DLLs+= {"RootIo","TkrDigi", "TkrUtil", "ntupleWriterSvc", "GlastSvc"};
 
 // ----------------------------
 // setup basic event loop stuff
 //
 ApplicationMgr.ExtSvc = { 
 //   "GlastEventSelector/EventSelector" , 
-    "EventCnvSvc"
+    "EventCnvSvc", "RootTupleSvc", "GlastDetSvc"
     };
 EventPersistencySvc.CnvServices = {"EventCnvSvc"};
 EventSelector.Input = "NONE";
