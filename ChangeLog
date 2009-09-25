@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: heather  Fri Sep 25 05:29:13 PDT 2009
+TkrDigi
+
+Modified Files:
+      Tag: GlastReleasev15r47p12
+	SConscript 
+Log Message:
+adjustments to test JO
+    *
+------------------------------------------------------------
 TAG
 Tag name: TkrDigi-02-10-03, operation: add
 Package: TkrDigi
