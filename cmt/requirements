@@ -1,6 +1,6 @@
 package TkrDigi
 
-version v2r10p2
+version v2r10p4
 
 author Michael Kuss   <michael.kuss@pi.infn.it>
 author Monica Brigida <monica.brigida@ba.infn.it>
@@ -25,6 +25,7 @@ set JOBOPTIONS ${TKRDIGIROOT}/src/test/jobOptions.txt
 #=============================================================
 private
 
+use RootConvert v* -no_auto_imports
 use RootIo v*
 
 use G4Propagator v*
