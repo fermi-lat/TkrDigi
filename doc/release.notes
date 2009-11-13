@@ -3,6 +3,7 @@
  Package TkrDigi
  * EOH *
 
+ TkrDigi-02-10-05 12-Nov-2009    jrb Updates for SCons
  TkrDigi-02-10-04 05-Nov-2009 HMK add use of RootConvert for unit test
  TkrDigi-02-10-03 09-Sep-2009  lsrea fix unix warnings
  v2r10p2    19-Dec-2008   TU Add explicit reference to GlastDetSvc in test program JO file
