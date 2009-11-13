@@ -4,3 +4,5 @@ i386*
 Linux*
 rh*
 VC8*
+build
+*.pyc
