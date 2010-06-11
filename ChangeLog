@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: jrb  Thu Jun 10 17:40:11 PDT 2010
+GlastRelease-scons/TkrDigi
+
+Modified Files:
+	SConscript 
+Log Message:
+updates for SCons build
+    *
+------------------------------------------------------------
 TAG
 Tag name: TkrDigi-02-10-05, operation: add
 Package: TkrDigi
