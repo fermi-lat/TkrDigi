@@ -1,5 +1,5 @@
 # -*- python -*-
-# $Header: /nfs/slac/g/glast/ground/cvs/GlastRelease-scons/TkrDigi/SConscript,v 1.14 2009/11/13 00:47:32 jrb Exp $ 
+# $Header: /nfs/slac/g/glast/ground/cvs/GlastRelease-scons/TkrDigi/SConscript,v 1.15 2009/11/13 01:40:18 jrb Exp $ 
 # Authors: Monica Brigida <monica.brigida@ba.infn.it>, Leon Rochester <lsrea@slac.stanford.edu>, Michael Kuss <michael.kuss@pi.infn.it>
 # Version: TkrDigi-02-10-05
 Import('baseEnv')
@@ -8,19 +8,22 @@ Import('packages')
 progEnv = baseEnv.Clone()
 libEnv = baseEnv.Clone()
 
-libEnv.Tool('TkrDigiLib', depsOnly = 1)
+libEnv.Tool('addLinkDeps', package='TkrDigi', toBuild='component')
 TkrDigi = libEnv.SharedLibrary('TkrDigi',
                                listFiles(['src/*.cxx','src/Bari/*.cxx',
                                           'src/Simple/*.cxx', 'src/Dll/*.cxx',
                                           'src/GaudiAlg/*.cxx',
                                           'src/General/*.cxx'])) 
 progEnv.Tool('TkrDigiLib')
+
 test_TkrDigi = progEnv.GaudiProgram('test_TkrDigi',
-                                    listFiles(['src/test/*.cxx']), test=1)
+                                    listFiles(['src/test/*.cxx']),
+                                    test=1, package='TkrDigi')
 
 progEnv.Tool('registerTargets', package = 'TkrDigi',
              libraryCxts=[[TkrDigi,libEnv]],
-             testAppCxts=[[test_TkrDigi,progEnv]])
+             testAppCxts=[[test_TkrDigi,progEnv]],
+             jo = ['src/test/jobOptions.txt'])
 
 
 
