@@ -3,6 +3,7 @@
  Package TkrDigi
  * EOH *
 
+ TkrDigi-02-10-06 12-Jun-2010    jrb upgrades for SCons builds
  TkrDigi-02-10-05 12-Nov-2009    jrb Updates for SCons
  TkrDigi-02-10-04 05-Nov-2009 HMK add use of RootConvert for unit test
  TkrDigi-02-10-03 09-Sep-2009  lsrea fix unix warnings
