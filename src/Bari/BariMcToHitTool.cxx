@@ -6,7 +6,7 @@
 *
 * @authors Nico Giglietto, Monica Brigida, Leon Rochester, Michael Kuss
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Bari/BariMcToHitTool.cxx,v 1.13 2007/04/27 10:09:11 ngigliet Exp $
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Bari/BariMcToHitTool.cxx,v 1.14 2007/05/28 10:09:20 ngigliet Exp $
 */
 
 #include "BariMcToHitTool.h"
@@ -65,7 +65,7 @@ StatusCode BariMcToHitTool::initialize()
     // Set a default current file
     // new file currents is more compact
     declareProperty("CurrentsFile",
-		    m_CurrentsFile="$(TKRDIGIROOT)/src/Bari/cariche");
+		    m_CurrentsFile="$(TKRDIGIDATAPATH)/Bari_charge.txt");
     // Do the currents file (once) - LSR
     facilities::Util::expandEnvVar(&m_CurrentsFile);
     // trying to eliminate memory leak candidates
