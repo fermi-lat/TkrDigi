@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: kuss  Thu Jun 17 06:52:13 PDT 2010
+TkrDigi/data
+
+Added Files:
+	Bari_charge.txt 
+Log Message:
+for SCons: move the Bari charge file to the data directory
+
+    *
+------------------------------------------------------------
 User: kuss  Thu Jun 17 06:49:19 PDT 2010
 TkrDigi/data
 
