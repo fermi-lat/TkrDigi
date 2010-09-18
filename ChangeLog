@@ -1,5 +1,18 @@
 ------------------------------------------------------------
 User: heather  Fri Sep 17 20:53:47 PDT 2010
+TkrDigi/src/test
+
+Modified Files:
+      Tag: GlastReleasev18r6p1
+	test_TkrDigi.cxx 
+Removed Files:
+      Tag: GlastReleasev18r6p1
+	test_TkrDigi_load.cxx 
+Log Message:
+Gaudi v21r7 updates
+    *
+------------------------------------------------------------
+User: heather  Fri Sep 17 20:53:47 PDT 2010
 TkrDigi/src/Simple
 
 Modified Files:
