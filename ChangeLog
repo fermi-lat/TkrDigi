@@ -1,5 +1,18 @@
 ------------------------------------------------------------
 User: heather  Fri Sep 17 20:53:46 PDT 2010
+TkrDigi/src/GaudiAlg
+
+Modified Files:
+      Tag: GlastReleasev18r6p1
+	TkrDigiAlg.cxx TkrDigiAlg.h TkrDigiChargeAlg.cxx 
+	TkrDigiHitRemovalAlg.cxx TkrDigiHitToDigiAlg.cxx 
+	TkrDigiMcToHitAlg.cxx TkrDigiMergeTruncationAlg.cxx 
+	TkrDigiNoiseAlg.cxx 
+Log Message:
+Gaudi v21r7 updates
+    *
+------------------------------------------------------------
+User: heather  Fri Sep 17 20:53:46 PDT 2010
 TkrDigi/src/Bari
 
 Modified Files:
