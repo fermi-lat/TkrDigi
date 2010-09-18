@@ -5,7 +5,7 @@
  *
  * @author Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/GaudiAlg/TkrDigiHitRemovalAlg.cxx,v 1.1 2005/08/16 22:00:26 lsrea Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/GaudiAlg/TkrDigiMergeTruncationAlg.cxx,v 1.1 2008/12/08 01:55:04 lsrea Exp $
  */
 
 #include "GaudiKernel/MsgStream.h"
@@ -37,9 +37,9 @@ class TkrDigiMergeTruncationAlg : public Algorithm {
 
 
 // Used by Gaudi for identifying this algorithm
-static const AlgFactory<TkrDigiMergeTruncationAlg>    Factory;
-const IAlgFactory& TkrDigiMergeTruncationAlgFactory = Factory;
-
+//static const AlgFactory<TkrDigiMergeTruncationAlg>    Factory;
+//const IAlgFactory& TkrDigiMergeTruncationAlgFactory = Factory;
+DECLARE_ALGORITHM_FACTORY(TkrDigiMergeTruncationAlg);
 
 TkrDigiMergeTruncationAlg::TkrDigiMergeTruncationAlg(const std::string& name,
                                  ISvcLocator* pSvcLocator)

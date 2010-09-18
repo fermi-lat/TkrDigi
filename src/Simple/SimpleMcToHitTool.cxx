@@ -6,7 +6,7 @@
  *
  * @authors Toby Burnett, Leon Rochester, Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Simple/SimpleMcToHitTool.cxx,v 1.6 2004/12/14 03:07:34 lsrea Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Simple/SimpleMcToHitTool.cxx,v 1.7 2007/08/08 20:50:52 lsrea Exp $
  */
 
 #include "SimpleMcToHitTool.h"
@@ -26,8 +26,9 @@
 #include "GaudiKernel/SmartDataPtr.h"
 
 
-static const ToolFactory<SimpleMcToHitTool>    s_factory;
-const IToolFactory& SimpleMcToHitToolFactory = s_factory;
+//static const ToolFactory<SimpleMcToHitTool>    s_factory;
+//const IToolFactory& SimpleMcToHitToolFactory = s_factory;
+DECLARE_TOOL_FACTORY(SimpleMcToHitTool);
 
 
 SimpleMcToHitTool::SimpleMcToHitTool(const std::string& type,
