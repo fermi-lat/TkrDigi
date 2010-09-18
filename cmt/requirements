@@ -29,14 +29,13 @@ use RootConvert v* -no_auto_imports
 use RootIo v*
 
 use G4Propagator v*
-
+use RootmapPolicy * GlastPolicy
 use gr_app v*
 
 
 #apply_pattern package_headers
 
 #macro_append TkrDigi_headers "" WIN32 " *.h"
-#library TkrDigi   *.cxx   Dll/*.cxx   ${TkrDigi_headers}
 
 macro TKRDIGI_source    " *.cxx " \
         WIN32           " *.cxx *.h "
@@ -46,10 +45,12 @@ library TkrDigi \
         -s=General    ${TKRDIGI_source} \
         -s=Bari       ${TKRDIGI_source} \
         -s=Simple     ${TKRDIGI_source} \
-        -s=Dll        ${TKRDIGI_source} \
         -s=GaudiAlg   ${TKRDIGI_source}
 
+
 apply_pattern package_Cshlibflags
+
+apply_pattern generate_rootmap library=TkrDigi
 
 private # Traudl says do this
 
