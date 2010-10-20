@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: jrb  Wed Oct 20 11:26:45 PDT 2010
+GlastRelease-scons/TkrDigi
+
+Modified Files:
+      Tag: GlastReleasev18r7p1
+	SConscript 
+Log Message:
+Get SCons to make rootmap
+    *
+------------------------------------------------------------
 TAG
 Tag name: TkrDigi-02-10-05-gr01, operation: add
 Package: TkrDigi
