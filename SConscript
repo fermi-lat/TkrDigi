@@ -1,5 +1,5 @@
 # -*- python -*-
-# $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/SConscript,v 1.17 2010/06/12 22:40:21 jrb Exp $ 
+# $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/SConscript,v 1.18 2010/12/13 01:08:29 lsrea Exp $ 
 # Authors: Monica Brigida <monica.brigida@ba.infn.it>, Leon Rochester <lsrea@slac.stanford.edu>, Michael Kuss <michael.kuss@pi.infn.it>
 # Version: TkrDigi-02-10-07
 Import('baseEnv')
@@ -23,6 +23,7 @@ test_TkrDigi = progEnv.GaudiProgram('test_TkrDigi',
 progEnv.Tool('registerTargets', package = 'TkrDigi',
              libraryCxts=[[TkrDigi,libEnv]],
              testAppCxts=[[test_TkrDigi,progEnv]],
+             data = listFiles(['data/*.txt']),
              jo = ['src/test/jobOptions.txt'])
 
 
