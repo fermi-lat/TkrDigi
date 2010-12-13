@@ -46,9 +46,9 @@ TkrDigiAlg.Type = "Bari";  // default: "Simple"
 TkrFailureModeSvc.towerList= {"14"};  
 TkrFailureModeSvc.layerList= {"14_3_0", "14_4_1"};
 
-TkrBadStripsSvc.badStripsFile = "$(TKRUTILROOT)/src/test/badStrips.txt";
+TkrBadStripsSvc.badStripsFile = "$(TKRUTILJOBOPTIONSPATH)/test/badStrips.txt";
 
-TkrSplitsSvc.splitsFile = "$(TKRUTILROOT)/src/test/splits.xml";
+TkrSplitsSvc.splitsFile = "$(TKRUTILJOBOPTIONSPATH)/test/splits.xml";
 
 // ----------------------------
 //  Geometry definition
