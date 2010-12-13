@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: lsrea  Sun Dec 12 23:02:58 PST 2010
+TkrDigi/src/test
+
+Modified Files:
+	jobOptions.txt 
+Log Message:
+Fix test job jO for SCons
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: TkrDigi-02-10-07, operation: add
 Package: TkrDigi
