@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: kuss  Tue Jan 11 06:49:30 PST 2011
+TkrDigi/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+use the standard macro to build the test executable
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: TkrDigi-02-10-08, operation: add
 Package: TkrDigi
