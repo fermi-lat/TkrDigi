@@ -1,5 +1,16 @@
 ------------------------------------------------------------
 User: jrb  Thu Jan 13 13:21:46 PST 2011
+GlastRelease-scons/TkrDigi/src/General
+
+Modified Files:
+      Tag: GlastReleasev18r7p1
+	GeneralChargeTool.cxx GeneralHitRemovalTool.cxx 
+	GeneralHitToDigiTool.cxx GeneralNoiseTool.cxx 
+Log Message:
+slighly better kludge for getting correct Xerces path for genmap command
+    *
+------------------------------------------------------------
+User: jrb  Thu Jan 13 13:21:46 PST 2011
 GlastRelease-scons/TkrDigi/src/GaudiAlg
 
 Modified Files:
