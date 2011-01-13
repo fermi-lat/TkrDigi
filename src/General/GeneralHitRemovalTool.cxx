@@ -9,7 +9,7 @@
 *
 * @author Leon Rochester
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitRemovalTool.cxx,v 1.5 2008/12/08 01:55:04 lsrea Exp $
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitRemovalTool.cxx,v 1.6.20.1 2010/09/18 03:53:46 heather Exp $
 */
 
 #include "GeneralHitRemovalTool.h"
@@ -30,8 +30,9 @@
 #include <string>
 
 
-static const ToolFactory<GeneralHitRemovalTool>    s_factory;
-const IToolFactory& GeneralHitRemovalToolFactory = s_factory;
+//static const ToolFactory<GeneralHitRemovalTool>    s_factory;
+//const IToolFactory& GeneralHitRemovalToolFactory = s_factory;
+DECLARE_TOOL_FACTORY(GeneralHitRemovalTool);
 
 
 GeneralHitRemovalTool::GeneralHitRemovalTool(const std::string& type,

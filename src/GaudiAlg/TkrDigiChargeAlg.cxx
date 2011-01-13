@@ -5,7 +5,7 @@
  *
  * @author Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/GaudiAlg/TkrDigiChargeAlg.cxx,v 1.2 2004/03/09 20:06:30 lsrea Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/GaudiAlg/TkrDigiChargeAlg.cxx,v 1.1.594.1 2010/09/18 03:53:46 heather Exp $
  */
 
 #include "TkrDigiChargeAlg.h"
@@ -15,9 +15,9 @@
 
 
 // Used by Gaudi for identifying this algorithm
-static const AlgFactory<TkrDigiChargeAlg>    Factory;
-const IAlgFactory& TkrDigiChargeAlgFactory = Factory;
-
+//static const AlgFactory<TkrDigiChargeAlg>    Factory;
+//const IAlgFactory& TkrDigiChargeAlgFactory = Factory;
+DECLARE_ALGORITHM_FACTORY(TkrDigiChargeAlg);
 
 TkrDigiChargeAlg::TkrDigiChargeAlg(const std::string& name,
                                  ISvcLocator* pSvcLocator)
