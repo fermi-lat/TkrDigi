@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: jrb  Thu Jan 13 13:21:45 PST 2011
+GlastRelease-scons/TkrDigi/src
+
+Modified Files:
+      Tag: GlastReleasev18r7p1
+	TkrDigiRandom.cxx 
+Log Message:
+slighly better kludge for getting correct Xerces path for genmap command
+    *
+------------------------------------------------------------
 User: kuss  Tue Jan 11 06:49:30 PST 2011
 TkrDigi/cmt
 
