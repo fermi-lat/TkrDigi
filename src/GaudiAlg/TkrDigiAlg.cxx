@@ -13,7 +13,7 @@
  *
  * @author Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/GaudiAlg/TkrDigiAlg.cxx,v 1.4 2007/04/12 16:04:43 lsrea Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/GaudiAlg/TkrDigiAlg.cxx,v 1.5.180.1 2010/09/18 03:53:46 heather Exp $
  */
 
 #include "TkrDigiAlg.h"
@@ -29,8 +29,9 @@
 
 
 // Definitions for use within Gaudi
-static const AlgFactory<TkrDigiAlg>    Factory;
-const IAlgFactory& TkrDigiAlgFactory = Factory;
+//static const AlgFactory<TkrDigiAlg>    Factory;
+//const IAlgFactory& TkrDigiAlgFactory = Factory;
+DECLARE_ALGORITHM_FACTORY(TkrDigiAlg);
 
 
 TkrDigiAlg::TkrDigiAlg(const std::string& name, ISvcLocator* pSvcLocator) :
@@ -55,6 +56,9 @@ StatusCode TkrDigiAlg::initialize() {
         log << MSG::ERROR << "setProperties() failed" << endreq;
         return StatusCode::FAILURE;
     }
+
+    if (toolSvc()->retrieveTool("TkrDigiRandom", m_randTool).isFailure()) 
+        log << MSG::WARNING << "Failed to create TkrDigiRandom" << endreq;
 
     // creating the sub algorithms
 

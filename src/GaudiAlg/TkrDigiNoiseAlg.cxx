@@ -5,7 +5,7 @@
  *
  * @author Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/GaudiAlg/TkrDigiNoiseAlg.cxx,v 1.1 2004/02/27 10:14:15 kuss Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/GaudiAlg/TkrDigiNoiseAlg.cxx,v 1.2.654.1 2010/09/18 03:53:46 heather Exp $
  */
 
 #include "TkrDigiNoiseAlg.h"
@@ -15,9 +15,9 @@
 
 
 // Used by Gaudi for identifying this algorithm
-static const AlgFactory<TkrDigiNoiseAlg>    Factory;
-const IAlgFactory& TkrDigiNoiseAlgFactory = Factory;
-
+//static const AlgFactory<TkrDigiNoiseAlg>    Factory;
+//const IAlgFactory& TkrDigiNoiseAlgFactory = Factory;
+DECLARE_ALGORITHM_FACTORY(TkrDigiNoiseAlg);
 
 TkrDigiNoiseAlg::TkrDigiNoiseAlg(const std::string& name,
                                  ISvcLocator* pSvcLocator)

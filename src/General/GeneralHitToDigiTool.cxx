@@ -6,7 +6,7 @@
 *
 * @author Michael Kuss
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitToDigiTool.cxx,v 1.12 2007/04/12 16:04:43 lsrea Exp $
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitToDigiTool.cxx,v 1.13.266.1 2010/09/18 03:53:47 heather Exp $
 */
 
 #include "GeneralHitToDigiTool.h"
@@ -35,8 +35,9 @@
 #include <sstream>
 #include <vector>
 
-static const ToolFactory<GeneralHitToDigiTool>    s_factory;
-const IToolFactory& GeneralHitToDigiToolFactory = s_factory;
+//static const ToolFactory<GeneralHitToDigiTool>    s_factory;
+//const IToolFactory& GeneralHitToDigiToolFactory = s_factory;
+DECLARE_TOOL_FACTORY(GeneralHitToDigiTool);
 
 //double GeneralHitToDigiTool::m_totThreshold =GeneralNoiseTool::noiseThreshold();
 //int    GeneralHitToDigiTool::s_maxHits      = 64;

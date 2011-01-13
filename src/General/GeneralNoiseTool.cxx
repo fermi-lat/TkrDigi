@@ -6,7 +6,7 @@
  *
  * @author Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralNoiseTool.cxx,v 1.3 2007/04/12 16:04:43 lsrea Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralNoiseTool.cxx,v 1.4.140.1 2010/09/18 03:53:47 heather Exp $
  */
 
 #include "GeneralNoiseTool.h"
@@ -21,8 +21,10 @@
 #include <string>
 
 
-static const ToolFactory<GeneralNoiseTool>    s_factory;
-const IToolFactory& GeneralNoiseToolFactory = s_factory;
+//static const ToolFactory<GeneralNoiseTool>    s_factory;
+//const IToolFactory& GeneralNoiseToolFactory = s_factory;
+DECLARE_TOOL_FACTORY(GeneralNoiseTool);
+
 
 // 1/4 mip, was .03
 //double GeneralNoiseTool::s_noiseThreshold = 0.03875;

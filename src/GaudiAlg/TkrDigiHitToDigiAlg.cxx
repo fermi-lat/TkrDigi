@@ -5,7 +5,7 @@
  *
  * @author Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/GaudiAlg/TkrDigiHitToDigiAlg.cxx,v 1.1 2004/02/27 10:14:15 kuss Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/GaudiAlg/TkrDigiHitToDigiAlg.cxx,v 1.2.654.1 2010/09/18 03:53:46 heather Exp $
  */
 
 #include "TkrDigiHitToDigiAlg.h"
@@ -15,9 +15,9 @@
 
 
 // Used by Gaudi for identifying this algorithm
-static const AlgFactory<TkrDigiHitToDigiAlg>    Factory;
-const IAlgFactory& TkrDigiHitToDigiAlgFactory = Factory;
-
+//static const AlgFactory<TkrDigiHitToDigiAlg>    Factory;
+//const IAlgFactory& TkrDigiHitToDigiAlgFactory = Factory;
+DECLARE_ALGORITHM_FACTORY(TkrDigiHitToDigiAlg);
 
 TkrDigiHitToDigiAlg::TkrDigiHitToDigiAlg(const std::string& name,
                                          ISvcLocator* pSvcLocator)
