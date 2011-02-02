@@ -3,6 +3,7 @@
  Package TkrDigi
  * EOH *
 
+ TkrDigi-02-10-09 01-Feb-2011  hmk   update GlastSvc use to be generic
  TkrDigi-02-10-08 12-Dec-2010  lsrea fix Sconsript for test job
  TkrDigi-02-10-07 12-Dec-2010  lsrea SCons fixes for test job
  TkrDigi-02-10-06 12-Jun-2010    jrb upgrades for SCons builds
