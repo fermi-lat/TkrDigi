@@ -1,6 +1,6 @@
 package TkrDigi
 
-version v2r10p8
+version v2r10p9
 
 author Michael Kuss   <michael.kuss@pi.infn.it>
 author Monica Brigida <monica.brigida@ba.infn.it>
@@ -9,7 +9,7 @@ author Leon Rochester <lsrea@slac.stanford.edu>
 branches src cmt doc
 
 use GlastPolicy v*
-use GlastSvc v9r*
+use GlastSvc v*
 use Event v*
 
 use GuiSvc v*
