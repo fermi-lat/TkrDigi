@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: heather  Tue Feb  1 18:47:27 PST 2011
+TkrDigi
+
+Modified Files:
+	SConscript 
+Log Message:
+update GlastSvc use to be generic
+    *
+------------------------------------------------------------
 TAG
 Tag name: TkrDigi-02-10-09, operation: add
 Package: TkrDigi
