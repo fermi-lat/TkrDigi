@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: heather  Fri May 20 08:56:29 PDT 2011
+TkrDigi/src/Bari
+
+Modified Files:
+	Cluster.h TkrDigitizer.cxx 
+Log Message:
+CLHEP 2.1.0.1
+    *
+------------------------------------------------------------
+User: heather  Fri May 20 08:56:29 PDT 2011
 TkrDigi/doc
 
 Modified Files:
