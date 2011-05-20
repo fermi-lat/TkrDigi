@@ -25,6 +25,9 @@ const double TkrDigitizer::RmsGain0 = 6.; // mV/fC
 const double TkrDigitizer::Vth      = 125.; // mV = 1/4 MIP, 1 MIP => 5 fC => 500 mV
 const double TkrDigitizer::Vsat     = 1100.; // mV, Saturation voltage output   
 
+typedef HepGeom::Point3D<double>  HepPoint3D;
+typedef HepGeom::Vector3D<double> HepVector3D;
+
 
 TkrDigitizer::TkrDigitizer() {
     m_clusterPar  = new Cluster();
