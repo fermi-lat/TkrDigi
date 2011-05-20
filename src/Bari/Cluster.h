@@ -17,9 +17,11 @@
 #define Cluster_h 1
 
 #include "CLHEP/Geometry/Point3D.h"
+#include "CLHEP/Geometry/Vector3D.h"
 // TU: Hacks for CLHEP 1.9.2.2 and beyond
 #ifndef HepPoint3D
 typedef HepGeom::Point3D<double> HepPoint3D;
+typedef HepGeom::Vector3D<double> HepVector3D;
 #endif
 
 class Cluster      //class declaration
