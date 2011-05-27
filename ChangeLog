@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: heather  Thu May 26 20:38:36 PDT 2011
+TkrDigi/src/Bari
+
+Modified Files:
+	Cluster.cxx ClusterPropagator.cxx InitCurrent.cxx 
+	TkrDigitizer.cxx 
+Log Message:
+CLHEP windows does not have include config dir
+    *
+------------------------------------------------------------
 User: heather  Thu May 26 20:38:35 PDT 2011
 TkrDigi/doc
 
