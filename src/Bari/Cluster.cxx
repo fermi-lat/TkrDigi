@@ -14,7 +14,7 @@
 
 #include "CLHEP/Random/RandFlat.h"
 #include "CLHEP/Random/RandGauss.h"
-#include "CLHEP/config/iostream.h"
+//#include "CLHEP/config/iostream.h"
 #include "CLHEP/Geometry/Vector3D.h"
 #include "CLHEP/Units/SystemOfUnits.h"
 #include "../SiStripList.h"
