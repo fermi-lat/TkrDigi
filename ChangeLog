@@ -1,31 +1,4 @@
 ------------------------------------------------------------
-User: heather  Thu May 26 20:38:35 PDT 2011
-TkrDigi/doc
-
-Modified Files:
-	release.notes 
-Log Message:
-CLHEP windows does not have include config dir
-    *
-------------------------------------------------------------
-User: heather  Thu May 26 20:38:35 PDT 2011
-TkrDigi/cmt
-
-Modified Files:
-	requirements 
-Log Message:
-CLHEP windows does not have include config dir
-    *
-------------------------------------------------------------
-User: heather  Thu May 26 20:38:35 PDT 2011
-TkrDigi
-
-Modified Files:
-	SConscript 
-Log Message:
-CLHEP windows does not have include config dir
-    *
-------------------------------------------------------------
 TAG
 Tag name: TkrDigi-02-10-10, operation: add
 Package: TkrDigi
