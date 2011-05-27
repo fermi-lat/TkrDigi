@@ -3,6 +3,7 @@
  Package TkrDigi
  * EOH *
 
+ TkrDigi-02-10-11 26-May-2011  hmk CLHEP on windows does not have include/config directory
  TkrDigi-02-10-10 20-May-2011  hmk CLHEP 2.1.0.1
  TkrDigi-02-10-09 01-Feb-2011  hmk   update GlastSvc use to be generic
  TkrDigi-02-10-08 12-Dec-2010  lsrea fix Sconsript for test job
