@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: heather  Thu May 26 20:38:35 PDT 2011
+TkrDigi/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+CLHEP windows does not have include config dir
+    *
+------------------------------------------------------------
+User: heather  Thu May 26 20:38:35 PDT 2011
 TkrDigi
 
 Modified Files:
