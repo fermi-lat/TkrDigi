@@ -1,5 +1,16 @@
 ------------------------------------------------------------
 User: heather  Mon Dec 12 12:56:10 PST 2011
+GlastRelease-scons/TkrDigi/src/test
+
+Modified Files:
+	test_TkrDigi.cxx 
+Removed Files:
+	test_TkrDigi_load.cxx 
+Log Message:
+merge Gaudi v21r7
+    *
+------------------------------------------------------------
+User: heather  Mon Dec 12 12:56:10 PST 2011
 GlastRelease-scons/TkrDigi/src/Simple
 
 Modified Files:
