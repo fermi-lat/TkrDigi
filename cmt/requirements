@@ -1,6 +1,6 @@
 package TkrDigi
 
-version v2r10p11
+version v2r11p0
 
 author Michael Kuss   <michael.kuss@pi.infn.it>
 author Monica Brigida <monica.brigida@ba.infn.it>
@@ -29,7 +29,7 @@ use RootConvert v* -no_auto_imports
 use RootIo v*
 
 use G4Propagator v*
-
+use RootmapPolicy * GlastPolicy
 use gr_app v*
 
 
@@ -46,10 +46,11 @@ library TkrDigi \
         -s=General    ${TKRDIGI_source} \
         -s=Bari       ${TKRDIGI_source} \
         -s=Simple     ${TKRDIGI_source} \
-        -s=Dll        ${TKRDIGI_source} \
         -s=GaudiAlg   ${TKRDIGI_source}
 
 apply_pattern package_Cshlibflags
+
+apply_pattern generate_rootmap library=TkrDigi
 
 # build this for testing
 apply_pattern package_test

@@ -31,5 +31,6 @@ public:
 };
 
 // Static factory for instantiation of algtool objects
-static ToolFactory<TkrDigiRandom> s_factory;
-const IToolFactory& TkrDigiRandomFactory = s_factory;
+//static ToolFactory<TkrDigiRandom> s_factory;
+//const IToolFactory& TkrDigiRandomFactory = s_factory;
+DECLARE_TOOL_FACTORY(TkrDigiRandom);

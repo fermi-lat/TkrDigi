@@ -1,4 +1,4 @@
-// $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/test/test_TkrDigi.cxx,v 1.3 2003/11/06 19:03:01 lsrea Exp $
+// $Header: /nfs/slac/g/glast/ground/cvs/GlastRelease-scons/TkrDigi/src/test/test_TkrDigi.cxx,v 1.4.656.1 2011/01/13 21:21:46 jrb Exp $
 
 // Include files
 // Gaudi system includes
@@ -39,8 +39,9 @@ private:
 // expect that the xxx_load.cxx file contains a call     
 //     DLL_DECL_ALGORITHM( test_TkrDigi );
 
-static const AlgFactory<test_TkrDigi>  Factory;
-const IAlgFactory& test_TkrDigiFactory = Factory;
+//static const AlgFactory<test_TkrDigi>  Factory;
+//const IAlgFactory& test_TkrDigiFactory = Factory;
+DECLARE_ALGORITHM_FACTORY(test_TkrDigi);
 
 //------------------------------------------------------------------------
 //! ctor
