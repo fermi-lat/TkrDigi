@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: heather  Mon Dec 12 12:56:08 PST 2011
+GlastRelease-scons/TkrDigi/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+merge Gaudi v21r7
+    *
+------------------------------------------------------------
+User: heather  Mon Dec 12 12:56:08 PST 2011
 GlastRelease-scons/TkrDigi
 
 Modified Files:
