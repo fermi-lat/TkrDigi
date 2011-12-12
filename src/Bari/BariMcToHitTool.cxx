@@ -6,7 +6,7 @@
 *
 * @authors Nico Giglietto, Monica Brigida, Leon Rochester, Michael Kuss
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Bari/BariMcToHitTool.cxx,v 1.14 2007/05/28 10:09:20 ngigliet Exp $
+* $Header: /nfs/slac/g/glast/ground/cvs/GlastRelease-scons/TkrDigi/src/Bari/BariMcToHitTool.cxx,v 1.15 2010/06/17 13:52:13 kuss Exp $
 */
 
 #include "BariMcToHitTool.h"
@@ -36,9 +36,9 @@
 #include "GaudiKernel/DataObject.h"
 
 
-static const ToolFactory<BariMcToHitTool>    s_factory;
-const IToolFactory& BariMcToHitToolFactory = s_factory;
-
+//static const ToolFactory<BariMcToHitTool>    s_factory;
+//const IToolFactory& BariMcToHitToolFactory = s_factory;
+DECLARE_TOOL_FACTORY(BariMcToHitTool);
 
 BariMcToHitTool::BariMcToHitTool(const std::string& type,
                                  const std::string& name,
