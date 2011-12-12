@@ -1,5 +1,17 @@
 ------------------------------------------------------------
 User: heather  Mon Dec 12 12:56:09 PST 2011
+GlastRelease-scons/TkrDigi/src/GaudiAlg
+
+Modified Files:
+	TkrDigiAlg.cxx TkrDigiAlg.h TkrDigiChargeAlg.cxx 
+	TkrDigiHitRemovalAlg.cxx TkrDigiHitToDigiAlg.cxx 
+	TkrDigiMcToHitAlg.cxx TkrDigiMergeTruncationAlg.cxx 
+	TkrDigiNoiseAlg.cxx 
+Log Message:
+merge Gaudi v21r7
+    *
+------------------------------------------------------------
+User: heather  Mon Dec 12 12:56:09 PST 2011
 GlastRelease-scons/TkrDigi/src/Bari
 
 Modified Files:
