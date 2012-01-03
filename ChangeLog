@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: heather  Tue Jan  3 11:04:19 PST 2012
+TkrDigi
+
+Modified Files:
+	SConscript 
+Log Message:
+patch test JO for new gaudi
+    *
+------------------------------------------------------------
 TAG
 Tag name: GlastRelease-17-35-24-gr17, operation: add
 Package: TkrDigi
