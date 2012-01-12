@@ -24,7 +24,7 @@ set JOBOPTIONS ${TKRDIGIROOT}/src/test/jobOptions.txt
 
 #=============================================================
 private
-
+use astro *
 use RootConvert v* -no_auto_imports
 use RootIo v*
 
@@ -54,3 +54,5 @@ apply_pattern generate_rootmap library=TkrDigi
 
 # build this for testing
 apply_pattern package_test
+
+application test_TkrDigi ${WinMain}
