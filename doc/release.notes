@@ -3,7 +3,8 @@
  Package TkrDigi
  * EOH *
 
- TkrDigi-02-11-01 03-Jan-2011  hmk Patch test JO for new Gaudi
+ TkrDigi-02-11-02 16-Jan-2012 hmk Patch for windows
+ TkrDigi-02-11-01 03-Jan-2012  hmk Patch test JO for new Gaudi
  TkrDigi-02-11-00 08-Dec-2011  hmk Merge in Gaudi v21r7
  TkrDigi-02-10-11 26-May-2011  hmk CLHEP on windows does not have include/config directory
  TkrDigi-02-10-10 20-May-2011  hmk CLHEP 2.1.0.1
