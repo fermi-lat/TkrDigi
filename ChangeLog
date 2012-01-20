@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: lsrea  Fri Jan 20 10:48:24 PST 2012
+TkrDigi
+
+Modified Files:
+	SConscript 
+Log Message:
+stag/GoGui_auto-tag
+    *
+------------------------------------------------------------
 TAG
 Tag name: TkrDigi-02-10-11-gr01, operation: add
 Package: TkrDigi
