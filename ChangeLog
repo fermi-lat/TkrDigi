@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: lsrea  Thu Jan 19 18:01:34 PST 2012
+TkrDigi/src/GaudiAlg
+
+Modified Files:
+      Tag: GlastReleasev19r4p1
+	TkrDigiAlg.cxx TkrDigiAlg.h 
+Log Message:
+mods for cable truncation
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: TkrDigi-02-11-02, operation: add
 Package: TkrDigi
