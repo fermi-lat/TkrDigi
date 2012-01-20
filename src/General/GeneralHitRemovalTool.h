@@ -6,7 +6,7 @@
 *
 * @authors Leon Rochester
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitRemovalTool.h,v 1.1 2005/08/16 22:00:27 lsrea Exp $
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitRemovalTool.h,v 1.2 2008/12/08 01:55:04 lsrea Exp $
 */
 
 #ifndef __GENERALHitRemovalTOOL_H__
@@ -38,8 +38,10 @@ public:
 
 private:
 
-    // does the FailureMode, BadStrips, and RC buffers
-    int doBadHitsLoop(SiPlaneMapContainer::SiPlaneMap& siPlaneMap);
+    // does the FailureMode and BadStrips
+    int killBadHitsLoop(SiPlaneMapContainer::SiPlaneMap& siPlaneMap);
+    // does the RC buffers
+    int doRCBufferLoop(SiPlaneMapContainer::SiPlaneMap& siPlaneMap);
     // does the cable buffer
     int doCableBufferLoop(SiPlaneMapContainer::SiPlaneMap& siPlaneMap,
         bool& towersOutofOrder, bool& planesOutofOrder);
