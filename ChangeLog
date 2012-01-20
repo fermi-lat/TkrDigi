@@ -1,5 +1,16 @@
 ------------------------------------------------------------
 User: lsrea  Thu Jan 19 18:01:34 PST 2012
+TkrDigi/src/General
+
+Modified Files:
+      Tag: GlastReleasev19r4p1
+	GeneralHitRemovalTool.cxx GeneralHitRemovalTool.h 
+Log Message:
+mods for cable truncation
+
+    *
+------------------------------------------------------------
+User: lsrea  Thu Jan 19 18:01:34 PST 2012
 TkrDigi/src/GaudiAlg
 
 Modified Files:
