@@ -5,7 +5,7 @@
  *
  * @author Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/GaudiAlg/TkrDigiHitRemovalAlg.cxx,v 1.2 2004/03/09 20:06:30 lsrea Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/GaudiAlg/TkrDigiHitRemovalAlg.cxx,v 1.2 2011/12/12 20:56:09 heather Exp $
  */
 
 #include "GaudiKernel/MsgStream.h"
@@ -37,9 +37,9 @@ class TkrDigiHitRemovalAlg : public Algorithm {
 
 
 // Used by Gaudi for identifying this algorithm
-static const AlgFactory<TkrDigiHitRemovalAlg>    Factory;
-const IAlgFactory& TkrDigiHitRemovalAlgFactory = Factory;
-
+//static const AlgFactory<TkrDigiHitRemovalAlg>    Factory;
+//const IAlgFactory& TkrDigiHitRemovalAlgFactory = Factory;
+DECLARE_ALGORITHM_FACTORY(TkrDigiHitRemovalAlg);
 
 TkrDigiHitRemovalAlg::TkrDigiHitRemovalAlg(const std::string& name,
                                  ISvcLocator* pSvcLocator)
