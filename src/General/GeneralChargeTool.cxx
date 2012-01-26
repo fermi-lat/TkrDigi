@@ -6,7 +6,7 @@
 *
 * @author Michael Kuss
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralChargeTool.cxx,v 1.1 2007/04/12 16:04:43 lsrea Exp $
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralChargeTool.cxx,v 1.3 2011/12/12 20:56:09 heather Exp $
 */
 
 #include "GeneralChargeTool.h"
@@ -22,9 +22,9 @@
 #include <string>
 
 
-static const ToolFactory<GeneralChargeTool>    s_factory;
-const IToolFactory& GeneralChargeToolFactory = s_factory;
-
+//static const ToolFactory<GeneralChargeTool>    s_factory;
+//const IToolFactory& GeneralChargeToolFactory = s_factory;
+DECLARE_TOOL_FACTORY(GeneralChargeTool);
 
 GeneralChargeTool::GeneralChargeTool(const std::string& type,
                                      const std::string& name,

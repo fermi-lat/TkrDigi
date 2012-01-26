@@ -1,6 +1,6 @@
 package TkrDigi
 
-version v2r10p9
+version v2r10p9gr01
 
 author Michael Kuss   <michael.kuss@pi.infn.it>
 author Monica Brigida <monica.brigida@ba.infn.it>
@@ -24,12 +24,12 @@ set JOBOPTIONS ${TKRDIGIROOT}/src/test/jobOptions.txt
 
 #=============================================================
 private
-
+use astro *
 use RootConvert v* -no_auto_imports
 use RootIo v*
 
 use G4Propagator v*
-
+use RootmapPolicy * GlastPolicy
 use gr_app v*
 
 
@@ -46,10 +46,13 @@ library TkrDigi \
         -s=General    ${TKRDIGI_source} \
         -s=Bari       ${TKRDIGI_source} \
         -s=Simple     ${TKRDIGI_source} \
-        -s=Dll        ${TKRDIGI_source} \
         -s=GaudiAlg   ${TKRDIGI_source}
 
 apply_pattern package_Cshlibflags
 
+apply_pattern generate_rootmap library=TkrDigi
+
 # build this for testing
 apply_pattern package_test
+
+application test_TkrDigi ${WinMain}

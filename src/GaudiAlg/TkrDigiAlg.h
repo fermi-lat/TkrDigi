@@ -15,13 +15,14 @@
  *
  * @author Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/GaudiAlg/TkrDigiAlg.h,v 1.3 2007/04/12 16:04:43 lsrea Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/GaudiAlg/TkrDigiAlg.h,v 1.5 2011/12/12 20:56:09 heather Exp $
  */
 
 #ifndef __TKRDIGIALG_H__
 #define __TKRDIGIALG_H__
 
 #include "GaudiKernel/Algorithm.h"
+#include "GlastSvc/GlastRandomSvc/IRandomAccess.h"
 
 #include <string>
 
@@ -50,6 +51,8 @@ class TkrDigiAlg : public Algorithm {
     Algorithm* m_chargeAlg;
 
     IDataProviderSvc* m_edSvc;
+
+    IRandomAccess *m_randTool;
 
 };
 
