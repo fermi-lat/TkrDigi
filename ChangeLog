@@ -1,5 +1,16 @@
 ------------------------------------------------------------
 User: heather  Thu Jan 26 08:49:50 PST 2012
+TkrDigi/src/General
+
+Modified Files:
+      Tag: GlastRelease-17-35-24-br01
+	GeneralChargeTool.cxx GeneralHitRemovalTool.cxx 
+	GeneralHitToDigiTool.cxx GeneralNoiseTool.cxx 
+Log Message:
+Gaudi v21r7
+    *
+------------------------------------------------------------
+User: heather  Thu Jan 26 08:49:50 PST 2012
 TkrDigi/src/GaudiAlg
 
 Modified Files:
