@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: heather  Thu Jan 26 08:49:49 PST 2012
+TkrDigi
+
+Modified Files:
+      Tag: GlastRelease-17-35-24-br01
+	SConscript 
+Log Message:
+Gaudi v21r7
+    *
+------------------------------------------------------------
 TAG
 Tag name: GlastRelease-17-35-24-br01, operation: add
 Package: TkrDigi
