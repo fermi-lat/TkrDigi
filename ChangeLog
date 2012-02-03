@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: lsrea  Fri Feb  3 11:28:26 PST 2012
+TkrDigi/src
+
+Modified Files:
+      Tag: GlastReleasev19r4p1
+	IHitRemovalTool.h 
+Log Message:
+New TkrDigiTruncationAlg, and associated changes
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: GlastRelease-17-35-24-gr21, operation: add
 Package: TkrDigi
