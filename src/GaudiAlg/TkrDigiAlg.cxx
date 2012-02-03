@@ -13,7 +13,7 @@
  *
  * @author Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/GaudiAlg/TkrDigiAlg.cxx,v 1.5 2008/10/01 20:31:57 lsrea Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/GaudiAlg/TkrDigiAlg.cxx,v 1.5.268.1 2012/01/20 02:01:34 lsrea Exp $
  */
 
 #include "TkrDigiAlg.h"
@@ -38,7 +38,7 @@ namespace {
     std::string algName[nAlgs] = {
         "TkrDigiMcToHitAlg",    "TkrDigiChargeAlg",    "TkrDigiNoiseAlg",
         "TkrDigiHitRemovalAlg", "TkrDigiHitToDigiAlg", "TkrFillTDInfoAlg",
-        "TkrDigiMergeTruncationAlg"
+        "TkrDigiMergeTruncationAlg" 
     };
     typedef enum algType { MCTOHIT,    CHARGE,    NOISE, 
                            HITREMOVAL, HITTODIGI, FILLTDINFO, 
