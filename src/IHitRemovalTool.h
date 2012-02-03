@@ -6,7 +6,7 @@
  *
  * @author Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/IHitRemovalTool.h,v 1.1 2005/08/16 22:00:26 lsrea Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/IHitRemovalTool.h,v 1.2 2008/12/08 01:55:04 lsrea Exp $
  */
 
 #ifndef __IHitRemovalTOOL_H__
@@ -33,6 +33,9 @@ class IHitRemovalTool : virtual public IAlgTool {
      */
     virtual StatusCode execute() = 0;
     virtual StatusCode truncateDigis() = 0;
+    virtual void doTrimDigis(bool trim) = 0;
+    virtual bool getTrimDigisFlag() = 0;
+    virtual void setTrimCount( int trimCount) = 0;
 
 };
 

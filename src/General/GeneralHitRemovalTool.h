@@ -6,7 +6,7 @@
 *
 * @authors Leon Rochester
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitRemovalTool.h,v 1.2 2008/12/08 01:55:04 lsrea Exp $
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitRemovalTool.h,v 1.2.232.1 2012/01/20 02:01:34 lsrea Exp $
 */
 
 #ifndef __GENERALHitRemovalTOOL_H__
@@ -35,6 +35,10 @@ public:
     StatusCode execute();
     /// truncates the digis after merging
     StatusCode truncateDigis();
+
+    void doTrimDigis(bool trim) { m_trimDigis = trim; }
+    bool getTrimDigisFlag() { return m_trimDigis; }
+    void setTrimCount( int trimCount) { m_trimCount = trimCount; }
 
 private:
 
@@ -66,6 +70,10 @@ private:
     bool m_doFailed;
     bool m_doBad;
     bool m_doTrunc;
+
+    bool m_trimDigis;
+    int  m_trimCount;
+
 };
 
 #endif

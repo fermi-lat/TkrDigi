@@ -5,7 +5,7 @@
  *
  * @author Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Dll/TkrDigi_load.cxx,v 1.7 2008/12/02 00:04:35 usher Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Dll/TkrDigi_load.cxx,v 1.8 2008/12/08 01:55:04 lsrea Exp $
  */
 
 #include "GaudiKernel/DeclareFactoryEntries.h"
@@ -19,6 +19,7 @@ DECLARE_FACTORY_ENTRIES(TkrDigi)
   DECLARE_ALGORITHM(TkrDigiHitToDigiAlg);
   DECLARE_ALGORITHM(TkrDigiChargeAlg);
   DECLARE_ALGORITHM(TkrDigiMergeTruncationAlg);
+  DECLARE_ALGORITHM(TkrDigiTruncationAlg);
 
   DECLARE_TOOL     (BariMcToHitTool);
   DECLARE_TOOL     (SimpleMcToHitTool);

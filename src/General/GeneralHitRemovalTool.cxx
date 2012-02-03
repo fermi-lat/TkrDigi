@@ -9,7 +9,7 @@
 *
 * @author Leon Rochester
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitRemovalTool.cxx,v 1.6 2009/09/09 22:18:50 lsrea Exp $
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitRemovalTool.cxx,v 1.6.98.1 2012/01/20 02:01:34 lsrea Exp $
 */
 
 #include "GeneralHitRemovalTool.h"
@@ -44,6 +44,8 @@ AlgTool(type, name, parent) {
     // Declaring the properties.
     declareProperty("killFailed",    m_killFailed    = true);
     declareProperty("killBadStrips", m_killBadStrips = true);
+    declareProperty("trimDigis"    , m_trimDigis     = false);
+    declareProperty("trimCount"    , m_trimCount     = 14);
 }
 
 namespace {
@@ -311,8 +313,14 @@ int GeneralHitRemovalTool::doRCBufferLoop(
         SiStripList::iterator itStrip; 
         // Truncate the controller buffers
         // The lost strips are the ones furthest away from the controller 
-        int maxLow  = m_splitsSvc->getMaxStrips(tower, bilayer, view, 0);
-        int maxHigh = m_splitsSvc->getMaxStrips(tower, bilayer, view, 1);
+        int maxLow, maxHigh;
+        if(m_trimDigis) {
+            maxLow  = m_trimCount;
+            maxHigh = m_trimCount;
+        } else {
+            maxLow  = m_splitsSvc->getMaxStrips(tower, bilayer, view, 0);
+            maxHigh = m_splitsSvc->getMaxStrips(tower, bilayer, view, 1);
+        }
         int breakpoint = m_splitsSvc->getSplitPoint(tower, bilayer, view);
 
         // quick test
