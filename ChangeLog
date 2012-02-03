@@ -1,4 +1,18 @@
 ------------------------------------------------------------
+User: lsrea  Fri Feb  3 11:28:27 PST 2012
+TkrDigi/src/GaudiAlg
+
+Modified Files:
+      Tag: GlastReleasev19r4p1
+	TkrDigiAlg.cxx 
+Added Files:
+      Tag: GlastReleasev19r4p1
+	TkrDigiTruncationAlg.cxx 
+Log Message:
+New TkrDigiTruncationAlg, and associated changes
+
+    *
+------------------------------------------------------------
 User: lsrea  Fri Feb  3 11:28:26 PST 2012
 TkrDigi/src/Dll
 
