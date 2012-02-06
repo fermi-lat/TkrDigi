@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: lsrea  Mon Feb  6 11:13:42 PST 2012
+TkrDigi/cmt
+
+Modified Files:
+      Tag: GlastRelease-17-35-24-br02
+	requirements 
+Log Message:
+Mods for truncations
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: TkrDigi-02-10-11-gr02, operation: add
 Package: TkrDigi
