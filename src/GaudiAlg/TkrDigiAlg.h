@@ -15,7 +15,7 @@
  *
  * @author Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/GaudiAlg/TkrDigiAlg.h,v 1.3 2007/04/12 16:04:43 lsrea Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/GaudiAlg/TkrDigiAlg.h,v 1.4.268.1 2012/01/20 02:01:34 lsrea Exp $
  */
 
 #ifndef __TKRDIGIALG_H__
@@ -42,12 +42,16 @@ class TkrDigiAlg : public Algorithm {
      * particular tool another type is chosen.
      */
     std::string m_type;
-    /// Pointers to the sub algorithms
+    // Pointers to the sub algorithms
+    // done in anonymous namespace now
+    /*
     Algorithm* m_mcToHitAlg;
     Algorithm* m_hitRemovalAlg;
     Algorithm* m_noiseAlg;
     Algorithm* m_hitToDigiAlg;
     Algorithm* m_chargeAlg;
+    Algorithm* m_fillTDInfoAlg;
+    */
 
     IDataProviderSvc* m_edSvc;
 
