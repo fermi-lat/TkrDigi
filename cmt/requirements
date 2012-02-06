@@ -13,7 +13,7 @@ use GlastSvc v*
 use Event v*
 
 use GuiSvc v*
-use TkrUtil v3r*
+use TkrUtil v*
 use facilities v2r*
 
 ##use xml v4r*
