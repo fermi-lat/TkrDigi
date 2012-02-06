@@ -1,5 +1,19 @@
 ------------------------------------------------------------
 User: lsrea  Mon Feb  6 11:13:43 PST 2012
+TkrDigi/src/GaudiAlg
+
+Modified Files:
+      Tag: GlastRelease-17-35-24-br02
+	TkrDigiAlg.cxx TkrDigiAlg.h 
+Added Files:
+      Tag: GlastRelease-17-35-24-br02
+	TkrDigiTruncationAlg.cxx 
+Log Message:
+Mods for truncations
+
+    *
+------------------------------------------------------------
+User: lsrea  Mon Feb  6 11:13:43 PST 2012
 TkrDigi/src/Dll
 
 Modified Files:
