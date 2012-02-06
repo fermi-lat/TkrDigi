@@ -1,5 +1,16 @@
 ------------------------------------------------------------
 User: lsrea  Mon Feb  6 11:13:42 PST 2012
+TkrDigi/src
+
+Modified Files:
+      Tag: GlastRelease-17-35-24-br02
+	IHitRemovalTool.h 
+Log Message:
+Mods for truncations
+
+    *
+------------------------------------------------------------
+User: lsrea  Mon Feb  6 11:13:42 PST 2012
 TkrDigi/cmt
 
 Modified Files:
