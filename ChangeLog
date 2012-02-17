@@ -1,5 +1,84 @@
 ------------------------------------------------------------
 TAG
+Tag name: GlastRelease-17-35-24-gr23, operation: add
+Package: TkrDigi
+User: heather  Fri Feb 17 13:44:19 2012
+Files:
+  TkrDigi/.cvsignore  1.4
+  TkrDigi/ChangeLog  1.452
+  TkrDigi/SConscript  1.21.36.1
+  TkrDigi/TkrDigiLib.py  1.3
+  TkrDigi/cmt/.cvsignore  1.3
+  TkrDigi/cmt/requirements  1.87.36.1
+  TkrDigi/cmt/Makefile  1.1.1.1
+  TkrDigi/data/Bari_charge.txt  1.1
+  TkrDigi/doc/.cvsignore  1.1.1.1
+  TkrDigi/doc/release.notes  1.90.36.1
+  TkrDigi/src/SiStripList.cxx  1.25
+  TkrDigi/src/IMcToHitTool.h  1.1
+  TkrDigi/src/IHitRemovalTool.h  1.2
+  TkrDigi/src/SiPlaneMapContainer.h  1.2
+  TkrDigi/src/SiLayerList.cxx  1.7
+  TkrDigi/src/IHitToDigiTool.h  1.1
+  TkrDigi/src/IChargeTool.h  1.3
+  TkrDigi/src/INoiseTool.h  1.1
+  TkrDigi/src/TkrDigiRandom.cxx  1.2.744.1
+  TkrDigi/src/SiStripList.h  1.14
+  TkrDigi/src/mainpage.h  1.1.1.1
+  TkrDigi/src/TkrVolumeIdentifier.cxx  1.1
+  TkrDigi/src/SiLayerList.h  1.4
+  TkrDigi/src/TkrVolumeIdentifier.h  1.1
+  TkrDigi/src/Bari/Digi.h  1.1
+  TkrDigi/src/Bari/CurrOr.h  1.4
+  TkrDigi/src/Bari/InitCurrent.h  1.5
+  TkrDigi/src/Bari/TotOr.cxx  1.1
+  TkrDigi/src/Bari/BariMcToHitTool.cxx  1.15.74.1
+  TkrDigi/src/Bari/InitCurrent.cxx  1.5
+  TkrDigi/src/Bari/Digi.cxx  1.1
+  TkrDigi/src/Bari/TkrDigitizer.h  1.8
+  TkrDigi/src/Bari/Cluster.cxx  1.3
+  TkrDigi/src/Bari/ClusterPropagator.h  1.2
+  TkrDigi/src/Bari/TkrDigitizer.cxx  1.9
+  TkrDigi/src/Bari/TotOr.h  1.1
+  TkrDigi/src/Bari/CurrOr.cxx  1.4
+  TkrDigi/src/Bari/DigiElem.h  1.3
+  TkrDigi/src/Bari/BariMcToHitTool.h  1.5
+  TkrDigi/src/Bari/Tot.cxx  1.2
+  TkrDigi/src/Bari/Tot.h  1.1
+  TkrDigi/src/Bari/ClusterPropagator.cxx  1.2
+  TkrDigi/src/Bari/Cluster.h  1.4
+  TkrDigi/src/Bari/DigiElem.cxx  1.3
+  TkrDigi/src/Dll/TkrDigi_load.cxx  1.8
+  TkrDigi/src/Dll/TkrDigi_dll.cxx  1.1.1.1
+  TkrDigi/src/GaudiAlg/TkrDigiHitRemovalAlg.cxx  1.1.744.1
+  TkrDigi/src/GaudiAlg/TkrDigiMcToHitAlg.cxx  1.2.744.1
+  TkrDigi/src/GaudiAlg/TkrDigiAlg.cxx  1.5.270.1
+  TkrDigi/src/GaudiAlg/TkrDigiAlg.h  1.4.270.1
+  TkrDigi/src/GaudiAlg/TkrDigiNoiseAlg.h  1.1
+  TkrDigi/src/GaudiAlg/TkrDigiMergeTruncationAlg.cxx  1.1.234.1
+  TkrDigi/src/GaudiAlg/TkrDigiHitToDigiAlg.cxx  1.2.744.1
+  TkrDigi/src/GaudiAlg/TkrDigiHitToDigiAlg.h  1.1
+  TkrDigi/src/GaudiAlg/TkrDigiMcToHitAlg.h  1.1
+  TkrDigi/src/GaudiAlg/TkrDigiChargeAlg.cxx  1.1.684.1
+  TkrDigi/src/GaudiAlg/TkrDigiNoiseAlg.cxx  1.2.744.1
+  TkrDigi/src/GaudiAlg/TkrDigiChargeAlg.h  1.1
+  TkrDigi/src/General/GeneralHitRemovalTool.h  1.2
+  TkrDigi/src/General/GeneralNoiseTool.h  1.2
+  TkrDigi/src/General/GeneralNoiseTool.cxx  1.4.230.1
+  TkrDigi/src/General/GeneralHitToDigiTool.h  1.8
+  TkrDigi/src/General/GeneralHitRemovalTool.cxx  1.6.100.1
+  TkrDigi/src/General/GeneralChargeTool.cxx  1.2.100.1
+  TkrDigi/src/General/GeneralHitToDigiTool.cxx  1.13.356.1
+  TkrDigi/src/General/GeneralChargeTool.h  1.1
+  TkrDigi/src/Simple/SimpleMcToHitTool.cxx  1.7.612.1
+  TkrDigi/src/Simple/SimpleMcToHitTool.h  1.4
+  TkrDigi/src/test/test_TkrDigi.cxx  1.4.744.1
+  TkrDigi/src/test/muon_mc.root  1.2
+  TkrDigi/src/test/jobOptions.txt  1.15.74.1
+
+    *
+------------------------------------------------------------
+TAG
 Tag name: GlastRelease-19-04-01-gr13, operation: add
 Package: TkrDigi
 User: heather  Tue Feb 14 14:35:46 2012
