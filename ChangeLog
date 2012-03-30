@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: lsrea  Fri Mar 30 09:33:03 PDT 2012
+TkrDigi/src/General
+
+Modified Files:
+      Tag: GlastRelease-17-35-24-br02
+	GeneralHitRemovalTool.cxx 
+Log Message:
+Fix memory leak
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: GlastRelease-17-35-24-rp02, operation: add
 Package: TkrDigi
