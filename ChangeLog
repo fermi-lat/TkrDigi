@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: heather  Wed Apr 25 13:57:48 PDT 2012
+TkrDigi/src/GaudiAlg
+
+Modified Files:
+	TkrDigiTruncationAlg.cxx 
+Log Message:
+patch merge
+    *
+------------------------------------------------------------
+User: heather  Wed Apr 25 13:57:48 PDT 2012
 TkrDigi/doc
 
 Modified Files:
