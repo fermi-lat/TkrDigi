@@ -13,7 +13,7 @@
  *
  * @author Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/GlastRelease-scons/TkrDigi/src/GaudiAlg/TkrDigiAlg.cxx,v 1.5.182.1 2011/01/13 21:21:45 jrb Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/GaudiAlg/TkrDigiAlg.cxx,v 1.6 2011/12/12 20:56:09 heather Exp $
  */
 
 #include "TkrDigiAlg.h"
@@ -32,6 +32,20 @@
 //static const AlgFactory<TkrDigiAlg>    Factory;
 //const IAlgFactory& TkrDigiAlgFactory = Factory;
 DECLARE_ALGORITHM_FACTORY(TkrDigiAlg);
+
+namespace {
+    // for looping over the sub-algorithms
+    const int nAlgs = 7;
+    Algorithm* ptrAlg[nAlgs];
+    std::string algName[nAlgs] = {
+        "TkrDigiMcToHitAlg",    "TkrDigiChargeAlg",    "TkrDigiNoiseAlg",
+        "TkrDigiHitRemovalAlg", "TkrDigiHitToDigiAlg", "TkrFillTDInfoAlg",
+        "TkrDigiMergeTruncationAlg" 
+    };
+    typedef enum algType { MCTOHIT,    CHARGE,    NOISE, 
+                           HITREMOVAL, HITTODIGI, FILLTDINFO, 
+                           TRUNCATION };
+}
 
 
 TkrDigiAlg::TkrDigiAlg(const std::string& name, ISvcLocator* pSvcLocator) :
@@ -62,46 +76,30 @@ StatusCode TkrDigiAlg::initialize() {
 
     // creating the sub algorithms
 
-    if ( createSubAlgorithm("TkrDigiMcToHitAlg", "TkrDigiMcToHitAlg",
-                            m_mcToHitAlg).isFailure() ) {
-        log << MSG::ERROR << "could not open TkrDigiMcToHitAlg" << endreq;
+    int iAlg;
+    for(iAlg=0;iAlg<nAlgs;++iAlg) {
+        ptrAlg[iAlg] = 0;
+        if ( createSubAlgorithm(algName[iAlg], algName[iAlg],
+                                ptrAlg[iAlg]).isFailure() ) {
+
+            log << MSG::ERROR << "could not open " << algName[iAlg] << endreq;
+
         return StatusCode::FAILURE;
     }
 
-    if ( createSubAlgorithm("TkrDigiNoiseAlg", "TkrDigiNoiseAlg",
-                            m_noiseAlg).isFailure() ) {
-        log << MSG::ERROR << "could not open TkrDigiNoiseAlg" << endreq;
-        return StatusCode::FAILURE;
+
     }
 
-    if ( createSubAlgorithm("TkrDigiChargeAlg", "TkrDigiChargeAlg",
-                            m_chargeAlg).isFailure() ) {
-        log << MSG::ERROR << "could not open TkrDigiChargeAlg" << endreq;
-        return StatusCode::FAILURE;
-    }
-
-    if ( createSubAlgorithm("TkrDigiHitRemovalAlg", "TkrDigiHitRemovalAlg",
-                            m_hitRemovalAlg).isFailure() ) {
-        log << MSG::ERROR << "could not open TkrDigiHitRemovalAlg" << endreq;
-        return StatusCode::FAILURE;
-    }
-
-    if ( createSubAlgorithm("TkrDigiHitToDigiAlg", "TkrDigiHitToDigiAlg",
-                            m_hitToDigiAlg).isFailure() ) {
-        log << MSG::ERROR << "could not open TkrDigiHitToDigiAlg" << endreq;
-        return StatusCode::FAILURE;
-    }
-
-    // Sets the property controlling the type of Tool to be used.
-    m_mcToHitAlg->setProperty(  "Type", m_type);
+    // These algorithms require special initialization:
+    ptrAlg[MCTOHIT]->setProperty(  "Type", m_type);
     // "General", or skip for Bari.
-    m_noiseAlg->setProperty(    "Type", (m_type=="Simple"? "General": "none"));
+    ptrAlg[NOISE]->setProperty(    "Type", (m_type=="Simple"? "General": "none"));
     // "General", or skip for Bari.
-    m_chargeAlg->setProperty(    "Type", (m_type=="Simple"? "General": "none"));
+    ptrAlg[CHARGE]->setProperty(    "Type", (m_type=="Simple"? "General": "none"));
     // Currently only one choice, "General"
-    m_hitRemovalAlg->setProperty( "Type", "General");
+    ptrAlg[HITREMOVAL]->setProperty( "Type", "General");
     // Currently only one choice, "General".
-    m_hitToDigiAlg->setProperty("Type", "General");
+    ptrAlg[HITTODIGI]->setProperty("Type", "General");
 
     IService* iService = 0;
     StatusCode sc = serviceLocator()->service("EventDataSvc", iService, true);
@@ -139,35 +137,18 @@ StatusCode TkrDigiAlg::execute() {
 
     // loading the sub algorithms
 
-    if( m_mcToHitAlg->execute().isFailure() ) {
-        log << MSG::ERROR << m_mcToHitAlg->name() << " FAILED to execute!"
-            << endreq;
-        return StatusCode::FAILURE;
-    }
-
-    if( m_chargeAlg->execute().isFailure() ) {
-        log << MSG::ERROR << m_chargeAlg->name() << " FAILED to execute!"
-            << endreq;
-        return StatusCode::FAILURE;
-    }
-
-    if( m_noiseAlg->execute().isFailure() ) {
-        log << MSG::ERROR << m_noiseAlg->name() << " FAILED to execute!"
-            << endreq;
-        return StatusCode::FAILURE;
-    }
-
-    if( m_hitRemovalAlg->execute().isFailure() ) {
-        log << MSG::ERROR << m_hitRemovalAlg->name() << " FAILED to execute!"
+    int iAlg;
+    for(iAlg=0;iAlg<nAlgs;++iAlg) {
+        if( ptrAlg[iAlg]->execute().isFailure() ) {
+            log << MSG::ERROR << algName[iAlg] << " FAILED to execute!"
             << endreq;
         return StatusCode::FAILURE;
     }
 
 
-    if( m_hitToDigiAlg->execute().isFailure() ) {
-        log << MSG::ERROR << m_hitToDigiAlg->name() << " FAILED to execute!"
-            << endreq;
-        return StatusCode::FAILURE;
+
+
+
     }
 
     return StatusCode::SUCCESS;
