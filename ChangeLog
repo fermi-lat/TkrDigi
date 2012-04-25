@@ -1,5 +1,16 @@
 ------------------------------------------------------------
 User: heather  Tue Apr 24 21:55:02 PDT 2012
+TkrDigi/src/GaudiAlg
+
+Modified Files:
+	TkrDigiAlg.cxx TkrDigiAlg.h 
+Added Files:
+	TkrDigiTruncationAlg.cxx 
+Log Message:
+P8 merge
+    *
+------------------------------------------------------------
+User: heather  Tue Apr 24 21:55:02 PDT 2012
 TkrDigi/src/Dll
 
 Modified Files:
