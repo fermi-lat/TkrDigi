@@ -9,7 +9,7 @@
 *
 * @author Leon Rochester
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/GlastRelease-scons/TkrDigi/src/General/GeneralHitRemovalTool.cxx,v 1.6.22.1 2011/01/13 21:21:46 jrb Exp $
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitRemovalTool.cxx,v 1.7 2011/12/12 20:56:09 heather Exp $
 */
 
 #include "GeneralHitRemovalTool.h"
@@ -45,6 +45,8 @@ AlgTool(type, name, parent) {
     // Declaring the properties.
     declareProperty("killFailed",    m_killFailed    = true);
     declareProperty("killBadStrips", m_killBadStrips = true);
+    declareProperty("trimDigis"    , m_trimDigis     = false);
+    declareProperty("trimCount"    , m_trimCount     = 14);
 }
 
 namespace {
@@ -120,18 +122,19 @@ StatusCode GeneralHitRemovalTool::execute() {
 
     // full treatment...
     m_doFailed = m_doBad = m_doTrunc = true;
-    /* int hitsRemoved = */ doBadHitsLoop(siPlaneMap);
+    killBadHitsLoop(siPlaneMap);
+    //doRCBufferLoop(siPlaneMap);
 
     // next, the cable buffers
     bool towersOutOfOrder=false, planesOutOfOrder=false;
-    /* int removedHits  = */ doCableBufferLoop(siPlaneMap, 
-        towersOutOfOrder, planesOutOfOrder);
+    //doCableBufferLoop(siPlaneMap, 
+    //    towersOutOfOrder, planesOutOfOrder);
 
-    if(towersOutOfOrder || planesOutOfOrder) {
-        log << MSG::INFO << "There is a problem with the ordering of the SiStrips... " 
-            << " this should *not* happen!" << endreq;
-        return StatusCode::FAILURE;
-    }
+    //if(towersOutOfOrder || planesOutOfOrder) {
+    //    log << MSG::INFO << "There is a problem with the ordering of the SiStrips... " 
+    //       << " this should *not* happen!" << endreq;
+    //    return StatusCode::FAILURE;
+    //}
     return sc;
 }
 
@@ -163,6 +166,7 @@ StatusCode GeneralHitRemovalTool::truncateDigis()
 
     // make and fill siStripLists from the Digi
     Event::TkrDigiCol::iterator it = tkrDigiCol->begin();
+    int count = 0;
     for (;it!=tkrDigiCol->end(); ++it) {
         Event::TkrDigi* digi = *(it);
 
@@ -170,6 +174,9 @@ StatusCode GeneralHitRemovalTool::truncateDigis()
         idents::TowerId id(digi->getTower());
         int layer = digi->getBilayer();
         int view  = digi->getView();
+        //std::cout << "Digi " << count << " " << digi->getTower().id() << " " << layer << " "
+        //    << view << std::endl;
+        count++;
         int tray, botTop;
         m_tkrGeom->layerToTray(layer, view, tray, botTop);
 
@@ -201,10 +208,12 @@ StatusCode GeneralHitRemovalTool::truncateDigis()
     m_doFailed = m_doBad = false;
     m_doTrunc = true;
 
-    int nRemovedRCHits = doBadHitsLoop(siPlaneMap);
+    int nKilledBadHits = 0, nRemovedRCHits = 0, nRemovedCCHits = 0;
 
-    bool towersOutOfOrder, planesOutOfOrder;
-    int nRemovedCCHits = doCableBufferLoop(siPlaneMap, 
+    if(m_doFailed || m_doBad) nKilledBadHits = killBadHitsLoop(siPlaneMap);
+    if(m_doTrunc) nRemovedRCHits = doRCBufferLoop(siPlaneMap);
+    bool towersOutOfOrder = false, planesOutOfOrder = false;
+    if(m_doTrunc) nRemovedCCHits = doCableBufferLoop(siPlaneMap, 
         towersOutOfOrder, planesOutOfOrder);
 
     if(towersOutOfOrder || planesOutOfOrder) {
@@ -235,14 +244,19 @@ StatusCode GeneralHitRemovalTool::truncateDigis()
             // if the HitList is empty, delete the digi
             // this can happen after hit truncation along a cable
             // for maxHit==14, this won't happen, because by construction
-            // the cable buffer never fills
-            if(thisDigi->getNumHits()==0) delete thisDigi;
+            // the cable buffer never fills (well, hardly ever!)
+            if(thisDigi->getNumHits()==0) {
+                if(debug) log << MSG::DEBUG << "digi removed: tower " << thisDigi->getTower().id() <<
+                    " layer " << thisDigi->getBilayer()  << " view " << thisDigi->getView()
+                    << endreq;
+                delete thisDigi;
+            }
         }
     }
     return sc;
 }
 
-int GeneralHitRemovalTool::doBadHitsLoop(
+int GeneralHitRemovalTool::killBadHitsLoop(
     SiPlaneMapContainer::SiPlaneMap& siPlaneMap)
 {
 
@@ -281,10 +295,33 @@ int GeneralHitRemovalTool::doBadHitsLoop(
                 }
             }
         }
+    }
+    return removed;
+}
+int GeneralHitRemovalTool::doRCBufferLoop(
+    SiPlaneMapContainer::SiPlaneMap& siPlaneMap)
+{
+    int removed = 0;
+    SiPlaneMapContainer::SiPlaneMap::iterator itMap=siPlaneMap.begin();
+    for ( ; itMap!=siPlaneMap.end(); ++itMap ) {
+        SiStripList* sList = itMap->second;
+        const TkrVolumeIdentifier volId = itMap->first;  
+        const idents::TowerId towerId     = volId.getTower();
+        const int tower = towerId.id();
+        const int bilayer  = volId.getLayer();
+        const int view     = volId.getView();
+        const idents::GlastAxis::axis axis = volId.getAxis();
+        SiStripList::iterator itStrip; 
         // Truncate the controller buffers
         // The lost strips are the ones furthest away from the controller 
-        int maxLow  = m_splitsSvc->getMaxStrips(tower, bilayer, view, 0);
-        int maxHigh = m_splitsSvc->getMaxStrips(tower, bilayer, view, 1);
+        int maxLow, maxHigh;
+        if(m_trimDigis) {
+            maxLow  = m_trimCount;
+            maxHigh = m_trimCount;
+        } else {
+            maxLow  = m_splitsSvc->getMaxStrips(tower, bilayer, view, 0);
+            maxHigh = m_splitsSvc->getMaxStrips(tower, bilayer, view, 1);
+        }
         int breakpoint = m_splitsSvc->getSplitPoint(tower, bilayer, view);
 
         // quick test

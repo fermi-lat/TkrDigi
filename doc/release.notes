@@ -3,11 +3,16 @@
  Package TkrDigi
  * EOH *
 
+ TkrDigi-02-13-00 24-Apr-2012 hmk Merge GlastReleasev19r4p1 branch
  TkrDigi-02-12-01 20-Jan-2012  lsrea mods for cable truncation
  TkrDigi-02-12-00 20-Jan-2012  lsrea mods for cable truncation
  TkrDigi-02-11-02 16-Jan-2012 hmk Patch for windows
  TkrDigi-02-11-01 03-Jan-2012  hmk Patch test JO for new Gaudi
  TkrDigi-02-11-00 08-Dec-2011  hmk Merge in Gaudi v21r7
+ -- End GlastReleasev19r4p1 branch
+ TkrDigi-02-10-11-gr02 03-Feb-2012  lsrea new TkrDigiTruncationAlg and associated stuff
+ TkrDigi-02-10-11-gr01 20-Jan-2012  lsrea cc cable truncation code on v19r4p1 branch
+ -- Start GlastReleasev19r4p1 branch
  TkrDigi-02-10-11 26-May-2011  hmk CLHEP on windows does not have include/config directory
  TkrDigi-02-10-10 20-May-2011  hmk CLHEP 2.1.0.1
  TkrDigi-02-10-09 01-Feb-2011  hmk   update GlastSvc use to be generic
