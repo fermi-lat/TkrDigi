@@ -5,7 +5,7 @@
  *
  * @author Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/GaudiAlg/Attic/TkrDigiTruncationAlg.cxx,v 1.1.2.1 2012/02/03 19:28:27 lsrea Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/GaudiAlg/TkrDigiTruncationAlg.cxx,v 1.2 2012/04/25 04:55:02 heather Exp $
  */
 
 #include "GaudiKernel/MsgStream.h"
@@ -44,8 +44,9 @@ class TkrDigiTruncationAlg : public Algorithm {
 
 
 // Used by Gaudi for identifying this algorithm
-static const AlgFactory<TkrDigiTruncationAlg>    Factory;
-const IAlgFactory& TkrDigiTruncationAlgFactory = Factory;
+//static const AlgFactory<TkrDigiTruncationAlg>    Factory;
+//const IAlgFactory& TkrDigiTruncationAlgFactory = Factory;
+DECLARE_ALGORITHM_FACTORY(TkrDigiTruncationAlg);
 
 
 TkrDigiTruncationAlg::TkrDigiTruncationAlg(const std::string& name,
