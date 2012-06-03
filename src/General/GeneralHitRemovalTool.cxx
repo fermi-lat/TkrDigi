@@ -9,7 +9,7 @@
 *
 * @author Leon Rochester
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitRemovalTool.cxx,v 1.7 2011/12/12 20:56:09 heather Exp $
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/General/GeneralHitRemovalTool.cxx,v 1.8 2012/04/25 04:55:02 heather Exp $
 */
 
 #include "GeneralHitRemovalTool.h"
@@ -253,6 +253,16 @@ StatusCode GeneralHitRemovalTool::truncateDigis()
             }
         }
     }
+
+    // make sure the stripDigiMap goes away!
+    StripDigiMap::iterator mapIter = stripDigiMap.begin();      
+    for(;mapIter!=stripDigiMap.end(); ++mapIter) {
+        SiStripList* stripList = mapIter->first;
+        stripList->clear();
+        delete stripList;
+    }
+    stripDigiMap.clear();
+
     return sc;
 }
 
