@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: lsrea  Sun Jun  3 13:03:10 PDT 2012
+TkrDigi/src/General
+
+Modified Files:
+	GeneralHitRemovalTool.cxx 
+Log Message:
+This memory-fix update got overlooked in the merge
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: TkrDigi-02-10-09-tr02, operation: add
 Package: TkrDigi
