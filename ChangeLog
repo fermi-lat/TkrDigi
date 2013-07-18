@@ -2,6 +2,14 @@
 TAG
 Tag name: GlastRelease-17-35-24-lp48, operation: add
 Package: TkrDigi
+User: heather  Thu Jul 18 10:22:36 2013
+Files:
+
+    *
+------------------------------------------------------------
+TAG
+Tag name: GlastRelease-17-35-24-lp48, operation: add
+Package: TkrDigi
 User: heather  Thu Jul 18 10:00:24 2013
 Files:
   TkrDigi/.cvsignore  1.4
