@@ -11,7 +11,7 @@
 * @author Toby Burnett, Leon Rochester (original authors)
 * @author Michael Kuss
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.h,v 1.13 2006/02/14 19:29:49 lsrea Exp $
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.h,v 1.14 2007/04/12 16:04:43 lsrea Exp $
 */
 
 #ifndef SISTRIPLIST_H
@@ -159,7 +159,8 @@ public:
         * @param 2   exit point in local coordinates
         * @param 3   pointer to a McPositionHit
         */
-        void score(const HepPoint3D&,const HepPoint3D&,const Event::McPositionHit*, bool test);
+        void score(const HepPoint3D&,const HepPoint3D&,const Event::McPositionHit*, 
+            bool fluctuate, bool test);
 
     //#define TEMPLATE
 #ifdef TEMPLATE

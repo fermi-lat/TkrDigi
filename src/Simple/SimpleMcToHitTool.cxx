@@ -6,7 +6,7 @@
  *
  * @authors Toby Burnett, Leon Rochester, Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/GlastRelease-scons/TkrDigi/src/Simple/SimpleMcToHitTool.cxx,v 1.7.524.1 2011/01/13 21:21:46 jrb Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Simple/SimpleMcToHitTool.cxx,v 1.8 2011/12/12 20:56:10 heather Exp $
  */
 
 #include "SimpleMcToHitTool.h"
@@ -39,6 +39,7 @@ SimpleMcToHitTool::SimpleMcToHitTool(const std::string& type,
     declareInterface<IMcToHitTool>(this);
 
     declareProperty("test", m_test = false);
+    declareProperty("fluctuate", m_fluctuate = false);
     declareProperty("alignmentMode", m_alignmentMode=0);
 }
 
@@ -241,7 +242,7 @@ SiPlaneMapContainer::SiPlaneMap SimpleMcToHitTool::createSiHits(
         HepPoint3D planeExit (localExit  + offset);
 
         // the entry into the planeMap is in plane coordinates
-        siPlaneMap[planeId]->score(planeEntry, planeExit, hit, m_test);
+        siPlaneMap[planeId]->score(planeEntry, planeExit, hit, m_fluctuate, m_test);
           }
 
           return siPlaneMap;
