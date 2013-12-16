@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: lsrea  Sun Dec 15 23:28:47 PST 2013
+GlastRelease-scons/TkrDigi/src
+
+Modified Files:
+	SiStripList.cxx SiStripList.h 
+Log Message:
+Implementation of Philippe's mip correction, but in digitization
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: GlastRelease-20-09-05, operation: add
 Package: TkrDigi
