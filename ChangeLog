@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: lsrea  Sun Dec 15 23:28:48 PST 2013
+GlastRelease-scons/TkrDigi/src/Simple
+
+Modified Files:
+	SimpleMcToHitTool.cxx SimpleMcToHitTool.h 
+Log Message:
+Implementation of Philippe's mip correction, but in digitization
+
+    *
+------------------------------------------------------------
 User: lsrea  Sun Dec 15 23:28:47 PST 2013
 GlastRelease-scons/TkrDigi/src
 
