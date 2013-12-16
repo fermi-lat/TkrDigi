@@ -6,7 +6,7 @@
  *
  * @authors Toby Burnett, Leon Rochester, Michael Kuss
  *
- * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Simple/SimpleMcToHitTool.h,v 1.3 2004/12/14 03:07:34 lsrea Exp $
+ * $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/Simple/SimpleMcToHitTool.h,v 1.4 2007/08/08 20:50:52 lsrea Exp $
  */
 
 #ifndef __SIMPLEMCTOHITTOOL_H__
@@ -59,6 +59,8 @@ class SimpleMcToHitTool : public AlgTool, virtual public IMcToHitTool {
     bool m_test;
     /// flag to set alignment mode: 0 = original, 1 = single event axis
     int  m_alignmentMode;
+    /// do strip-wise "landau" fluctuations
+    bool m_fluctuate;
 };
 
 #endif

@@ -6,7 +6,7 @@
 * @author Toby Burnett, Leon Rochester (original authors)
 * @author Michael Kuss
 *
-* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.cxx,v 1.24 2007/04/12 16:04:43 lsrea Exp $
+* $Header: /nfs/slac/g/glast/ground/cvs/TkrDigi/src/SiStripList.cxx,v 1.25 2009/09/09 22:18:37 lsrea Exp $
 */
 
 #include "SiStripList.h"
@@ -15,6 +15,7 @@
 #include "CLHEP/Random/RandFlat.h"
 #include "CLHEP/Random/RandGauss.h"
 #include "CLHEP/Random/RandBinomial.h"
+#include "CLHEP/Random/RandLandau.h"
 
 #include <algorithm>
 #include <float.h>
@@ -29,6 +30,7 @@ inline double copysign(double a, double b){return _copysign(a,b);}
 namespace {
     bool debug = false;
     bool printEdep = true;
+    bool doLandau = true;
 }
 
 // static variable implementations--now initialized with detsvc.
@@ -156,7 +158,8 @@ export template<class T> void SiStripList::addStrip(const int strip,
 
 
 void SiStripList::score(const HepPoint3D& o, const HepPoint3D& p,
-                        const Event::McPositionHit* hit, bool test) 
+                        const Event::McPositionHit* hit, 
+                        bool fluctuate = false, bool test = false) 
 {
     // Purpose and Method: distribute energy among the various strips as the
     //                     particle passes through the detector.
@@ -171,6 +174,12 @@ void SiStripList::score(const HepPoint3D& o, const HepPoint3D& p,
 
     HepVector3D inVec  = o;
     HepVector3D outVec = p;
+
+    //store the stuff to add energies at the end;
+    // brute force, should be a little class
+    std::vector<float> eVec(0);  // eDep for strip
+    std::vector<int>   idVec(0); // iD of strip
+    std::vector<const Event::McPositionHit*> hitVec(0); // Mc pos hit
 
     // the method can modify all the arguments
     bool trimmed;
@@ -209,7 +218,14 @@ void SiStripList::score(const HepPoint3D& o, const HepPoint3D& p,
             // fraction of strip crossed
             float dx = si_strip_pitch() / 2.0 + (ex-sx) * copysign(1.0, xDir);
             float frac = (test ? 1.0 : dx / dx_max);
-            addStrip(exs, dE*frac, hit);
+            //addStrip(exs, dE*frac, hit);
+            idVec.push_back(exs);
+            eVec.push_back(dE*frac);
+            hitVec.push_back(hit);
+            if(eVec.size()!=idVec.size()){
+                std::cout << eVec.size() << " " << idVec.size() << std::endl;
+            }
+
 
             short sinc = (xDir>0) ? -1 : 1; // move backwards (exit strip)
             for ( int sid=exs+sinc;
@@ -219,8 +235,17 @@ void SiStripList::score(const HepPoint3D& o, const HepPoint3D& p,
                 (
                 xDir>0 ? (in<calculateBin(sid)) : (in>calculateBin(sid))
                 );
-            sid+=sinc )
-                addStrip(sid, dE, hit);
+            sid+=sinc ) {
+                //addStrip(sid, dE, hit);
+                idVec.push_back(sid);
+                eVec.push_back(dE);
+                hitVec.push_back(hit);
+                if(eVec.size()!=idVec.size()){
+                    std::cout << eVec.size() << " " << idVec.size() << std::endl;
+                }
+            }
+
+ 
             // scans for until it crosses the entered gap
         }
         else
@@ -232,7 +257,14 @@ void SiStripList::score(const HepPoint3D& o, const HepPoint3D& p,
             // fraction of strip crossed
             float dx = si_strip_pitch() / 2.0 - (in-sx) * copysign(1.0, xDir);
             float frac = ( test ? 1.0 : dx / dx_max);
-            addStrip(ins, dE*frac, hit);
+            //addStrip(ins, dE*frac, hit);
+            idVec.push_back(ins);
+            eVec.push_back(dE*frac);
+            hitVec.push_back(hit);
+            if(eVec.size()!=idVec.size()){
+                std::cout << eVec.size() << " " << idVec.size() << std::endl;
+            }
+
 
             short sinc = (xDir>0) ? 1 : -1;   // move backwards (exit strip)
             for ( int sid=ins+sinc;
@@ -242,32 +274,98 @@ void SiStripList::score(const HepPoint3D& o, const HepPoint3D& p,
                 (
                 xDir>0 ? (ex>calculateBin(sid)) : (ex<calculateBin(sid))
                 );
-            sid+=sinc )
-                addStrip(sid, dE, hit);
+            sid+=sinc ) {
+                //addStrip(sid, dE, hit);
+                idVec.push_back(sid);
+                eVec.push_back(dE);
+                hitVec.push_back(hit);
+                if(eVec.size()!=idVec.size()){
+                    std::cout << eVec.size() << " " << idVec.size() << std::endl;
+                }
+            }
+
+
             // scans for until it crosses the exited gap
         }
         else {                // entered + exited through strips
-            if ( ins == exs )
-                addStrip(ins, eLoss, hit);
-            else {
+            if ( ins == exs ) {
+                //addStrip(ins, eLoss, hit);
+                idVec.push_back(ins);
+                eVec.push_back(eLoss);
+                hitVec.push_back(hit);
+                if(eVec.size()!=idVec.size()){
+                    std::cout << eVec.size() << " " << idVec.size() << std::endl;
+                }
+            } else {
                 float sx = calculateBin(ins);
                 float dx = si_strip_pitch() / 2. - (in-sx) * copysign(1., xDir);
                 float frac = ( test ? 1.0 : dx / dx_max);
-                addStrip(ins, dE*frac, hit); // entry strip
+                //addStrip(ins, dE*frac, hit); // entry strip
+                idVec.push_back(ins);
+                eVec.push_back(dE*frac);
+                hitVec.push_back(hit);
+                if(eVec.size()!=idVec.size()){
+                    std::cout << eVec.size() << " " << idVec.size() << std::endl;
+                }
+
                 sx = calculateBin(exs);
                 dx = si_strip_pitch() / 2.0 + (ex-sx) * copysign(1.0, xDir);
                 frac = ( test ? 1.0 : dx / dx_max);
-                addStrip(exs, dE*frac, hit); // exit strip
+                //addStrip(exs, dE*frac, hit); // exit strip
+                idVec.push_back(exs);
+                eVec.push_back(dE*frac);
+                hitVec.push_back(hit);
+                if(eVec.size()!=idVec.size()){
+                    std::cout << eVec.size() << " " << idVec.size() << std::endl;
+                }
 
                 short sinc = (ins<exs) ? 1 : -1;
-                for ( int sid=ins+sinc; sid!=exs; sid+=sinc )   
-                    addStrip(sid, dE, hit);
+                for ( int sid=ins+sinc; sid!=exs; sid+=sinc ) {  
+                    //addStrip(sid, dE, hit);
+                    idVec.push_back(sid);
+                    eVec.push_back(dE);
+                    hitVec.push_back(hit);
+                    if(eVec.size()!=idVec.size()){
+                        std::cout << eVec.size() << " " << idVec.size() << std::endl;
+                    }
+                }
+
                 // add energy to all strips between entry and exit
             }   // else (ins != ens)
         }   // else (exs != undef_strip())
     }   // else (ins != undef_strip())
-}
 
+
+    // now we can process all the strips
+    // for normal operation, just add the strips with the standard energy
+    // if this works, we'll add code here to do the fluctuations
+    unsigned int i;
+    unsigned int size = eVec.size();
+    if (fluctuate && size > 0 ) {
+        //unsigned int k = 0;     
+        // get the landau numbers
+        //const int nLandau = 100;
+        //double landauArray[nLandau];
+
+        //CLHEP::RandLandau::shootArray(size, landauArray);
+        float e0 = 0.0;
+        float e1 = 0.0;
+        for(i=0;i<size; ++i) {
+            e0 += eVec[i];
+            double rand = CLHEP::RandLandau::shoot();
+            eVec[i] *= (1.0 + 0.095*rand);
+            e1 += eVec[i];
+        }
+        float norm = e0/e1;
+        for(i=0;i<size;++i) {
+            eVec[i] *= norm;
+        }
+
+    }
+    for(i=0;i<size; ++i) {
+        addStrip(idVec[i], eVec[i], hitVec[i]);
+    }
+}
 
 int SiStripList::addNoise(const double sigma, const double occupancy,
                           const double threshold, const double trigThreshold)
@@ -308,7 +406,6 @@ void SiStripList::addElectronicNoise(const double sigma)
         
     }
 }
-
 
 int SiStripList::addNoiseStrips(const double occupancy,
                                 const double threshold,
