@@ -3,6 +3,7 @@
  Package TkrDigi
  * EOH *
 
+ TkrDigi-02-13-03 15-Dec-2013  lsrea implementation of Philippe's mip correcton in SiStripList and SimpleMcToHitTool
  TkrDigi-02-13-02 03-Jun-2012  lsrea updating for memory-leak fix
  TkrDigi-02-13-01 25-Apr-2012 hmk Patch merge
  TkrDigi-02-13-00 24-Apr-2012 hmk Merge GlastReleasev19r4p1 branch
