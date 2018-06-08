@@ -57,6 +57,7 @@ AlgTool(type, name, parent) {
     declareProperty("killBadStrips", m_killBadStrips = true );
     declareProperty("killFailed",    m_killFailed    = true );
     declareProperty("totThreshold",  m_totThreshold);
+    declareProperty("maxStrips",  m_maxStrips = 999999999);
 }
 
 
@@ -353,8 +354,21 @@ StatusCode GeneralHitToDigiTool::execute()
 
     SiPlaneMapContainer::SiPlaneMap& siPlaneMap = pObject->getSiPlaneMap();
 
-    // finally make digis from the hits
+    // check number of strips and do nothing if too large.
+    unsigned int nStripsTotal=0;
     SiPlaneMapContainer::SiPlaneMap::iterator itMap=siPlaneMap.begin();
+    for ( ; itMap!=siPlaneMap.end(); ++itMap ) {
+      SiStripList* sList = itMap->second;
+      nStripsTotal+=sList->size();
+    }
+
+    if (nStripsTotal>m_maxStrips) {
+      log<<MSG::INFO<<"Event too big. nStrips="<<nStripsTotal<<" exceeding maximum of "<<m_maxStrips<<". Skipping event."<<endreq;
+      return sc;
+    }
+
+    // finally make digis from the hits
+    itMap=siPlaneMap.begin();
     for ( ; itMap!=siPlaneMap.end(); ++itMap ) {
         SiStripList* sList = itMap->second;
         const TkrVolumeIdentifier volId = itMap->first;  

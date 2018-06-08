@@ -41,6 +41,7 @@ SimpleMcToHitTool::SimpleMcToHitTool(const std::string& type,
     declareProperty("test", m_test = false);
     declareProperty("fluctuate", m_fluctuate = false);
     declareProperty("alignmentMode", m_alignmentMode=0);
+    declareProperty("maxMCHits",m_maxMCHits=999999999);
 }
 
 StatusCode SimpleMcToHitTool::initialize() {
@@ -187,6 +188,11 @@ SiPlaneMapContainer::SiPlaneMap SimpleMcToHitTool::createSiHits(
     log << endreq;
 
     if (nHits==0) return siPlaneMap;
+
+    if (nHits> m_maxMCHits) {
+      log << MSG::INFO<<"Number of MC hits nhits="<<nHits<<" exceeds maximum of "<<m_maxMCHits<<". Skipping event."<<endreq;
+      return siPlaneMap;
+    }
 
     // This assumes that the number of ladders equals the number of
     // wafers/ladder.  Not true for the BFEM/BTEM!

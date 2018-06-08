@@ -61,6 +61,8 @@ class SimpleMcToHitTool : public AlgTool, virtual public IMcToHitTool {
     int  m_alignmentMode;
     /// do strip-wise "landau" fluctuations
     bool m_fluctuate;
+    /// limit number of MC hits to eliminate ultra-large events.
+    unsigned int m_maxMCHits;
 };
 
 #endif

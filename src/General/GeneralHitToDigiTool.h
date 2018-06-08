@@ -71,6 +71,8 @@ private:
     /// maximum number of hits per side
     static int    s_maxHits;
 
+    /// max number of strips after which to terminate readout
+    unsigned int m_maxStrips;
 };
 
 #endif
